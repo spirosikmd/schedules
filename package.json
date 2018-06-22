@@ -1,0 +1,13 @@
+{
+  "name": "jenny-schedule",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Spyros Ioakeimidis <spyrosikmd@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "node-xlsx": "^0.12.1"
+  }
+}
