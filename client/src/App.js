@@ -7,7 +7,7 @@ class App extends Component {
       totalHours: 0,
     },
     person: 'Jenny',
-    weeklyWage: 0,
+    weeklyWage: 9.5,
   };
 
   constructor() {
@@ -81,22 +81,35 @@ class App extends Component {
         </header>
         <div>
           <form onSubmit={this.handleSubmit}>
-            <input className="sb-input" type="file" ref={this.fileInput} />
-            <button className="sb-btn" type="submit">
-              Submit
-            </button>
-          </form>
-          <div>
-            <label>
-              Weekly Wage:
+            <div className="sb-form-control">
+              <label className="sb-label" htmlFor="schedule-file">
+                Schedule File:
+              </label>
+              <div className="sb-form-control__input">
+                <input
+                  className="sb-input"
+                  id="schedule-file"
+                  type="file"
+                  ref={this.fileInput}
+                />
+              </div>
+            </div>
+            <div className="sb-form-control">
+              <label className="sb-label" htmlFor="weekly-wage">
+                Weekly Wage:
+              </label>
               <input
                 className="sb-input"
+                id="weekly-wage"
                 type="number"
                 value={this.state.weeklyWage}
                 onChange={this.handleWeeklyWageChange}
               />
-            </label>
-          </div>
+            </div>
+            <button className="sb-btn" type="submit">
+              Submit
+            </button>
+          </form>
           <table>
             <thead>
               <tr>
