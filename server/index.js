@@ -1,13 +1,55 @@
-const express = require("express");
-const { getScheduleAndTotalHoursForPerson } = require("./utils");
+const express = require('express');
+const fs = require('fs');
+const fileUpload = require('express-fileupload');
+const { getScheduleAndTotalHoursForPerson } = require('./parser');
 
 const app = express();
 
-app.get("/schedule", (req, res) => {
-  // TODO: These should be provided by the UI
-  const PERSON = "jenny";
-  const FILE = `${__dirname}/data/1.xlsx`;
-  res.json(getScheduleAndTotalHoursForPerson(FILE, PERSON));
+app.use(fileUpload());
+
+app.post('/upload', (req, res) => {
+  if (!req.files)
+    return res.status(400).json({
+      message: 'No files were uploaded.',
+    });
+
+  const scheduleFile = req.files.scheduleFile;
+  const person = req.body.person;
+
+  const schedule = getScheduleAndTotalHoursForPerson(
+    scheduleFile.data,
+    person.toLowerCase()
+  );
+
+  fs.writeFile(
+    `${__dirname}/data/data.json`,
+    JSON.stringify(schedule),
+    'utf8',
+    error => {
+      if (error) {
+        return res.status(400).json({
+          message: 'Error parsing schedule file.',
+        });
+      }
+
+      res.json({
+        message: 'ok',
+      });
+    }
+  );
 });
 
-app.listen(5000, () => console.log("Example app listening on port 3000!"));
+app.get('/schedule', (req, res) => {
+  const person = req.query.person;
+  fs.readFile(`${__dirname}/data/data.json`, (error, data) => {
+    if (error) {
+      return res.status(400).json({
+        message: 'Error getting schedule file.',
+      });
+    }
+
+    res.json(JSON.parse(data));
+  });
+});
+
+app.listen(5000, () => console.log('Example app listening on port 3000!'));
