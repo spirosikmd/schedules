@@ -1,57 +1,46 @@
 const express = require('express');
-const fs = require('fs');
 const fileUpload = require('express-fileupload');
-const { getScheduleAndMetadataForPerson } = require('./parser');
+const { parseScheduleFileData } = require('./parser');
+const { saveScheduleData, getScheduleDataForPerson } = require('./db');
 
 const app = express();
 
 app.use(fileUpload());
 
 app.post('/upload', (req, res) => {
-  if (!req.files)
+  if (!req.files) {
     return res.status(400).json({
       message: 'No files were uploaded.',
     });
+  }
 
-  const scheduleFile = req.files.scheduleFile;
-  const { person, weeklyWage } = req.body;
+  const { scheduleFile } = req.files;
 
-  const schedule = getScheduleAndMetadataForPerson(
-    scheduleFile.data,
-    person.toLowerCase(),
-    parseFloat(weeklyWage)
-  );
+  const scheduleData = parseScheduleFileData(scheduleFile.data);
 
-  fs.writeFile(
-    `${__dirname}/data/data.json`,
-    JSON.stringify(schedule),
-    'utf8',
-    error => {
-      if (error) {
-        return res.status(400).json({
-          message: 'Error parsing schedule file.',
-        });
-      }
-
+  saveScheduleData(scheduleData)
+    .then(message => {
       res.json({
-        message: 'ok',
+        message,
       });
-    }
-  );
+    })
+    .catch(error =>
+      res.status(400).json({
+        message: error,
+      })
+    );
 });
 
 app.get('/schedule', (req, res) => {
-  const person = req.query.person;
-  console.log(`Schedule for ${person}`);
-  fs.readFile(`${__dirname}/data/data.json`, (error, data) => {
-    if (error) {
-      return res.status(400).json({
-        message: 'Error getting schedule file.',
-      });
-    }
+  const { person, hourlyWage } = req.query;
 
-    res.json(JSON.parse(data));
-  });
+  getScheduleDataForPerson(person, hourlyWage)
+    .then(data => res.json(data))
+    .catch(error => {
+      return res.status(400).json({
+        message: error,
+      });
+    });
 });
 
 app.listen(5000, () => console.log('Example app listening on port 3000!'));

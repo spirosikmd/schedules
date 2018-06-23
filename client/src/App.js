@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import Schedule from './Schedule';
+import RefreshForm from './RefreshForm';
+import ScheduleFileUploadForm from './ScheduleFileUploadForm';
 
 class App extends Component {
   state = {
@@ -7,24 +10,19 @@ class App extends Component {
       totalHours: 0,
     },
     person: 'Jenny',
-    weeklyWage: 9.5,
+    hourlyWage: 9.5,
   };
 
-  constructor() {
-    super();
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.fileInput = React.createRef();
-  }
-
   componentDidMount() {
-    this.fetchScheduleForPerson(this.state.person, this.state.weeklyWage)
+    this.fetchScheduleForPerson(this.state.person, this.state.hourlyWage)
       .then(response => this.setState({ response }))
       .catch(err => console.log(err));
   }
 
-  fetchScheduleForPerson = async person => {
-    const response = await fetch(`/schedule?person=${person.toLowerCase()}`);
+  fetchScheduleForPerson = async (person, hourlyWage) => {
+    const response = await fetch(
+      `/schedule?person=${person.toLowerCase()}&hourlyWage=${hourlyWage}`
+    );
     const body = await response.json();
 
     if (response.status !== 200) throw Error(body.message);
@@ -32,11 +30,9 @@ class App extends Component {
     return body;
   };
 
-  generateScheduleWithFileAndPerson = async (file, person, weeklyWage) => {
+  generateScheduleWithFileAndPerson = async file => {
     const data = new FormData();
     data.set('scheduleFile', file);
-    data.set('person', person);
-    data.set('weeklyWage', weeklyWage);
 
     const response = await fetch('/upload', {
       method: 'post',
@@ -50,94 +46,50 @@ class App extends Component {
     return body;
   };
 
-  handleSubmit = async event => {
-    event.preventDefault();
-
-    const file = this.fileInput.current.files[0];
-
-    this.generateScheduleWithFileAndPerson(
-      file,
-      this.state.person,
-      this.state.weeklyWage
-    )
+  handleScheduleFileUploadFormSubmit = async file => {
+    this.generateScheduleWithFileAndPerson(file)
       .then(() => {
-        this.fetchScheduleForPerson(this.state.person).then(response =>
-          this.setState({ response })
-        );
+        this.fetchScheduleForPerson(
+          this.state.person,
+          this.state.hourlyWage
+        ).then(response => this.setState({ response }));
       })
       .catch(err => console.log(err));
   };
 
-  handleWeeklyWageChange = event => {
-    const value = event.currentTarget.value;
-    this.setState({ weeklyWage: value });
+  handleHourlyWageChange = hourlyWage => {
+    this.setState({ hourlyWage });
+  };
+
+  handleRefreshFormSubmit = async () => {
+    this.fetchScheduleForPerson(this.state.person, this.state.hourlyWage)
+      .then(response => this.setState({ response }))
+      .catch(err => console.log(err));
   };
 
   render() {
     return (
-      <div>
-        <header>
-          <h1>Welcome to {this.state.person}'s Schedule</h1>
-        </header>
-        <div>
-          <form onSubmit={this.handleSubmit}>
-            <div className="sb-form-control">
-              <label className="sb-label" htmlFor="schedule-file">
-                Schedule File:
-              </label>
-              <div className="sb-form-control__input">
-                <input
-                  className="sb-input"
-                  id="schedule-file"
-                  type="file"
-                  ref={this.fileInput}
-                />
-              </div>
-            </div>
-            <div className="sb-form-control">
-              <label className="sb-label" htmlFor="weekly-wage">
-                Weekly Wage:
-              </label>
-              <input
-                className="sb-input"
-                id="weekly-wage"
-                type="number"
-                value={this.state.weeklyWage}
-                onChange={this.handleWeeklyWageChange}
+      <div className="sb-container">
+        <div className="sb-grid">
+          <div className="sb-col-12">
+            <header>
+              <h1>Welcome to {this.state.person}'s Schedule</h1>
+            </header>
+            <div>
+              <ScheduleFileUploadForm
+                onSubmit={this.handleScheduleFileUploadFormSubmit}
+              />
+              <RefreshForm
+                hourlyWage={this.state.hourlyWage}
+                onHourlyWageChange={this.handleHourlyWageChange}
+                onSubmit={this.handleRefreshFormSubmit}
+              />
+              <Schedule
+                schedule={this.state.response.schedule}
+                totalHours={this.state.response.totalHours}
+                totalWeeklyWage={this.state.response.totalWeeklyWage}
               />
             </div>
-            <button className="sb-btn" type="submit">
-              Submit
-            </button>
-          </form>
-          <table>
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Total Hours</th>
-              </tr>
-            </thead>
-            <tbody>
-              {this.state.response.schedule.map(daySchedule => (
-                <tr key={daySchedule.date}>
-                  <td>{daySchedule.date}</td>
-                  <td>{daySchedule.location}</td>
-                  <td>{daySchedule.startTime}</td>
-                  <td>{daySchedule.endTime}</td>
-                  <td>{daySchedule.hours}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div>
-            <strong>Total Hours:</strong> {this.state.response.totalHours}
-          </div>
-          <div>
-            <strong>Total Weekly Wage:</strong>{' '}
-            {this.state.response.totalWeeklyWage} EUR
           </div>
         </div>
       </div>
