@@ -1,18 +1,24 @@
 const xlsx = require('node-xlsx').default;
 
 module.exports = {
-  getScheduleAndTotalHoursForPerson(file, person) {
-    // TODO: ideally this should be done once and cache the result as the schedule doesn't change for now
+  getScheduleAndMetadataForPerson(file, person, weeklyWage) {
     const schedule = xlsx.parse(file, {
-      raw: false
+      raw: false,
     });
+
+    const totalHours = getTotalHours(schedule, person);
 
     return {
       schedule: getPersonSchedule(schedule, person),
-      totalHours: getTotalHours(schedule, person)
+      totalHours,
+      totalWeeklyWage: getTotalWeeklyWage(totalHours, weeklyWage),
     };
-  }
+  },
 };
+
+function getTotalWeeklyWage(totalHours, weeklyWage) {
+  return totalHours * weeklyWage;
+}
 
 // Create person's schedule
 function getPersonSchedule(schedule, person) {
@@ -46,7 +52,7 @@ function parseDayScheduleWithDate(daySchedule, date) {
     location: daySchedule[1],
     startTime: daySchedule[3],
     endTime: daySchedule[4],
-    hours: parseFloat(daySchedule[5])
+    hours: parseFloat(daySchedule[5]),
   };
 }
 

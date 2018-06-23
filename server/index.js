@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const fileUpload = require('express-fileupload');
-const { getScheduleAndTotalHoursForPerson } = require('./parser');
+const { getScheduleAndMetadataForPerson } = require('./parser');
 
 const app = express();
 
@@ -14,11 +14,12 @@ app.post('/upload', (req, res) => {
     });
 
   const scheduleFile = req.files.scheduleFile;
-  const person = req.body.person;
+  const { person, weeklyWage } = req.body;
 
-  const schedule = getScheduleAndTotalHoursForPerson(
+  const schedule = getScheduleAndMetadataForPerson(
     scheduleFile.data,
-    person.toLowerCase()
+    person.toLowerCase(),
+    parseFloat(weeklyWage)
   );
 
   fs.writeFile(
@@ -41,6 +42,7 @@ app.post('/upload', (req, res) => {
 
 app.get('/schedule', (req, res) => {
   const person = req.query.person;
+  console.log(`Schedule for ${person}`);
   fs.readFile(`${__dirname}/data/data.json`, (error, data) => {
     if (error) {
       return res.status(400).json({

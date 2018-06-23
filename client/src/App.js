@@ -7,6 +7,7 @@ class App extends Component {
       totalHours: 0,
     },
     person: 'Jenny',
+    weeklyWage: 0,
   };
 
   constructor() {
@@ -17,13 +18,13 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.fetchScheduleForPerson(this.state.person)
+    this.fetchScheduleForPerson(this.state.person, this.state.weeklyWage)
       .then(response => this.setState({ response }))
       .catch(err => console.log(err));
   }
 
   fetchScheduleForPerson = async person => {
-    const response = await fetch(`/schedule?person=${person}`);
+    const response = await fetch(`/schedule?person=${person.toLowerCase()}`);
     const body = await response.json();
 
     if (response.status !== 200) throw Error(body.message);
@@ -31,10 +32,11 @@ class App extends Component {
     return body;
   };
 
-  generateScheduleWithFileAndPerson = async (file, person) => {
+  generateScheduleWithFileAndPerson = async (file, person, weeklyWage) => {
     const data = new FormData();
     data.set('scheduleFile', file);
     data.set('person', person);
+    data.set('weeklyWage', weeklyWage);
 
     const response = await fetch('/upload', {
       method: 'post',
@@ -53,13 +55,22 @@ class App extends Component {
 
     const file = this.fileInput.current.files[0];
 
-    this.generateScheduleWithFileAndPerson(file, this.state.person)
+    this.generateScheduleWithFileAndPerson(
+      file,
+      this.state.person,
+      this.state.weeklyWage
+    )
       .then(() => {
         this.fetchScheduleForPerson(this.state.person).then(response =>
           this.setState({ response })
         );
       })
       .catch(err => console.log(err));
+  };
+
+  handleWeeklyWageChange = event => {
+    const value = event.currentTarget.value;
+    this.setState({ weeklyWage: value });
   };
 
   render() {
@@ -75,6 +86,17 @@ class App extends Component {
               Submit
             </button>
           </form>
+          <div>
+            <label>
+              Weekly Wage:
+              <input
+                className="sb-input"
+                type="number"
+                value={this.state.weeklyWage}
+                onChange={this.handleWeeklyWageChange}
+              />
+            </label>
+          </div>
           <table>
             <thead>
               <tr>
@@ -97,7 +119,13 @@ class App extends Component {
               ))}
             </tbody>
           </table>
-          <strong>Total Hours:</strong> {this.state.response.totalHours}
+          <div>
+            <strong>Total Hours:</strong> {this.state.response.totalHours}
+          </div>
+          <div>
+            <strong>Total Weekly Wage:</strong>{' '}
+            {this.state.response.totalWeeklyWage} EUR
+          </div>
         </div>
       </div>
     );
