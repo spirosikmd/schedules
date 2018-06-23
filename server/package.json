@@ -1,0 +1,16 @@
+{
+  "name": "jenny-schedule-server",
+  "version": "0.1.0",
+  "private": true,
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.3",
+    "node-xlsx": "^0.12.1"
+  },
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.5"
+  }
+}

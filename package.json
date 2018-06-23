@@ -1,14 +1,14 @@
 {
   "name": "jenny-schedule",
-  "version": "1.0.0",
-  "main": "index.js",
+  "version": "0.1.0",
   "author": "Spyros Ioakeimidis <spyrosikmd@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "server": "cd client && yarn start",
+    "client": "cd server && yarn start",
+    "start": "concurrently \"yarn server\" \"yarn client\" -k"
   },
-  "dependencies": {
-    "express": "^4.16.3",
-    "node-xlsx": "^0.12.1"
+  "devDependencies": {
+    "concurrently": "^3.6.0"
   }
 }
