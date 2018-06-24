@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import Schedule from './Schedule';
 import RefreshForm from './RefreshForm';
 import ScheduleFileUploadForm from './ScheduleFileUploadForm';
+import {
+  fetchScheduleForPerson,
+  generateScheduleWithFileAndPerson,
+} from './api';
 
 class App extends Component {
   state = {
@@ -14,45 +18,17 @@ class App extends Component {
   };
 
   componentDidMount() {
-    this.fetchScheduleForPerson(this.state.person, this.state.hourlyWage)
+    fetchScheduleForPerson(this.state.person, this.state.hourlyWage)
       .then(response => this.setState({ response }))
       .catch(err => console.log(err));
   }
 
-  fetchScheduleForPerson = async (person, hourlyWage) => {
-    const response = await fetch(
-      `/schedule?person=${person.toLowerCase()}&hourlyWage=${hourlyWage}`
-    );
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  };
-
-  generateScheduleWithFileAndPerson = async file => {
-    const data = new FormData();
-    data.set('scheduleFile', file);
-
-    const response = await fetch('/upload', {
-      method: 'post',
-      body: data,
-    });
-
-    const body = await response.json();
-
-    if (response.status !== 200) throw Error(body.message);
-
-    return body;
-  };
-
   handleScheduleFileUploadFormSubmit = async file => {
-    this.generateScheduleWithFileAndPerson(file)
+    generateScheduleWithFileAndPerson(file)
       .then(() => {
-        this.fetchScheduleForPerson(
-          this.state.person,
-          this.state.hourlyWage
-        ).then(response => this.setState({ response }));
+        fetchScheduleForPerson(this.state.person, this.state.hourlyWage).then(
+          response => this.setState({ response })
+        );
       })
       .catch(err => console.log(err));
   };
@@ -62,7 +38,7 @@ class App extends Component {
   };
 
   handleRefreshFormSubmit = async () => {
-    this.fetchScheduleForPerson(this.state.person, this.state.hourlyWage)
+    fetchScheduleForPerson(this.state.person, this.state.hourlyWage)
       .then(response => this.setState({ response }))
       .catch(err => console.log(err));
   };

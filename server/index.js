@@ -13,7 +13,7 @@ const app = express();
 app.use(fileUpload());
 app.use(express.static(clientBuildPath));
 
-app.post('/upload', (req, res) => {
+app.post('/api/upload', (req, res) => {
   if (!req.files) {
     return res.status(400).json({
       message: 'No files were uploaded.',
@@ -37,7 +37,7 @@ app.post('/upload', (req, res) => {
     );
 });
 
-app.get('/schedule', (req, res) => {
+app.get('/api/schedule', (req, res) => {
   const { person, hourlyWage } = req.query;
 
   getScheduleDataForPerson(person, hourlyWage)
