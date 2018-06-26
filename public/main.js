@@ -1,12 +1,9 @@
 const { ipcMain } = require('electron');
-const {
-  saveScheduleData,
-  getScheduleDataForPerson,
-} = require('../../server/db');
-const { parseScheduleFileWithPath } = require('../../server/parser');
+const { saveScheduleData, getScheduleDataForPerson } = require('./db');
+const { parseScheduleFileWithPath } = require('./parser');
 
 ipcMain.on('api:schedule', (event, { person, hourlyWage }) => {
-  getScheduleDataForPerson(person, hourlyWage)
+  getScheduleDataForPerson(person.toLowerCase(), hourlyWage)
     .then(data => {
       event.sender.send('api:schedule:success', data);
     })

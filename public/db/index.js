@@ -1,6 +1,8 @@
 const fs = require('fs');
+const { app } = require('electron');
 
-const DB_FILE_PATH = `${__dirname}/db.json`;
+const userDataPath = app.getPath('userData');
+const DB_FILE_PATH = `${userDataPath}/db.json`;
 
 module.exports = {
   getScheduleDataForPerson,
@@ -31,7 +33,7 @@ function getScheduleDataForPerson(person, hourlyWage) {
       scheduleData.forEach(daySchedule => {
         daySchedule.locations.forEach(location => {
           location.employees.forEach(employee => {
-            if (employee.name === person.toLowerCase()) {
+            if (employee.name === person) {
               schedule.push({
                 date: daySchedule.date,
                 location: location.name,
@@ -39,7 +41,7 @@ function getScheduleDataForPerson(person, hourlyWage) {
                 endTime: employee.endTime,
                 hours: employee.hours,
                 worksWith: location.employees
-                  .filter(employee => employee.name !== person.toLowerCase())
+                  .filter(employee => employee.name !== person)
                   .map(employee => employee.name),
               });
             }

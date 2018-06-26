@@ -4,8 +4,8 @@ module.exports = {
   parseScheduleFileWithPath,
 };
 
-function parseScheduleFileWithPath(filePath) {
-  const schedule = xlsx.parse(filePath, {
+function parseScheduleFileWithPath(scheduleData) {
+  const schedule = xlsx.parse(scheduleData, {
     raw: false,
   });
 
