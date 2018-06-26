@@ -37,3 +37,5 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+require('./main');

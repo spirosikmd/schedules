@@ -4,10 +4,10 @@
   "author": "Spyros Ioakeimidis <spyrosikmd@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "server": "cd client && yarn start",
-    "client": "cd server && yarn start",
+    "server": "cd server && yarn start",
+    "client": "cd client && yarn start",
     "build": "cd client && yarn build",
-    "start": "concurrently \"yarn server\" \"yarn client\" -k"
+    "start": "cd client && yarn electron-dev"
   },
   "devDependencies": {
     "concurrently": "^3.6.0"

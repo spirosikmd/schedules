@@ -1,4 +1,5 @@
 const BASE = '/api';
+const ipcRenderer = window.ipcRenderer;
 
 export async function generateScheduleWithFileAndPerson(file) {
   const data = new FormData();
@@ -17,12 +18,15 @@ export async function generateScheduleWithFileAndPerson(file) {
 }
 
 export async function fetchScheduleForPerson(person, hourlyWage) {
-  const response = await fetch(
-    `${BASE}/schedule?person=${person.toLowerCase()}&hourlyWage=${hourlyWage}`
-  );
-  const body = await response.json();
+  ipcRenderer.send('api:schedule', { person, hourlyWage });
 
-  if (response.status !== 200) throw Error(body.message);
+  return new Promise((resolve, reject) => {
+    ipcRenderer.on('api:schedule:success', (event, arg) => {
+      resolve(arg);
+    });
 
-  return body;
+    ipcRenderer.on('api:schedule:fail', (event, arg) => {
+      reject(arg);
+    });
+  });
 }

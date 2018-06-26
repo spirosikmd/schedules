@@ -31,7 +31,7 @@ function getScheduleDataForPerson(person, hourlyWage) {
       scheduleData.forEach(daySchedule => {
         daySchedule.locations.forEach(location => {
           location.employees.forEach(employee => {
-            if (employee.name === person) {
+            if (employee.name === person.toLowerCase()) {
               schedule.push({
                 date: daySchedule.date,
                 location: location.name,
@@ -39,7 +39,7 @@ function getScheduleDataForPerson(person, hourlyWage) {
                 endTime: employee.endTime,
                 hours: employee.hours,
                 worksWith: location.employees
-                  .filter(employee => employee.name !== person)
+                  .filter(employee => employee.name !== person.toLowerCase())
                   .map(employee => employee.name),
               });
             }
