@@ -1,41 +1,41 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
 
 class Schedule extends PureComponent {
   render() {
     const { schedule, totalHours, totalWeeklyWage } = this.props;
     return (
-      <Fragment>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Location</th>
-              <th>Start Time</th>
-              <th>End Time</th>
-              <th>Total Hours</th>
-              <th>Works With</th>
-            </tr>
-          </thead>
-          <tbody>
-            {schedule.map(daySchedule => (
-              <tr key={daySchedule.date}>
-                <td>{daySchedule.date}</td>
-                <td>{daySchedule.location}</td>
-                <td>{daySchedule.startTime}</td>
-                <td>{daySchedule.endTime}</td>
-                <td>{daySchedule.hours}</td>
-                <td>{daySchedule.worksWith.join(', ')}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="sb-flex sb-flex-column">
+        {schedule.map(daySchedule => (
+          <div key={daySchedule.date} className="sb-tile sb-margin-bottom-s">
+            <div className="sb-flex">
+              <div className="sb-padding" style={{ flex: 3 }}>
+                {daySchedule.date}
+              </div>
+              <div className="sb-padding" style={{ flex: 1 }}>
+                {daySchedule.location}
+              </div>
+              <div className="sb-padding" style={{ flex: 2 }}>
+                {daySchedule.startTime}
+              </div>
+              <div className="sb-padding" style={{ flex: 2 }}>
+                {daySchedule.endTime}
+              </div>
+              <div className="sb-padding" style={{ flex: 1 }}>
+                {daySchedule.hours}
+              </div>
+              <div className="sb-padding" style={{ flex: 4 }}>
+                {daySchedule.worksWith.join(', ')}
+              </div>
+            </div>
+          </div>
+        ))}
         <div>
           <strong>Total Hours:</strong> {totalHours}
         </div>
         <div>
           <strong>Total Weekly Wage:</strong> {totalWeeklyWage} EUR
         </div>
-      </Fragment>
+      </div>
     );
   }
 }

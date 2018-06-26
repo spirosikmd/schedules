@@ -14,7 +14,7 @@ class App extends Component {
       totalHours: 0,
     },
     person: 'Jenny',
-    hourlyWage: 9.5,
+    hourlyWage: 8.5,
   };
 
   componentDidMount() {
@@ -43,29 +43,41 @@ class App extends Component {
       .catch(err => console.log(err));
   };
 
+  handleCreateEventsClick = () => {
+    alert('create events');
+  };
+
   render() {
     return (
-      <div className="sb-container">
+      <div className="sb-container sb-padding">
         <div className="sb-grid">
           <div className="sb-col-12">
-            <header>
+            <ScheduleFileUploadForm
+              onSubmit={this.handleScheduleFileUploadFormSubmit}
+            />
+            <header className="sb-margin-bottom">
               <h1>Welcome to {this.state.person}'s Schedule</h1>
             </header>
-            <div>
-              <ScheduleFileUploadForm
-                onSubmit={this.handleScheduleFileUploadFormSubmit}
-              />
+            <div className="sb-flex sb-padding-bottom sb-justify-content-between">
               <RefreshForm
                 hourlyWage={this.state.hourlyWage}
                 onHourlyWageChange={this.handleHourlyWageChange}
                 onSubmit={this.handleRefreshFormSubmit}
               />
-              <Schedule
-                schedule={this.state.response.schedule}
-                totalHours={this.state.response.totalHours}
-                totalWeeklyWage={this.state.response.totalWeeklyWage}
-              />
+              <div>
+                <button
+                  className="sb-btn"
+                  onClick={this.handleCreateEventsClick}
+                >
+                  create events
+                </button>
+              </div>
             </div>
+            <Schedule
+              schedule={this.state.response.schedule}
+              totalHours={this.state.response.totalHours}
+              totalWeeklyWage={this.state.response.totalWeeklyWage}
+            />
           </div>
         </div>
       </div>
