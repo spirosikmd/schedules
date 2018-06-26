@@ -66,7 +66,7 @@ class App extends Component {
               />
               <div>
                 <button
-                  className="sb-btn"
+                  className="sb-btn sb-btn--primary"
                   onClick={this.handleCreateEventsClick}
                 >
                   create events

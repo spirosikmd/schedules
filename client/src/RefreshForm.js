@@ -25,7 +25,10 @@ class RefreshForm extends PureComponent {
             onChange={this.handleHourlyWageChange}
           />
         </div>
-        <button className="sb-btn sb-margin-left" type="submit">
+        <button
+          className="sb-btn sb-btn--secondary sb-margin-left"
+          type="submit"
+        >
           Refresh
         </button>
       </form>
