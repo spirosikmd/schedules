@@ -1,20 +1,17 @@
-const BASE = '/api';
-const ipcRenderer = window.ipcRenderer;
+const { ipcRenderer } = window;
 
 export async function generateScheduleWithFileAndPerson(file) {
-  const data = new FormData();
-  data.set('scheduleFile', file);
+  ipcRenderer.send('api:upload', file.path);
 
-  const response = await fetch(`${BASE}/upload`, {
-    method: 'post',
-    body: data,
+  return new Promise((resolve, reject) => {
+    ipcRenderer.on('api:upload:success', (event, arg) => {
+      resolve(arg);
+    });
+
+    ipcRenderer.on('api:upload:fail', (event, arg) => {
+      reject(arg);
+    });
   });
-
-  const body = await response.json();
-
-  if (response.status !== 200) throw Error(body.message);
-
-  return body;
 }
 
 export async function fetchScheduleForPerson(person, hourlyWage) {

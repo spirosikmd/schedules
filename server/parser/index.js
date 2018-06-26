@@ -1,11 +1,11 @@
 const xlsx = require('node-xlsx').default;
 
 module.exports = {
-  parseScheduleFileData,
+  parseScheduleFileWithPath,
 };
 
-function parseScheduleFileData(scheduleData) {
-  const schedule = xlsx.parse(scheduleData, {
+function parseScheduleFileWithPath(filePath) {
+  const schedule = xlsx.parse(filePath, {
     raw: false,
   });
 

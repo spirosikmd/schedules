@@ -1,41 +1,28 @@
 import React, { PureComponent } from 'react';
 
 class ScheduleFileUploadForm extends PureComponent {
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    document.addEventListener('drop', event => {
+      event.preventDefault();
+      event.stopPropagation();
 
-    this.fileInput = React.createRef();
+      const file = event.dataTransfer.files[0];
+      this.props.onSubmit(file);
+    });
+
+    document.addEventListener('dragover', event => {
+      event.preventDefault();
+      event.stopPropagation();
+    });
   }
 
-  handleSubmit = event => {
-    event.preventDefault();
-
-    const file = this.fileInput.current.files[0];
-
-    this.props.onSubmit(file);
-  };
+  componentWillUnmount() {
+    document.removeEventListener('drop');
+    document.removeEventListener('dragover');
+  }
 
   render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <div className="sb-form-control">
-          <label className="sb-label" htmlFor="schedule-file">
-            Schedule File:
-          </label>
-          <div className="sb-form-control__input">
-            <input
-              className="sb-input"
-              id="schedule-file"
-              type="file"
-              ref={this.fileInput}
-            />
-          </div>
-        </div>
-        <button className="sb-btn" type="submit">
-          Submit
-        </button>
-      </form>
-    );
+    return <div id="holder" />;
   }
 }
 
