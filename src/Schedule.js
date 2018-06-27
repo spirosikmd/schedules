@@ -13,7 +13,7 @@ class Schedule extends PureComponent {
           <strong>Total Hours:</strong> {totalHours}
         </div>
         <div>
-          <strong>Total Weekly Wage:</strong> {totalWeeklyWage} EUR
+          <strong>Total Weekly Wage:</strong> {totalWeeklyWage.toFixed(2)} EUR
         </div>
       </div>
     );

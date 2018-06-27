@@ -14,7 +14,7 @@ class RefreshForm extends PureComponent {
   render() {
     return (
       <form onSubmit={this.handleRefreshSubmit} className="sb-flex">
-        <div className="sb-form-control">
+        <div className="sb-form-control sb-margin-right">
           <input
             aria-label="Hourly Wage"
             placeholder="Enter your hourly wage"
@@ -25,10 +25,7 @@ class RefreshForm extends PureComponent {
             onChange={this.handleHourlyWageChange}
           />
         </div>
-        <button
-          className="sb-btn sb-btn--secondary sb-margin-left"
-          type="submit"
-        >
+        <button className="sb-btn sb-btn--secondary" type="submit">
           Refresh
         </button>
       </form>

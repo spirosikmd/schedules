@@ -1,9 +1,15 @@
 const { ipcMain } = require('electron');
-const { saveScheduleData, getScheduleDataForPerson } = require('./db');
+const {
+  saveScheduleData,
+  getScheduleDataForPerson,
+  getSchedules,
+  getSelectedScheduleId,
+  getHourlyWage,
+} = require('./db');
 const { parseScheduleFileWithPath } = require('./parser');
 
-ipcMain.on('api:schedule', (event, { person, hourlyWage }) => {
-  getScheduleDataForPerson(person.toLowerCase(), hourlyWage)
+ipcMain.on('api:schedule', (event, { scheduleId, person, hourlyWage }) => {
+  getScheduleDataForPerson(scheduleId, person.toLowerCase(), hourlyWage)
     .then(data => {
       event.sender.send('api:schedule:success', data);
     })
@@ -14,10 +20,20 @@ ipcMain.on('api:schedule', (event, { person, hourlyWage }) => {
     });
 });
 
-ipcMain.on('api:upload', (event, filePath) => {
+ipcMain.on('api:scheduleId', event => {
+  getSelectedScheduleId()
+    .then(data => event.sender.send('api:scheduleId:success', data))
+    .catch(error => {
+      event.sender.send('api:scheduleId:fail', {
+        message: error,
+      });
+    });
+});
+
+ipcMain.on('api:upload', (event, fileName, filePath) => {
   const scheduleData = parseScheduleFileWithPath(filePath);
 
-  saveScheduleData(scheduleData)
+  saveScheduleData(fileName, scheduleData)
     .then(message => {
       event.sender.send('api:upload:success', {
         message,
@@ -28,4 +44,24 @@ ipcMain.on('api:upload', (event, filePath) => {
         message: error,
       })
     );
+});
+
+ipcMain.on('api:schedules', event => {
+  getSchedules()
+    .then(data => event.sender.send('api:schedules:success', data))
+    .catch(error => {
+      event.sender.send('api:schedules:fail', {
+        message: error,
+      });
+    });
+});
+
+ipcMain.on('api:hourlyWage', event => {
+  getHourlyWage()
+    .then(data => event.sender.send('api:hourlyWage:success', data))
+    .catch(error => {
+      event.sender.send('api:hourlyWage:fail', {
+        message: error,
+      });
+    });
 });

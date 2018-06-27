@@ -10,7 +10,8 @@
     "node-xlsx": "^0.12.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "uuid": "^3.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
