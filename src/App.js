@@ -91,8 +91,8 @@ class App extends Component {
     alert('create events');
   };
 
-  handleSelectedScheduleChange = event => {
-    this.setState({ selectedScheduleId: event.target.value });
+  handleSelectedScheduleChange = selectedScheduleId => {
+    this.setState({ selectedScheduleId });
   };
 
   render() {
@@ -107,39 +107,20 @@ class App extends Component {
               <h1>Welcome to {this.state.person}'s Schedule</h1>
             </header>
             <div className="sb-flex sb-padding-bottom sb-justify-content-between">
-              <div className="sb-flex">
-                <div className="sb-form-control sb-margin-right">
-                  <div className="sb-select sb-form-control__input">
-                    <select
-                      className="sb-input"
-                      value={this.state.selectedScheduleId}
-                      onChange={this.handleSelectedScheduleChange}
-                    >
-                      {this.state.schedules.map(schedule => (
-                        <option key={schedule.id} value={schedule.id}>
-                          {schedule.name}
-                        </option>
-                      ))}
-                    </select>
-                    <svg className="sb-icon" viewBox="-5 -5 16 16">
-                      <path d="M0 0l3.5 4L7 0H0" />
-                    </svg>
-                  </div>
-                </div>
-                <RefreshForm
-                  hourlyWage={this.state.hourlyWage}
-                  onHourlyWageChange={this.handleHourlyWageChange}
-                  onSubmit={this.handleRefreshFormSubmit}
-                />
-              </div>
-              <div>
-                <button
-                  className="sb-btn sb-btn--primary"
-                  onClick={this.handleCreateEventsClick}
-                >
-                  create events
-                </button>
-              </div>
+              <RefreshForm
+                hourlyWage={this.state.hourlyWage}
+                schedules={this.state.schedules}
+                selectedScheduleId={this.state.selectedScheduleId}
+                onHourlyWageChange={this.handleHourlyWageChange}
+                onSelectedScheduleChange={this.handleSelectedScheduleChange}
+                onSubmit={this.handleRefreshFormSubmit}
+              />
+              <button
+                className="sb-btn sb-btn--primary"
+                onClick={this.handleCreateEventsClick}
+              >
+                create events
+              </button>
             </div>
             <Schedule
               schedule={this.state.schedule}
