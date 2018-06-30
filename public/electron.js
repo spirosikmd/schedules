@@ -14,12 +14,16 @@ function createWindow() {
       preload: __dirname + '/preload.js',
     },
   });
+
   mainWindow.loadURL(
     isDev
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../build/index.html')}`
   );
+
   mainWindow.on('closed', () => (mainWindow = null));
+
+  require('./menu');
 }
 
 app.on('ready', createWindow);
