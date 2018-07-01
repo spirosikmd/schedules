@@ -4,6 +4,25 @@ module.exports = {
   parseScheduleFileWithPath,
 };
 
+function parseDate(dateToParse) {
+  const lowercasedDate = dateToParse.toLowerCase();
+  const lowercasedWithSingleSpacesDate = lowercasedDate.replace(/\s\s+/g, ' ');
+  const dateOnly = lowercasedWithSingleSpacesDate.split(' ')[1];
+  const [day, month] = dateOnly.split('-');
+  const newDate = new Date(
+    Date.UTC(2018, parseInt(month, 10) - 1, parseInt(day, 10))
+  );
+  return newDate;
+}
+
+function parseTime(timeToParse, date) {
+  const time = new Date(date.getTime());
+  const replacedTime = timeToParse.replace(';', ':');
+  const [hours, minutes] = replacedTime.split(':');
+  time.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+  return time;
+}
+
 function parseScheduleFileWithPath(scheduleData) {
   const schedule = xlsx.parse(scheduleData, {
     raw: false,
@@ -18,7 +37,7 @@ function parseScheduleFileWithPath(scheduleData) {
       continue;
     }
     let j = i + 1;
-    const date = schedule[0].data[j][0];
+    const date = parseDate(schedule[0].data[j][0]);
     const locations = [];
     let daySchedule = schedule[0].data[j];
     while (
@@ -29,19 +48,21 @@ function parseScheduleFileWithPath(scheduleData) {
       const foundLocation = locations.find(
         location => location.name === daySchedule[1]
       );
+      const startTime = parseTime(daySchedule[3], date);
+      const endTime = parseTime(daySchedule[4], date);
       if (foundLocation) {
         foundLocation.employees.push({
           name: daySchedule[2],
-          startTime: daySchedule[3],
-          endTime: daySchedule[4],
+          startTime,
+          endTime,
           hours: parseFloat(daySchedule[5]),
         });
       } else {
         const employees = [
           {
             name: daySchedule[2],
-            startTime: daySchedule[3],
-            endTime: daySchedule[4],
+            startTime,
+            endTime,
             hours: parseFloat(daySchedule[5]),
           },
         ];
