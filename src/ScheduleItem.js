@@ -1,5 +1,11 @@
 import React, { PureComponent } from 'react';
 
+function renderTime(time) {
+  const date = new Date(time);
+  const minutes = date.getMinutes();
+  return `${date.getHours()}:${minutes < 10 ? '0' : ''}${minutes}`;
+}
+
 class ScheduleItem extends PureComponent {
   render() {
     const { daySchedule } = this.props;
@@ -8,16 +14,16 @@ class ScheduleItem extends PureComponent {
       <div className="sb-tile sb-margin-bottom-s">
         <div className="sb-flex">
           <div className="sb-padding" style={{ flex: 3 }}>
-            {daySchedule.date}
+            {new Date(daySchedule.date).toDateString()}
           </div>
           <div className="sb-padding" style={{ flex: 1 }}>
             {daySchedule.location}
           </div>
           <div className="sb-padding" style={{ flex: 2 }}>
-            {daySchedule.startTime}
+            {renderTime(daySchedule.startTime)}
           </div>
           <div className="sb-padding" style={{ flex: 2 }}>
-            {daySchedule.endTime}
+            {renderTime(daySchedule.endTime)}
           </div>
           <div className="sb-padding" style={{ flex: 1 }}>
             {daySchedule.hours}
