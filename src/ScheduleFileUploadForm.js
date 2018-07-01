@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 
 class ScheduleFileUploadForm extends PureComponent {
   componentDidMount() {
-    document.addEventListener('drop', event => {
+    this.dropListener = document.addEventListener('drop', event => {
       event.preventDefault();
       event.stopPropagation();
 
@@ -10,15 +10,15 @@ class ScheduleFileUploadForm extends PureComponent {
       this.props.onSubmit(file);
     });
 
-    document.addEventListener('dragover', event => {
+    this.dragoverListener = document.addEventListener('dragover', event => {
       event.preventDefault();
       event.stopPropagation();
     });
   }
 
   componentWillUnmount() {
-    document.removeEventListener('drop');
-    document.removeEventListener('dragover');
+    document.removeEventListener('drop', this.dropListener);
+    document.removeEventListener('dragover', this.dragoverListener);
   }
 
   render() {
