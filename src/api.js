@@ -100,3 +100,17 @@ export function createEvents(schedule) {
 
   return Promise.all(createEventRequests);
 }
+
+export function updateSchedule(scheduleId, data) {
+  ipcRenderer.send('api:updateSchedule', scheduleId, data);
+
+  return new Promise((resolve, reject) => {
+    ipcRenderer.on('api:updateSchedule:success', (event, arg) => {
+      resolve(arg);
+    });
+
+    ipcRenderer.on('api:updateSchedule:fail', (event, arg) => {
+      reject(arg);
+    });
+  });
+}

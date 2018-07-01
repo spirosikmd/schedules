@@ -16,6 +16,7 @@ module.exports = {
   getSchedules,
   getSelectedScheduleId,
   getHourlyWage,
+  updateSchedule,
 };
 
 function saveScheduleData(scheduleName, scheduleData) {
@@ -27,6 +28,7 @@ function saveScheduleData(scheduleName, scheduleData) {
       {
         id: uuidv4(),
         name: scheduleName,
+        eventsCreatedOnce: false,
         data: scheduleData,
       },
     ];
@@ -43,6 +45,7 @@ function getSchedules() {
     const simplifiedSchedules = schedules.map(schedule => ({
       id: schedule.id,
       name: schedule.name,
+      eventsCreatedOnce: schedule.eventsCreatedOnce || false,
     }));
 
     resolve(simplifiedSchedules);
@@ -113,5 +116,34 @@ function getScheduleDataForPerson(scheduleId, person, hourlyWage) {
       totalHours,
       totalWeeklyWage: totalHours * hourlyWage,
     });
+  });
+}
+
+function updateSchedule(scheduleId, data) {
+  return new Promise((resolve, reject) => {
+    const schedules = store.get('schedules');
+
+    const foundScheduleIndex = schedules.findIndex(
+      schedule => schedule.id === scheduleId
+    );
+
+    if (foundScheduleIndex === -1) {
+      return reject(`Schedule with id ${scheduleId} not found`);
+    }
+
+    const foundSchedule = schedules[foundScheduleIndex];
+    const updatedFoundSchedule = {
+      ...foundSchedule,
+      ...data,
+    };
+    const updatedSchedules = [
+      ...schedules.slice(0, foundScheduleIndex),
+      updatedFoundSchedule,
+      ...schedules.slice(foundScheduleIndex + 1),
+    ];
+
+    store.set('schedules', updatedSchedules);
+
+    resolve(updatedFoundSchedule);
   });
 }

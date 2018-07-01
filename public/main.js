@@ -5,6 +5,7 @@ const {
   getSchedules,
   getSelectedScheduleId,
   getHourlyWage,
+  updateSchedule,
 } = require('./db');
 const { parseScheduleFileWithPath } = require('./parser');
 
@@ -34,11 +35,7 @@ ipcMain.on('api:upload', (event, fileName, filePath) => {
   const scheduleData = parseScheduleFileWithPath(filePath);
 
   saveScheduleData(fileName, scheduleData)
-    .then(message => {
-      event.sender.send('api:upload:success', {
-        message,
-      });
-    })
+    .then(data => event.sender.send('api:upload:success', data))
     .catch(error =>
       event.sender.send('api:upload:fail', {
         message: error,
@@ -64,4 +61,14 @@ ipcMain.on('api:hourlyWage', event => {
         message: error,
       });
     });
+});
+
+ipcMain.on('api:updateSchedule', (event, scheduleId, data) => {
+  updateSchedule(scheduleId, data)
+    .then(data => event.sender.send('api:updateSchedule:success', data))
+    .catch(error =>
+      event.sender.send('api:updateSchedule:fail', {
+        message: error,
+      })
+    );
 });

@@ -10,6 +10,7 @@ import {
   fetchSelectedScheduleId,
   fetchHourlyWage,
   createEvents,
+  updateSchedule,
 } from './api';
 
 class App extends Component {
@@ -36,7 +37,14 @@ class App extends Component {
 
         Promise.all([fetchSelectedScheduleId(), fetchHourlyWage()])
           .then(([selectedScheduleId, hourlyWage]) => {
-            this.setState({ selectedScheduleId, hourlyWage });
+            if (!selectedScheduleId) {
+              return;
+            }
+
+            this.setState({
+              selectedScheduleId: selectedScheduleId,
+              hourlyWage,
+            });
 
             fetchScheduleForPerson(
               selectedScheduleId,
@@ -102,6 +110,7 @@ class App extends Component {
 
   handleCreateEventsClick = () => {
     this.setState({ isCreatingEvents: true });
+
     createEvents(this.state.schedule)
       .then(events => {
         events.forEach(event => {
@@ -111,8 +120,16 @@ class App extends Component {
             }`
           );
         });
-        // TODO: save events created once in the selected schedule
+
         this.setState({ isCreatingEvents: false });
+
+        updateSchedule(this.state.selectedScheduleId, {
+          eventsCreatedOnce: true,
+        })
+          .then(updatedSchedule => {
+            console.log(updatedSchedule);
+          })
+          .catch(console.error);
       })
       .catch(console.error);
   };
