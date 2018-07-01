@@ -176,7 +176,7 @@ class App extends Component {
             />
             <header className="sb-flex sb-justify-content-between sb-margin-bottom">
               <h1>
-                Welcome to {this.state.authUser.profileObj.givenName} Schedule
+                Welcome to {this.state.authUser.profileObj.givenName} schedule
               </h1>
               <GoogleLogout
                 className="sb-btn"
