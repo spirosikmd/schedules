@@ -69,3 +69,9 @@ export async function fetchSelectedScheduleId() {
     });
   });
 }
+
+export function createEvents(schedule) {
+  return window.gapi.client.request({
+    path: 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+  });
+}
