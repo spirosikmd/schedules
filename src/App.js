@@ -26,6 +26,7 @@ class App extends Component {
       errorCode: '',
       details: '',
     },
+    isCreatingEvents: false,
   };
 
   componentDidMount() {
@@ -100,8 +101,19 @@ class App extends Component {
   };
 
   handleCreateEventsClick = () => {
+    this.setState({ isCreatingEvents: true });
     createEvents(this.state.schedule)
-      .then(console.log)
+      .then(events => {
+        events.forEach(event => {
+          console.log(
+            `Event created: ${event.created} | ${event.description} | ${
+              event.location
+            }`
+          );
+        });
+        // TODO: save events created once in the selected schedule
+        this.setState({ isCreatingEvents: false });
+      })
       .catch(console.error);
   };
 
@@ -167,8 +179,11 @@ class App extends Component {
               <button
                 className="sb-btn sb-btn--primary"
                 onClick={this.handleCreateEventsClick}
+                disabled={this.state.isCreatingEvents}
               >
-                create events
+                {this.state.isCreatingEvents
+                  ? 'creating events...'
+                  : 'create events'}
               </button>
             </div>
             <Schedule
