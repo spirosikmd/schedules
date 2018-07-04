@@ -1,7 +1,7 @@
 const xlsx = require('node-xlsx').default;
 
 module.exports = {
-  parseScheduleFileWithPath,
+  parseScheduleFileData,
 };
 
 function parseDate(dateToParse) {
@@ -23,7 +23,7 @@ function parseTime(timeToParse, date) {
   return time;
 }
 
-function parseScheduleFileWithPath(scheduleData) {
+function parseScheduleFileData(scheduleData) {
   const schedule = xlsx.parse(scheduleData, {
     raw: false,
   });

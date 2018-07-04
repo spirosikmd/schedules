@@ -2,42 +2,17 @@
   "name": "jenny-schedule",
   "version": "0.2.0",
   "private": true,
-  "main": "public/electron.js",
   "author": "Spyros Ioakeimidis <spyrosikmd@gmail.com>",
   "description": "Check your schedule and more!",
-  "homepage": "./",
-  "dependencies": {
-    "electron-is-dev": "^0.3.0",
-    "node-xlsx": "^0.12.1",
-    "react": "^16.4.1",
-    "react-dom": "^16.4.1",
-    "react-google-login": "^3.2.1",
-    "react-scripts": "1.1.4",
-    "uuid": "^3.3.0"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "electron-dev": "concurrently -k \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron-pack": "build",
-    "preelectron-pack": "yarn build"
+    "dev:client": "cd client && yarn start",
+    "dev:server": "cd server && yarn dev",
+    "dev": "concurrently --kill-others-on-fail \"yarn dev:server\" \"yarn dev:client\"",
+    "build:client": "cd client && yarn build",
+    "start:server": "cd server && yarn start",
+    "start": "yarn build:client && yarn start:server"
   },
   "devDependencies": {
-    "concurrently": "^3.6.0",
-    "electron": "^2.0.3",
-    "electron-builder": "^20.16.0",
-    "wait-on": "^2.1.0"
-  },
-  "build": {
-    "appId": "com.example.electron-cra",
-    "files": [
-      "build/**/*",
-      "node_modules/**/*"
-    ],
-    "directories": {
-      "buildResources": "assets"
-    }
+    "concurrently": "^3.6.0"
   }
 }

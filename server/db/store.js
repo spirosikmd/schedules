@@ -1,10 +1,10 @@
-const { app } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
 class Store {
   constructor(opts) {
-    const userDataPath = app.getPath('userData');
+    // Probably use something like process.env.HOME
+    const userDataPath = __dirname;
 
     this.path = path.join(userDataPath, opts.configName + '.json');
 
