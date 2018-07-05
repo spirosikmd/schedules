@@ -18,7 +18,7 @@ class App extends Component {
     schedule: [],
     totalHours: 0,
     totalWeeklyWage: 0,
-    person: 'Jenny',
+    person: 'jenny',
     hourlyWage: 0,
     selectedScheduleId: '',
     schedules: [],
