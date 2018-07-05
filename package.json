@@ -10,7 +10,10 @@
     "dev": "concurrently --kill-others-on-fail \"yarn dev:server\" \"yarn dev:client\"",
     "build:client": "cd client && yarn build",
     "start:server": "cd server && yarn start",
-    "start": "yarn build:client && yarn start:server"
+    "start": "yarn build:client && yarn start:server",
+    "install:client": "cd client && yarn",
+    "install:server": "cd server && yarn",
+    "postinstall": "concurrently \"yarn install:client\" \"yarn install:server\""
   },
   "devDependencies": {
     "concurrently": "^3.6.0"
