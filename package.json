@@ -13,7 +13,7 @@
     "start": "yarn build:client && yarn start:server",
     "install:client": "cd client && yarn",
     "install:server": "cd server && yarn",
-    "postinstall": "concurrently \"yarn install:client\" \"yarn install:server\""
+    "postinstall": "yarn install:client && yarn install:server"
   },
   "devDependencies": {
     "concurrently": "^3.6.0"
