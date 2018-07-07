@@ -1,4 +1,6 @@
-require('dotenv-safe').load();
+require('dotenv-safe').config({
+  allowEmptyValues: true,
+});
 
 const express = require('express');
 
