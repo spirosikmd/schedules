@@ -17,13 +17,27 @@ function getSettings(userEmail) {
           return reject(err);
         }
 
+        if (settings === null) {
+          Settings.create(
+            { user: user._id, hourlyWage: 8.55, person: '' },
+            (err, newSettings) => {
+              if (err) {
+                return reject(err);
+              }
+
+              resolve(newSettings);
+            }
+          );
+          return;
+        }
+
         resolve(settings);
       });
     });
   });
 }
 
-function updateSettings(userEmail, hourlyWage, person) {
+function updateSettings(userEmail, settingsId, hourlyWage, person) {
   return new Promise((resolve, reject) => {
     User.findOne({ email: userEmail }, (err, user) => {
       if (err) {
@@ -38,13 +52,18 @@ function updateSettings(userEmail, hourlyWage, person) {
 
       const data = { hourlyWage, person, user: user._id };
 
-      Settings.create(data, (err, settings) => {
-        if (err) {
-          return reject(err);
-        }
+      Settings.findOneAndUpdate(
+        { _id: settingsId, user: user._id },
+        data,
+        { new: true },
+        (err, settings) => {
+          if (err) {
+            return reject(err);
+          }
 
-        resolve(settings);
-      });
+          resolve(settings);
+        }
+      );
     });
   });
 }
