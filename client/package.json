@@ -5,6 +5,7 @@
   "author": "Spyros Ioakeimidis <spyrosikmd@gmail.com>",
   "description": "Check your schedule and more!",
   "dependencies": {
+    "@reach/router": "^1.1.1",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
     "react-google-login": "^3.2.1",

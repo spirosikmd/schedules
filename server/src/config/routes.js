@@ -3,17 +3,19 @@ const {
   saveScheduleData,
   getScheduleDataForPerson,
   getSchedules,
-  getSelectedScheduleId,
-  getSettings,
   updateSchedule,
-} = require('../db');
+} = require('../services/schedule');
+const { getSettings, updateSettings } = require('../services/settings');
+const { createUser } = require('../services/user');
 const { parseScheduleFileData } = require('../parser');
 
 const upload = multer();
 
 module.exports = function(app) {
   app.get('/api/schedules', (req, res) => {
-    getSchedules()
+    const { userEmail } = req.query;
+
+    getSchedules(userEmail)
       .then(data => res.json(data))
       .catch(error => {
         res.status(404).json({
@@ -24,10 +26,11 @@ module.exports = function(app) {
 
   app.post('/api/schedules', upload.single('scheduleFile'), (req, res) => {
     const { buffer, originalname } = req.file;
+    const { userEmail } = req.query;
 
     const scheduleData = parseScheduleFileData(buffer);
 
-    saveScheduleData(originalname, scheduleData)
+    saveScheduleData(userEmail, originalname, scheduleData)
       .then(data => res.json(data))
       .catch(error =>
         res.status(404).json({
@@ -36,21 +39,12 @@ module.exports = function(app) {
       );
   });
 
-  app.get('/api/selected-schedule-id', (req, res) => {
-    getSelectedScheduleId()
-      .then(data => res.json(data))
-      .catch(error => {
-        res.status(404).json({
-          message: error,
-        });
-      });
-  });
-
   app.put('/api/schedules/:scheduleId', (req, res) => {
     const { scheduleId } = req.params;
+    const { userEmail } = req.query;
     const data = req.body;
 
-    updateSchedule(scheduleId, data)
+    updateSchedule(userEmail, scheduleId, data)
       .then(data => res.json(data))
       .catch(error =>
         res.status(404).json({
@@ -61,9 +55,14 @@ module.exports = function(app) {
 
   app.get('/api/schedules/:scheduleId/generate', (req, res) => {
     const { scheduleId } = req.params;
-    const { person, hourlyWage } = req.query;
+    const { person, hourlyWage, userEmail } = req.query;
 
-    getScheduleDataForPerson(scheduleId, person.toLowerCase(), hourlyWage)
+    getScheduleDataForPerson(
+      userEmail,
+      scheduleId,
+      person.toLowerCase(),
+      hourlyWage
+    )
       .then(data => res.json(data))
       .catch(error => {
         res.status(404).json({
@@ -73,7 +72,34 @@ module.exports = function(app) {
   });
 
   app.get('/api/settings', (req, res) => {
-    getSettings()
+    const { userEmail } = req.query;
+
+    getSettings(userEmail)
+      .then(data => res.json(data))
+      .catch(error => {
+        res.status(404).json({
+          message: error,
+        });
+      });
+  });
+
+  app.put('/api/settings', (req, res) => {
+    const { hourlyWage, person } = req.body;
+    const { userEmail } = req.query;
+
+    updateSettings(userEmail, hourlyWage, person)
+      .then(data => res.json(data))
+      .catch(error => {
+        res.status(404).json({
+          message: error,
+        });
+      });
+  });
+
+  app.post('/api/users', (req, res) => {
+    const { email } = req.body;
+
+    createUser(email)
       .then(data => res.json(data))
       .catch(error => {
         res.status(404).json({
