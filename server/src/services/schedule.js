@@ -136,6 +136,7 @@ function updateSchedule(userEmail, scheduleId, data) {
       Schedule.findOneAndUpdate(
         { _id: scheduleId, user: user._id },
         data,
+        { new: true },
         (err, schedule) => {
           if (err || schedule === null) {
             return reject(err);
