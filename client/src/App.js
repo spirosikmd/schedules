@@ -207,7 +207,7 @@ class App extends Component {
       schedule => schedule.id === this.state.selectedScheduleId
     );
     const eventsCreatedOnceForSelectedSchedule =
-      selectedSchedule.eventsCreatedOnce;
+      selectedSchedule && selectedSchedule.eventsCreatedOnce;
 
     return (
       <div className="sb-container sb-padding">
