@@ -1,25 +1,36 @@
 import React, { PureComponent } from 'react';
 
 class RefreshForm extends PureComponent {
-  handleRefreshSubmit = event => {
+  constructor(props) {
+    super(props);
+
+    this.handleRefreshSubmit = this.handleRefreshSubmit.bind(this);
+    this.handleHourlyWageChange = this.handleHourlyWageChange.bind(this);
+    this.handlePersonChange = this.handlePersonChange.bind(this);
+    this.handleSelectedScheduleChange = this.handleSelectedScheduleChange.bind(
+      this
+    );
+  }
+
+  handleRefreshSubmit(event) {
     event.preventDefault();
     this.props.onSubmit();
-  };
+  }
 
-  handleHourlyWageChange = event => {
+  handleHourlyWageChange(event) {
     const value = event.currentTarget.value;
     this.props.onHourlyWageChange(value);
-  };
+  }
 
-  handlePersonChange = event => {
+  handlePersonChange(event) {
     const value = event.currentTarget.value;
     this.props.onPersonChange(value);
-  };
+  }
 
-  handleSelectedScheduleChange = event => {
+  handleSelectedScheduleChange(event) {
     const selectedScheduleId = event.currentTarget.value;
     this.props.onSelectedScheduleChange(selectedScheduleId);
-  };
+  }
 
   render() {
     const { person, hourlyWage, schedules, selectedScheduleId } = this.props;

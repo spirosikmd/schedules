@@ -32,6 +32,24 @@ class App extends Component {
     isCreatingEvents: false,
   };
 
+  constructor(props) {
+    super(props);
+
+    this.handleScheduleFileUploadFormSubmit = this.handleScheduleFileUploadFormSubmit.bind(
+      this
+    );
+    this.handleHourlyWageChange = this.handleHourlyWageChange.bind(this);
+    this.handlePersonChange = this.handlePersonChange.bind(this);
+    this.handleRefreshFormSubmit = this.handleRefreshFormSubmit.bind(this);
+    this.handleCreateEventsClick = this.handleCreateEventsClick.bind(this);
+    this.handleSelectedScheduleChange = this.handleSelectedScheduleChange.bind(
+      this
+    );
+    this.handleGoogleLoginSuccess = this.handleGoogleLoginSuccess.bind(this);
+    this.handleGoogleLoginFailure = this.handleGoogleLoginFailure.bind(this);
+    this.handleGoogleLogoutSuccess = this.handleGoogleLogoutSuccess.bind(this);
+  }
+
   componentDidMount() {
     fetchSchedules()
       .then(schedules => {
@@ -67,7 +85,7 @@ class App extends Component {
       .catch(err => console.log(err));
   }
 
-  handleScheduleFileUploadFormSubmit = async file => {
+  handleScheduleFileUploadFormSubmit(file) {
     generateScheduleWithFileAndPerson(file)
       .then(() => {
         fetchSchedules().then(schedules => {
@@ -88,9 +106,9 @@ class App extends Component {
         });
       })
       .catch(err => console.log(err));
-  };
+  }
 
-  handleHourlyWageChange = hourlyWage => {
+  handleHourlyWageChange(hourlyWage) {
     const settings = {
       ...this.state.settings,
       ...{
@@ -98,9 +116,9 @@ class App extends Component {
       },
     };
     this.setState({ settings });
-  };
+  }
 
-  handlePersonChange = person => {
+  handlePersonChange(person) {
     const settings = {
       ...this.state.settings,
       ...{
@@ -108,9 +126,9 @@ class App extends Component {
       },
     };
     this.setState({ settings });
-  };
+  }
 
-  handleRefreshFormSubmit = async () => {
+  handleRefreshFormSubmit() {
     fetchScheduleForPerson(
       this.state.selectedScheduleId,
       this.state.settings.person,
@@ -124,9 +142,9 @@ class App extends Component {
         })
       )
       .catch(err => console.log(err));
-  };
+  }
 
-  handleCreateEventsClick = () => {
+  handleCreateEventsClick() {
     this.setState({ isCreatingEvents: true });
 
     createEvents(this.state.schedule)
@@ -150,23 +168,23 @@ class App extends Component {
           .catch(console.error);
       })
       .catch(console.error);
-  };
+  }
 
-  handleSelectedScheduleChange = selectedScheduleId => {
+  handleSelectedScheduleChange(selectedScheduleId) {
     this.setState({ selectedScheduleId });
-  };
+  }
 
-  handleGoogleLoginSuccess = authUser => {
+  handleGoogleLoginSuccess(authUser) {
     this.setState({ authUser });
-  };
+  }
 
-  handleGoogleLoginFailure = ({ error, details }) => {
+  handleGoogleLoginFailure({ error, details }) {
     this.setState({ error: { errorCode: error, details } });
-  };
+  }
 
-  handleGoogleLogoutSuccess = () => {
+  handleGoogleLogoutSuccess() {
     this.setState({ authUser: null });
-  };
+  }
 
   render() {
     if (this.state.authUser === null) {
