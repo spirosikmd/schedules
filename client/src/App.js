@@ -162,8 +162,8 @@ class App extends Component {
         updateSchedule(this.state.selectedScheduleId, {
           eventsCreatedOnce: true,
         })
-          .then(updatedSchedule => {
-            console.log(updatedSchedule);
+          .then(() => {
+            fetchSchedules().then(schedules => this.setState({ schedules }));
           })
           .catch(console.error);
       })
@@ -203,6 +203,12 @@ class App extends Component {
       );
     }
 
+    const selectedSchedule = this.state.schedules.find(
+      schedule => schedule.id === this.state.selectedScheduleId
+    );
+    const eventsCreatedOnceForSelectedSchedule =
+      selectedSchedule.eventsCreatedOnce;
+
     return (
       <div className="sb-container sb-padding">
         <div className="sb-grid">
@@ -231,15 +237,21 @@ class App extends Component {
                 onSelectedScheduleChange={this.handleSelectedScheduleChange}
                 onSubmit={this.handleRefreshFormSubmit}
               />
-              <button
-                className="sb-btn sb-btn--primary"
-                onClick={this.handleCreateEventsClick}
-                disabled={this.state.isCreatingEvents}
-              >
-                {this.state.isCreatingEvents
-                  ? 'creating events...'
-                  : 'create events'}
-              </button>
+              <div className="sb-flex sb-align-items-center">
+                <div className="sb-margin-right">
+                  {eventsCreatedOnceForSelectedSchedule &&
+                    '(Events created once!)'}
+                </div>
+                <button
+                  className="sb-btn sb-btn--primary"
+                  onClick={this.handleCreateEventsClick}
+                  disabled={this.state.isCreatingEvents}
+                >
+                  {this.state.isCreatingEvents
+                    ? 'creating events...'
+                    : 'create events'}
+                </button>
+              </div>
             </div>
             <Schedule
               schedule={this.state.schedule}
