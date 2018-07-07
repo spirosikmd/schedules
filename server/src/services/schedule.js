@@ -149,9 +149,34 @@ function updateSchedule(userEmail, scheduleId, data) {
   });
 }
 
+function deleteSchedule(userEmail, scheduleId) {
+  return new Promise((resolve, reject) => {
+    User.findOne({ email: userEmail }, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject(
+          `Cannot delete schedule for user with email ${userEmail}`
+        );
+      }
+
+      Schedule.findOneAndDelete({ user: user._id, _id: scheduleId }, err => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve({ message: 'Schedule successfully deleted' });
+      });
+    });
+  });
+}
+
 module.exports = {
   getScheduleDataForPerson,
   saveScheduleData,
   getSchedules,
   updateSchedule,
+  deleteSchedule,
 };

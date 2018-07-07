@@ -4,6 +4,7 @@ const {
   getScheduleDataForPerson,
   getSchedules,
   updateSchedule,
+  deleteSchedule,
 } = require('../services/schedule');
 const { getSettings, updateSettings } = require('../services/settings');
 const { createUser } = require('../services/user');
@@ -45,6 +46,19 @@ module.exports = function(app) {
     const data = req.body;
 
     updateSchedule(userEmail, scheduleId, data)
+      .then(data => res.json(data))
+      .catch(error =>
+        res.status(404).json({
+          message: error,
+        })
+      );
+  });
+
+  app.delete('/api/schedules/:scheduleId', (req, res) => {
+    const { scheduleId } = req.params;
+    const { userEmail } = req.query;
+
+    deleteSchedule(userEmail, scheduleId)
       .then(data => res.json(data))
       .catch(error =>
         res.status(404).json({

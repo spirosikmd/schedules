@@ -103,3 +103,12 @@ export function createUser(email) {
     }),
   }).then(response => response.json());
 }
+
+export function deleteSchedule(userEmail, scheduleId) {
+  return fetch(`${BASE}/schedules/${scheduleId}?userEmail=${userEmail}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }).then(response => response.json());
+}
