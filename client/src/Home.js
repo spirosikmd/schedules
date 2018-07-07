@@ -70,9 +70,6 @@ class Home extends Component {
       <div className="sb-container sb-padding">
         <div className="sb-grid">
           <div className="sb-col-12">
-            <ScheduleFileUploadForm
-              onSubmit={this.handleScheduleFileUploadFormSubmit}
-            />
             <header className="sb-flex sb-justify-content-between sb-margin-bottom">
               <h1>
                 Welcome to {this.props.authUser.profileObj.givenName} schedule
@@ -88,8 +85,9 @@ class Home extends Component {
                 />
               </div>
             </header>
-            {this.state.schedules.length > 0 ? (
-              this.state.schedules.map(schedule => (
+            <div>
+              <h2 className="sb-margin-bottom">Select a schedule</h2>
+              {this.state.schedules.map(schedule => (
                 <div
                   key={schedule.id}
                   className="sb-tile sb-padding sb-margin-bottom"
@@ -102,10 +100,11 @@ class Home extends Component {
                     {schedule.name}
                   </Link>
                 </div>
-              ))
-            ) : (
-              <div>Drag and drop a schedule file!</div>
-            )}
+              ))}
+            </div>
+            <ScheduleFileUploadForm
+              onSubmit={this.handleScheduleFileUploadFormSubmit}
+            />
           </div>
         </div>
       </div>

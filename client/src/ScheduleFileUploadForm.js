@@ -1,28 +1,50 @@
 import React, { PureComponent } from 'react';
 
 class ScheduleFileUploadForm extends PureComponent {
-  componentDidMount() {
-    this.dropListener = document.addEventListener('drop', event => {
-      event.preventDefault();
-      event.stopPropagation();
+  constructor(props) {
+    super(props);
 
-      const file = event.dataTransfer.files[0];
-      this.props.onSubmit(file);
-    });
+    this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.dragoverListener = document.addEventListener('dragover', event => {
-      event.preventDefault();
-      event.stopPropagation();
-    });
+    this.fileInput = React.createRef();
   }
 
-  componentWillUnmount() {
-    document.removeEventListener('drop', this.dropListener);
-    document.removeEventListener('dragover', this.dragoverListener);
+  handleSubmit(event) {
+    event.preventDefault();
+
+    const file = this.fileInput.current.files[0];
+
+    if (!file) {
+      return;
+    }
+
+    this.props.onSubmit(file);
   }
 
   render() {
-    return <div id="holder" />;
+    return (
+      <form onSubmit={this.handleSubmit} className="sb-flex">
+        <div className="sb-form-control sb-flex sb-align-items-center sb-margin-right">
+          <label
+            className="sb-margin-right"
+            htmlFor="scheduleFile"
+            style={{ flex: 1 }}
+          >
+            Or upload a new one:
+          </label>
+          <input
+            className="sb-input"
+            type="file"
+            id="scheduleFile"
+            ref={this.fileInput}
+            style={{ flex: 2 }}
+          />
+        </div>
+        <button className="sb-btn" type="submit">
+          Upload
+        </button>
+      </form>
+    );
   }
 }
 
