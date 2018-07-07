@@ -8,7 +8,7 @@ import {
   generateScheduleWithFileAndPerson,
   fetchSchedules,
   fetchSelectedScheduleId,
-  fetchHourlyWage,
+  fetchSettings,
   createEvents,
   updateSchedule,
 } from './api';
@@ -18,8 +18,10 @@ class App extends Component {
     schedule: [],
     totalHours: 0,
     totalWeeklyWage: 0,
-    person: 'jenny',
-    hourlyWage: 0,
+    settings: {
+      person: '',
+      hourlyWage: 0,
+    },
     selectedScheduleId: '',
     schedules: [],
     authUser: null,
@@ -35,21 +37,21 @@ class App extends Component {
       .then(schedules => {
         this.setState({ schedules });
 
-        Promise.all([fetchSelectedScheduleId(), fetchHourlyWage()])
-          .then(([selectedScheduleId, hourlyWage]) => {
+        Promise.all([fetchSelectedScheduleId(), fetchSettings()])
+          .then(([selectedScheduleId, settings]) => {
             if (!selectedScheduleId) {
               return;
             }
 
             this.setState({
               selectedScheduleId: selectedScheduleId,
-              hourlyWage,
+              settings,
             });
 
             fetchScheduleForPerson(
               selectedScheduleId,
-              this.state.person,
-              hourlyWage
+              settings.person,
+              settings.hourlyWage
             )
               .then(response =>
                 this.setState({
@@ -74,8 +76,8 @@ class App extends Component {
 
           fetchScheduleForPerson(
             lastSchedule.id,
-            this.state.person,
-            this.state.hourlyWage
+            this.state.settings.person,
+            this.state.settings.hourlyWage
           ).then(response =>
             this.setState({
               schedule: response.schedule,
@@ -89,14 +91,30 @@ class App extends Component {
   };
 
   handleHourlyWageChange = hourlyWage => {
-    this.setState({ hourlyWage });
+    const settings = {
+      ...this.state.settings,
+      ...{
+        hourlyWage,
+      },
+    };
+    this.setState({ settings });
+  };
+
+  handlePersonChange = person => {
+    const settings = {
+      ...this.state.settings,
+      ...{
+        person,
+      },
+    };
+    this.setState({ settings });
   };
 
   handleRefreshFormSubmit = async () => {
     fetchScheduleForPerson(
       this.state.selectedScheduleId,
-      this.state.person,
-      this.state.hourlyWage
+      this.state.settings.person,
+      this.state.settings.hourlyWage
     )
       .then(response =>
         this.setState({
@@ -186,10 +204,12 @@ class App extends Component {
             </header>
             <div className="sb-flex sb-padding-bottom sb-justify-content-between">
               <RefreshForm
-                hourlyWage={this.state.hourlyWage}
+                person={this.state.settings.person}
+                hourlyWage={this.state.settings.hourlyWage}
                 schedules={this.state.schedules}
                 selectedScheduleId={this.state.selectedScheduleId}
                 onHourlyWageChange={this.handleHourlyWageChange}
+                onPersonChange={this.handlePersonChange}
                 onSelectedScheduleChange={this.handleSelectedScheduleChange}
                 onSubmit={this.handleRefreshFormSubmit}
               />

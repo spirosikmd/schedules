@@ -25,8 +25,8 @@ export async function fetchSchedules() {
   return fetch(`${BASE}/schedules`).then(response => response.json());
 }
 
-export async function fetchHourlyWage() {
-  return fetch(`${BASE}/hourly-wage`).then(response => response.json());
+export async function fetchSettings() {
+  return fetch(`${BASE}/settings`).then(response => response.json());
 }
 
 export async function fetchSelectedScheduleId() {

@@ -7,7 +7,7 @@ const {
   getScheduleDataForPerson,
   getSchedules,
   getSelectedScheduleId,
-  getHourlyWage,
+  getSettings,
   updateSchedule,
 } = require('./db');
 const { parseScheduleFileData } = require('./parser');
@@ -79,8 +79,8 @@ app.get('/api/schedules/:scheduleId/generate', (req, res) => {
     });
 });
 
-app.get('/api/hourly-wage', (req, res) => {
-  getHourlyWage()
+app.get('/api/settings', (req, res) => {
+  getSettings()
     .then(data => res.json(data))
     .catch(error => {
       res.status(404).json({

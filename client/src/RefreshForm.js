@@ -11,13 +11,18 @@ class RefreshForm extends PureComponent {
     this.props.onHourlyWageChange(value);
   };
 
+  handlePersonChange = event => {
+    const value = event.currentTarget.value;
+    this.props.onPersonChange(value);
+  };
+
   handleSelectedScheduleChange = event => {
     const selectedScheduleId = event.currentTarget.value;
     this.props.onSelectedScheduleChange(selectedScheduleId);
   };
 
   render() {
-    const { schedules, selectedScheduleId } = this.props;
+    const { person, hourlyWage, schedules, selectedScheduleId } = this.props;
 
     return (
       <div className="sb-flex">
@@ -42,12 +47,23 @@ class RefreshForm extends PureComponent {
         <form onSubmit={this.handleRefreshSubmit} className="sb-flex">
           <div className="sb-form-control sb-margin-right">
             <input
+              aria-label="Person"
+              placeholder="Enter your schedule name"
+              className="sb-input"
+              id="person"
+              type="text"
+              value={person}
+              onChange={this.handlePersonChange}
+            />
+          </div>
+          <div className="sb-form-control sb-margin-right">
+            <input
               aria-label="Hourly Wage"
               placeholder="Enter your hourly wage"
               className="sb-input"
               id="hourly-wage"
               type="number"
-              value={this.props.hourlyWage}
+              value={hourlyWage}
               onChange={this.handleHourlyWageChange}
             />
           </div>

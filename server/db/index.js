@@ -6,7 +6,10 @@ const store = new Store({
   defaults: {
     schedules: [],
     selectedScheduleId: null,
-    hourlyWage: 8.55,
+    settings: {
+      hourlyWage: 8.55,
+      person: '',
+    },
   },
 });
 
@@ -15,7 +18,7 @@ module.exports = {
   saveScheduleData,
   getSchedules,
   getSelectedScheduleId,
-  getHourlyWage,
+  getSettings,
   updateSchedule,
 };
 
@@ -60,11 +63,11 @@ function getSelectedScheduleId() {
   });
 }
 
-function getHourlyWage() {
+function getSettings() {
   return new Promise((resolve, reject) => {
-    const hourlyWage = store.get('hourlyWage');
+    const settings = store.get('settings');
 
-    resolve(hourlyWage);
+    resolve(settings);
   });
 }
 
@@ -81,7 +84,7 @@ function getScheduleDataForPerson(scheduleId, person, hourlyWage) {
     }
 
     store.set('selectedScheduleId', scheduleId);
-    store.set('hourlyWage', hourlyWage);
+    store.set('settings', { hourlyWage, person });
 
     const scheduleData = foundSchedule.data;
 
