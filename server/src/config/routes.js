@@ -83,11 +83,12 @@ module.exports = function(app) {
       });
   });
 
-  app.put('/api/settings', (req, res) => {
+  app.put('/api/settings/:settingsId', (req, res) => {
     const { hourlyWage, person } = req.body;
     const { userEmail } = req.query;
+    const { settingsId } = req.params;
 
-    updateSettings(userEmail, hourlyWage, person)
+    updateSettings(userEmail, settingsId, hourlyWage, person)
       .then(data => res.json(data))
       .catch(error => {
         res.status(404).json({

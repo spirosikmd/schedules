@@ -18,13 +18,7 @@ class Schedule extends PureComponent {
   }
 
   componentDidMount() {
-    const search = querystring.parse(this.props.location.search.substring(1));
-    const { person, hourlyWage } = search;
-    const { email } = this.props.authUser.profileObj;
-
-    fetchScheduleForPerson(email, this.props.scheduleId, person, hourlyWage)
-      .then(schedule => this.setState({ schedule }))
-      .catch(err => console.log(err));
+    this.getSchedule();
   }
 
   handleBackButtonClick(event) {
@@ -47,15 +41,27 @@ class Schedule extends PureComponent {
 
         this.setState({ isCreatingEvents: false });
 
-        updateSchedule(this.props.scheduleId, {
+        const { email } = this.props.authUser.profileObj;
+
+        updateSchedule(email, this.props.scheduleId, {
           eventsCreatedOnce: true,
         })
-          .then(schedule => {
-            this.setState({ schedule });
+          .then(() => {
+            this.getSchedule();
           })
           .catch(console.error);
       })
       .catch(console.error);
+  }
+
+  getSchedule() {
+    const search = querystring.parse(this.props.location.search.substring(1));
+    const { person, hourlyWage } = search;
+    const { email } = this.props.authUser.profileObj;
+
+    fetchScheduleForPerson(email, this.props.scheduleId, person, hourlyWage)
+      .then(schedule => this.setState({ schedule }))
+      .catch(err => console.log(err));
   }
 
   render() {

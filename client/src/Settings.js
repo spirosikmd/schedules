@@ -3,8 +3,10 @@ import { fetchSettings, updateSettings } from './api';
 
 class Settings extends PureComponent {
   state = {
-    person: '',
-    hourlyWage: 0,
+    settings: {
+      person: '',
+      hourlyWage: 0,
+    },
     isSaving: false,
   };
 
@@ -20,7 +22,7 @@ class Settings extends PureComponent {
     const { email } = this.props.authUser.profileObj;
 
     fetchSettings(email).then(settings => {
-      this.setState({ ...settings });
+      this.setState({ settings });
     });
   }
 
@@ -34,10 +36,10 @@ class Settings extends PureComponent {
 
     this.setState({ isSaving: true });
 
-    const { hourlyWage, person } = this.state;
+    const { _id: settingsId, hourlyWage, person } = this.state.settings;
     const { email } = this.props.authUser.profileObj;
 
-    updateSettings(email, hourlyWage, person).then(settings => {
+    updateSettings(email, settingsId, hourlyWage, person).then(settings => {
       this.setState({ isSaving: false });
       this.setState({ ...settings });
     });
@@ -46,11 +48,15 @@ class Settings extends PureComponent {
   handleInputChange(event) {
     const value = event.target.value;
     const name = event.target.name;
-    this.setState({ [name]: value });
+    const settings = {
+      ...this.state.settings,
+      ...{ [name]: value },
+    };
+    this.setState({ settings });
   }
 
   render() {
-    const { person, hourlyWage, isSaving } = this.state;
+    const { settings, isSaving } = this.state;
 
     return (
       <div>
@@ -79,7 +85,7 @@ class Settings extends PureComponent {
                 className="sb-input"
                 id="person"
                 type="text"
-                value={person}
+                value={settings.person}
                 name="person"
                 onChange={this.handleInputChange}
               />
@@ -91,7 +97,7 @@ class Settings extends PureComponent {
                 className="sb-input"
                 id="hourly-wage"
                 type="number"
-                value={hourlyWage}
+                value={settings.hourlyWage}
                 name="hourlyWage"
                 onChange={this.handleInputChange}
               />

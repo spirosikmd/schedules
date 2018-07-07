@@ -79,8 +79,8 @@ export function updateSchedule(userEmail, scheduleId, data) {
   }).then(response => response.json());
 }
 
-export function updateSettings(userEmail, hourlyWage, person) {
-  return fetch(`${BASE}/settings?userEmail=${userEmail}`, {
+export function updateSettings(userEmail, settingsId, hourlyWage, person) {
+  return fetch(`${BASE}/settings/${settingsId}?userEmail=${userEmail}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
