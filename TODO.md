@@ -1,5 +1,6 @@
 # TODO
 
-- Sum all wages in a legend (e.g Holy Total).
+- Sum all wages in a legend (e.g Holy Total) in home page.
 - Show a chart with the weekly average.
-- Edit the name of upload schedules.
+- Wage per day in the schedule table.
+- Edit the schedule table. Add days and hours, all other optional.
