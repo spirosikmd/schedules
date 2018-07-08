@@ -10,10 +10,11 @@
     "dev": "concurrently --kill-others-on-fail \"yarn dev:server\" \"yarn dev:client\"",
     "build:client": "cd client && yarn build",
     "start:server": "cd server && yarn start",
-    "start": "yarn build:client && yarn start:server",
+    "start": "yarn start:server",
     "install:client": "cd client && yarn",
     "install:server": "cd server && yarn",
-    "postinstall": "yarn install:client && yarn install:server"
+    "postinstall": "yarn install:client && yarn install:server",
+    "heroku-postbuild": "yarn build:client"
   },
   "devDependencies": {
     "concurrently": "^3.6.0"
