@@ -97,6 +97,7 @@ class Settings extends PureComponent {
                 className="sb-input"
                 id="hourly-wage"
                 type="number"
+                step="0.01"
                 value={settings.hourlyWage}
                 name="hourlyWage"
                 onChange={this.handleInputChange}
