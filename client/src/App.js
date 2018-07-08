@@ -24,9 +24,9 @@ class App extends PureComponent {
   }
 
   handleGoogleLoginSuccess(authUser) {
-    this.setState({ authUser }, () => {
-      createUser(authUser.profileObj.email);
-    });
+    createUser(authUser.profileObj.email).then(() =>
+      this.setState({ authUser })
+    );
   }
 
   handleGoogleLoginFailure({ error, details }) {
