@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.2
+
+- Fix for Safari and number inputs.
+
 ## v0.4.1
 
 - Update holy total as schedules are updated.
