@@ -8,6 +8,7 @@ import {
   fetchSettings,
   deleteSchedule,
   updateSchedule,
+  fetchHolyTotal,
 } from './api';
 
 class Home extends Component {
@@ -24,6 +25,7 @@ class Home extends Component {
     isCreatingEvents: false,
     editingScheduleId: '',
     newScheduleName: '',
+    holyTotal: 0,
   };
 
   constructor(props) {
@@ -51,6 +53,10 @@ class Home extends Component {
             this.setState({
               settings: settings || {},
             });
+
+            fetchHolyTotal(email, settings.person, settings.hourlyWage).then(
+              response => this.setState({ holyTotal: response.data.holyTotal })
+            );
           })
           .catch(err => console.log(err));
       })
@@ -204,9 +210,14 @@ class Home extends Component {
                 </div>
               ))}
             </div>
-            <ScheduleFileUploadForm
-              onSubmit={this.handleScheduleFileUploadFormSubmit}
-            />
+            <div className="sb-margin-bottom">
+              <ScheduleFileUploadForm
+                onSubmit={this.handleScheduleFileUploadFormSubmit}
+              />
+            </div>
+            <div>
+              <strong>Holy total:</strong> {this.state.holyTotal.toFixed(2)} EUR
+            </div>
           </div>
         </div>
       </div>

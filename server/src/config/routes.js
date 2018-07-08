@@ -8,6 +8,7 @@ const {
 } = require('../services/schedule');
 const { getSettings, updateSettings } = require('../services/settings');
 const { createUser } = require('../services/user');
+const { calculateHolyTotal } = require('../services/aggregations');
 const { parseScheduleFileData } = require('../parser');
 
 const upload = multer();
@@ -115,6 +116,18 @@ module.exports = function(app) {
     const { email } = req.body;
 
     createUser(email)
+      .then(data => res.json(data))
+      .catch(error => {
+        res.status(404).json({
+          message: error,
+        });
+      });
+  });
+
+  app.get('/api/aggregations/holy-total', (req, res) => {
+    const { person, hourlyWage, userEmail } = req.query;
+
+    calculateHolyTotal(userEmail, person, hourlyWage)
       .then(data => res.json(data))
       .catch(error => {
         res.status(404).json({

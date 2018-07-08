@@ -112,3 +112,14 @@ export function deleteSchedule(userEmail, scheduleId) {
     },
   }).then(response => response.json());
 }
+
+export function fetchHolyTotal(userEmail, person, hourlyWage) {
+  return fetch(
+    `${BASE}/aggregations/holy-total?userEmail=${userEmail}&person=${person}&hourlyWage=${hourlyWage}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  ).then(response => response.json());
+}
