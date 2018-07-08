@@ -2,7 +2,7 @@ const User = require('../models/user');
 
 function createUser(email) {
   return new Promise((resolve, reject) => {
-    User.find({ email }, (err, user) => {
+    User.findOne({ email }, (err, user) => {
       if (err) {
         return reject(err);
       }
