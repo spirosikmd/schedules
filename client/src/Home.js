@@ -71,6 +71,12 @@ class Home extends Component {
         fetchSchedules(email).then(schedules => {
           this.setState({ schedules });
         });
+
+        const { settings } = this.state;
+
+        fetchHolyTotal(email, settings.person, settings.hourlyWage).then(
+          response => this.setState({ holyTotal: response.data.holyTotal })
+        );
       })
       .catch(err => console.log(err));
   }
@@ -87,6 +93,12 @@ class Home extends Component {
         fetchSchedules(email).then(schedules => {
           this.setState({ schedules });
         });
+
+        const { settings } = this.state;
+
+        fetchHolyTotal(email, settings.person, settings.hourlyWage).then(
+          response => this.setState({ holyTotal: response.data.holyTotal })
+        );
       })
       .catch(err => console.log(err));
   }
@@ -128,6 +140,8 @@ class Home extends Component {
   }
 
   render() {
+    const { holyTotal } = this.state;
+
     return (
       <div className="sb-container sb-padding">
         <div className="sb-grid">
@@ -215,9 +229,11 @@ class Home extends Component {
                 onSubmit={this.handleScheduleFileUploadFormSubmit}
               />
             </div>
-            <div>
-              <strong>Holy total:</strong> {this.state.holyTotal.toFixed(2)} EUR
-            </div>
+            {holyTotal > 0 && (
+              <div>
+                <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
+              </div>
+            )}
           </div>
         </div>
       </div>
