@@ -1,19 +1,6 @@
 const mongoose = require('mongoose');
 
-const {
-  NODE_ENV,
-  DB_USER,
-  DB_PASSWORD,
-  DB_HOST,
-  DB_PORT,
-  DB_NAME,
-} = process.env;
-
-let MONGO_URI = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
-
-if (NODE_ENV === 'production') {
-  MONGO_URI = `mongodb://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}`;
-}
+const MONGO_URI = process.env.MONGO_URI;
 
 module.exports = function() {
   return new Promise((resolve, reject) => {
