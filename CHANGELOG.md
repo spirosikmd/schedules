@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3.0
+
+- Wage per day in the schedule table.
+
 ## v0.2.0
 
 - Refactor to a web application with mongo db.

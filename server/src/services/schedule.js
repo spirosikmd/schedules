@@ -96,6 +96,7 @@ function getScheduleDataForPerson(userEmail, scheduleId, person, hourlyWage) {
                     worksWith: location.employees
                       .filter(employee => employee.name !== person)
                       .map(employee => employee.name),
+                    dayWage: employee.hours * hourlyWage,
                   });
                 }
               });

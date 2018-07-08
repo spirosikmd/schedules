@@ -28,6 +28,9 @@ class ScheduleItem extends PureComponent {
           <div className="sb-padding" style={{ flex: 1 }}>
             {daySchedule.hours}
           </div>
+          <div className="sb-padding" style={{ flex: 1 }}>
+            {daySchedule.dayWage.toFixed(2)}
+          </div>
           <div className="sb-padding" style={{ flex: 4 }}>
             {daySchedule.worksWith.join(', ')}
           </div>

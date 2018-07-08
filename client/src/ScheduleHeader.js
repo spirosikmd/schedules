@@ -11,6 +11,7 @@ class ScheduleHeader extends PureComponent {
           <ScheduleHeaderItem text="Start Time" flex="2" />
           <ScheduleHeaderItem text="End Time" flex="2" />
           <ScheduleHeaderItem text="Hours" flex="1" />
+          <ScheduleHeaderItem text="Wage" flex="1" />
           <ScheduleHeaderItem text="Work With" flex="4" />
         </div>
       </div>
