@@ -4,7 +4,10 @@ const MONGO_URI = process.env.MONGO_URI;
 
 module.exports = function() {
   return new Promise((resolve, reject) => {
-    mongoose.connect(MONGO_URI);
+    mongoose.connect(
+      MONGO_URI,
+      { useNewUrlParser: true }
+    );
 
     const db = mongoose.connection;
 
