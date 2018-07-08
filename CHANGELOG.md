@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4.1
+
+- Update holy total as schedules are updated.
+
 ## v0.4.0
 
 - Sum all wages in a legend (e.g Holy Total) in home page.

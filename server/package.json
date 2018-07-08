@@ -1,6 +1,6 @@
 {
   "name": "schedule-server",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "author": "Spyros Ioakeimidis <spyrosikmd@gmail.com>",
   "description": "Check your schedule and more!",
