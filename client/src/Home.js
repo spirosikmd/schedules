@@ -151,6 +151,9 @@ class Home extends Component {
                 Welcome to {this.props.authUser.profileObj.givenName} schedule
               </h1>
               <div>
+                <Link className="sb-btn sb-margin-right" to="/charts">
+                  Charts
+                </Link>
                 <Link className="sb-btn sb-margin-right" to="/settings">
                   Settings
                 </Link>

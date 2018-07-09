@@ -8,7 +8,10 @@ const {
 } = require('../services/schedule');
 const { getSettings, updateSettings } = require('../services/settings');
 const { createUser } = require('../services/user');
-const { calculateHolyTotal } = require('../services/aggregations');
+const {
+  calculateHolyTotal,
+  calculateWeeklyWageData,
+} = require('../services/aggregations');
 const { parseScheduleFileData } = require('../parser');
 
 const upload = multer();
@@ -128,6 +131,18 @@ module.exports = function(app) {
     const { person, hourlyWage, userEmail } = req.query;
 
     calculateHolyTotal(userEmail, person, hourlyWage)
+      .then(data => res.json(data))
+      .catch(error => {
+        res.status(404).json({
+          message: error,
+        });
+      });
+  });
+
+  app.get('/api/aggregations/weekly-wage-data', (req, res) => {
+    const { person, hourlyWage, userEmail } = req.query;
+
+    calculateWeeklyWageData(userEmail, person, hourlyWage)
       .then(data => res.json(data))
       .catch(error => {
         res.status(404).json({

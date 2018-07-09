@@ -123,3 +123,14 @@ export function fetchHolyTotal(userEmail, person, hourlyWage) {
     }
   ).then(response => response.json());
 }
+
+export function fetchWeeklyWageDataAggregation(userEmail, person, hourlyWage) {
+  return fetch(
+    `${BASE}/aggregations/weekly-wage-data?userEmail=${userEmail}&person=${person}&hourlyWage=${hourlyWage}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  ).then(response => response.json());
+}

@@ -4,6 +4,7 @@ import { GoogleLogin } from 'react-google-login';
 import Home from './Home';
 import Settings from './Settings';
 import Schedule from './Schedule';
+import Charts from './Charts';
 import { createUser } from './api';
 
 class App extends PureComponent {
@@ -65,6 +66,7 @@ class App extends PureComponent {
         />
         <Schedule path="/schedules/:scheduleId" authUser={authUser} />
         <Settings path="/settings" authUser={authUser} />
+        <Charts path="/charts" authUser={authUser} />
       </Router>
     );
   }

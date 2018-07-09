@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5.0
+
+- Implement charts page with a chart with the weekly average data.
+
 ## v0.4.3
 
 - Use TZ env variable for server.
