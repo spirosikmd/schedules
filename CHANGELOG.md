@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.4.3
+
+- Use TZ env variable for server.
+- Fix for start and end time to always be in UTC.
+
 ## v0.4.2
 
 - Fix for Safari and number inputs.
