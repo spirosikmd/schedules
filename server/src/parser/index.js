@@ -19,7 +19,8 @@ function parseTime(timeToParse, date) {
   const time = new Date(date.getTime());
   const replacedTime = timeToParse.replace(';', ':');
   const [hours, minutes] = replacedTime.split(':');
-  time.setHours(parseInt(hours, 10), parseInt(minutes, 10));
+  const utcHours = hours - 2; // TODO: Hard code Amsterdam daylight timezone for now
+  time.setHours(parseInt(utcHours, 10), parseInt(minutes, 10));
   return time;
 }
 
