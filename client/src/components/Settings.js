@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { fetchSettings, updateSettings } from '../api';
+import {
+  fetchSettingsForUser,
+  updateSettingsForUser,
+} from '../actions/settingsActions';
 
 class Settings extends PureComponent {
   state = {
-    settings: {
+    newSettings: {
       person: '',
       hourlyWage: 0,
     },
@@ -22,8 +25,11 @@ class Settings extends PureComponent {
   componentDidMount() {
     const { email } = this.props.user.profileObj;
 
-    fetchSettings(email).then(settings => {
-      this.setState({ settings });
+    this.props.fetchSettingsForUser(email).then(() => {
+      const { person, hourlyWage } = this.props.settings;
+      this.setState({
+        newSettings: { person, hourlyWage },
+      });
     });
   }
 
@@ -37,27 +43,33 @@ class Settings extends PureComponent {
 
     this.setState({ isSaving: true });
 
-    const { _id: settingsId, hourlyWage, person } = this.state.settings;
+    const { _id: settingsId } = this.props.settings;
+    const { hourlyWage, person } = this.state.newSettings;
     const { email } = this.props.user.profileObj;
 
-    updateSettings(email, settingsId, hourlyWage, person).then(settings => {
-      this.setState({ isSaving: false });
-      this.setState({ ...settings });
-    });
+    this.props
+      .updateSettingsForUser(email, settingsId, hourlyWage, person)
+      .then(() => {
+        const { person, hourlyWage } = this.props.settings;
+        this.setState({
+          newSettings: { person, hourlyWage },
+          isSaving: false,
+        });
+      });
   }
 
   handleInputChange(event) {
     const value = event.target.value;
     const name = event.target.name;
-    const settings = {
-      ...this.state.settings,
+    const newSettings = {
+      ...this.state.newSettings,
       ...{ [name]: value },
     };
-    this.setState({ settings });
+    this.setState({ newSettings });
   }
 
   render() {
-    const { settings, isSaving } = this.state;
+    const { newSettings, isSaving } = this.state;
 
     return (
       <div>
@@ -86,7 +98,7 @@ class Settings extends PureComponent {
                 className="sb-input"
                 id="person"
                 type="text"
-                value={settings.person}
+                value={newSettings.person}
                 name="person"
                 onChange={this.handleInputChange}
               />
@@ -99,7 +111,7 @@ class Settings extends PureComponent {
                 id="hourly-wage"
                 type="number"
                 step="0.01"
-                value={settings.hourlyWage}
+                value={newSettings.hourlyWage}
                 name="hourlyWage"
                 onChange={this.handleInputChange}
               />
@@ -120,6 +132,16 @@ class Settings extends PureComponent {
 
 const mapStateToProps = state => ({
   user: state.userReducer.user,
+  settings: state.settingsReducer.settings,
 });
 
-export default connect(mapStateToProps)(Settings);
+const mapDispatchToProps = dispatch => ({
+  fetchSettingsForUser: email => dispatch(fetchSettingsForUser(email)),
+  updateSettingsForUser: (email, settingsId, hourlyWage, person) =>
+    dispatch(updateSettingsForUser(email, settingsId, hourlyWage, person)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Settings);
