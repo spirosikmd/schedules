@@ -6,8 +6,8 @@ import Home from './Home';
 import Settings from './Settings';
 import Schedule from './Schedule';
 import Charts from './Charts';
-import { createUser } from './api';
-import { setUser } from './actions/userActions';
+import { createUser } from '../api';
+import { setUser } from '../actions/userActions';
 
 class App extends PureComponent {
   state = {

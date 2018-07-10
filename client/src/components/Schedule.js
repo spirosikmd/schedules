@@ -3,7 +3,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import ScheduleItem from './ScheduleItem';
 import ScheduleHeader from './ScheduleHeader';
-import { fetchScheduleForPerson, createEvents, updateSchedule } from './api';
+import { fetchScheduleForPerson, createEvents, updateSchedule } from '../api';
 
 class Schedule extends PureComponent {
   state = {

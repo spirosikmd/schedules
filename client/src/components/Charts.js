@@ -10,7 +10,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { connect } from 'react-redux';
-import { fetchWeeklyWageDataAggregation, fetchSettings } from './api';
+import { fetchWeeklyWageDataAggregation, fetchSettings } from '../api';
 
 class Charts extends PureComponent {
   state = {

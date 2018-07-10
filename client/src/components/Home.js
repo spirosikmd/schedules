@@ -10,7 +10,7 @@ import {
   deleteSchedule,
   updateSchedule,
   fetchHolyTotal,
-} from './api';
+} from '../api';
 
 class Home extends Component {
   state = {
