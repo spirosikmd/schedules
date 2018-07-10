@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import { fetchSettings, updateSettings } from './api';
 
 class Settings extends PureComponent {
@@ -19,7 +20,7 @@ class Settings extends PureComponent {
   }
 
   componentDidMount() {
-    const { email } = this.props.authUser.profileObj;
+    const { email } = this.props.user.profileObj;
 
     fetchSettings(email).then(settings => {
       this.setState({ settings });
@@ -37,7 +38,7 @@ class Settings extends PureComponent {
     this.setState({ isSaving: true });
 
     const { _id: settingsId, hourlyWage, person } = this.state.settings;
-    const { email } = this.props.authUser.profileObj;
+    const { email } = this.props.user.profileObj;
 
     updateSettings(email, settingsId, hourlyWage, person).then(settings => {
       this.setState({ isSaving: false });
@@ -117,4 +118,8 @@ class Settings extends PureComponent {
   }
 }
 
-export default Settings;
+const mapStateToProps = state => ({
+  user: state.userReducer.user,
+});
+
+export default connect(mapStateToProps)(Settings);

@@ -1,5 +1,6 @@
 import querystring from 'querystring';
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import ScheduleItem from './ScheduleItem';
 import ScheduleHeader from './ScheduleHeader';
 import { fetchScheduleForPerson, createEvents, updateSchedule } from './api';
@@ -41,7 +42,7 @@ class Schedule extends PureComponent {
 
         this.setState({ isCreatingEvents: false });
 
-        const { email } = this.props.authUser.profileObj;
+        const { email } = this.props.user.profileObj;
 
         updateSchedule(email, this.props.scheduleId, {
           eventsCreatedOnce: true,
@@ -57,7 +58,7 @@ class Schedule extends PureComponent {
   getSchedule() {
     const search = querystring.parse(this.props.location.search.substring(1));
     const { person, hourlyWage } = search;
-    const { email } = this.props.authUser.profileObj;
+    const { email } = this.props.user.profileObj;
 
     fetchScheduleForPerson(email, this.props.scheduleId, person, hourlyWage)
       .then(schedule => this.setState({ schedule }))
@@ -128,4 +129,8 @@ class Schedule extends PureComponent {
   }
 }
 
-export default Schedule;
+const mapStateToProps = state => ({
+  user: state.userReducer.user,
+});
+
+export default connect(mapStateToProps)(Schedule);

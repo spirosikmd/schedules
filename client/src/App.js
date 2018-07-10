@@ -60,14 +60,10 @@ class App extends PureComponent {
 
     return (
       <Router>
-        <Home
-          path="/"
-          authUser={user}
-          onGoogleLogoutSuccess={this.handleGoogleLogoutSuccess}
-        />
-        <Schedule path="/schedules/:scheduleId" authUser={user} />
-        <Settings path="/settings" authUser={user} />
-        <Charts path="/charts" authUser={user} />
+        <Home path="/" onGoogleLogoutSuccess={this.handleGoogleLogoutSuccess} />
+        <Schedule path="/schedules/:scheduleId" />
+        <Settings path="/settings" />
+        <Charts path="/charts" />
       </Router>
     );
   }

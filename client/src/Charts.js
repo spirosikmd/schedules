@@ -9,6 +9,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts';
+import { connect } from 'react-redux';
 import { fetchWeeklyWageDataAggregation, fetchSettings } from './api';
 
 class Charts extends PureComponent {
@@ -23,7 +24,7 @@ class Charts extends PureComponent {
   }
 
   componentDidMount() {
-    const { email } = this.props.authUser.profileObj;
+    const { email } = this.props.user.profileObj;
 
     fetchSettings(email)
       .then(settings => {
@@ -94,4 +95,8 @@ class Charts extends PureComponent {
   }
 }
 
-export default Charts;
+const mapStateToProps = state => ({
+  user: state.userReducer.user,
+});
+
+export default connect(mapStateToProps)(Charts);
