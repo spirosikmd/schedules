@@ -1,15 +1,16 @@
 import React, { PureComponent } from 'react';
 import { Router } from '@reach/router';
 import { GoogleLogin } from 'react-google-login';
+import { connect } from 'react-redux';
 import Home from './Home';
 import Settings from './Settings';
 import Schedule from './Schedule';
 import Charts from './Charts';
 import { createUser } from './api';
+import { setUser } from './actions/userActions';
 
 class App extends PureComponent {
   state = {
-    authUser: null,
     error: {
       errorCode: '',
       details: '',
@@ -25,9 +26,9 @@ class App extends PureComponent {
   }
 
   handleGoogleLoginSuccess(authUser) {
-    createUser(authUser.profileObj.email).then(() =>
-      this.setState({ authUser })
-    );
+    createUser(authUser.profileObj.email).then(() => {
+      this.props.setUser(authUser);
+    });
   }
 
   handleGoogleLoginFailure({ error, details }) {
@@ -35,13 +36,13 @@ class App extends PureComponent {
   }
 
   handleGoogleLogoutSuccess() {
-    this.setState({ authUser: null });
+    this.props.setUser(null);
   }
 
   render() {
-    const { authUser } = this.state;
+    const { user } = this.props;
 
-    if (authUser === null) {
+    if (user === null) {
       return (
         <div className="sb-container sb-padding">
           <GoogleLogin
@@ -61,15 +62,26 @@ class App extends PureComponent {
       <Router>
         <Home
           path="/"
-          authUser={authUser}
+          authUser={user}
           onGoogleLogoutSuccess={this.handleGoogleLogoutSuccess}
         />
-        <Schedule path="/schedules/:scheduleId" authUser={authUser} />
-        <Settings path="/settings" authUser={authUser} />
-        <Charts path="/charts" authUser={authUser} />
+        <Schedule path="/schedules/:scheduleId" authUser={user} />
+        <Settings path="/settings" authUser={user} />
+        <Charts path="/charts" authUser={user} />
       </Router>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  user: state.userReducer.user,
+});
+
+const mapDispatchToProps = dispatch => ({
+  setUser: user => dispatch(setUser(user)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
