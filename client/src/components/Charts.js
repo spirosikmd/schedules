@@ -24,7 +24,7 @@ class Charts extends PureComponent {
   }
 
   componentDidMount() {
-    const { email } = this.props.user.profileObj;
+    const { email } = this.props.user;
 
     fetchSettings(email)
       .then(settings => {

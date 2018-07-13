@@ -23,7 +23,7 @@ class Settings extends PureComponent {
   }
 
   componentDidMount() {
-    const { email } = this.props.user.profileObj;
+    const { email } = this.props.user;
 
     this.props.fetchSettingsForUser(email).then(() => {
       const { person, hourlyWage } = this.props.settings;
@@ -45,7 +45,7 @@ class Settings extends PureComponent {
 
     const { _id: settingsId } = this.props.settings;
     const { hourlyWage, person } = this.state.newSettings;
-    const { email } = this.props.user.profileObj;
+    const { email } = this.props.user;
 
     this.props
       .updateSettingsForUser(email, settingsId, hourlyWage, person)

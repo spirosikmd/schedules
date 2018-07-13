@@ -1,4 +1,4 @@
-import { createUser } from '../api';
+import { authenticateWithGoogle } from '../api';
 
 export const setUser = user => dispatch => {
   dispatch({
@@ -7,10 +7,8 @@ export const setUser = user => dispatch => {
   });
 };
 
-export const createUserFromAuthUser = authUser => dispatch => {
-  const email = authUser.profileObj.email;
-
-  return createUser(email).then(() => {
-    dispatch(setUser(authUser));
+export const createUserFromAccessToken = accessToken => dispatch => {
+  return authenticateWithGoogle(accessToken).then(user => {
+    dispatch(setUser(user));
   });
 };

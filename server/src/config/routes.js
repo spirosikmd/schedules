@@ -1,4 +1,5 @@
 const multer = require('multer');
+const passport = require('passport');
 const {
   saveScheduleData,
   getScheduleDataForPerson,
@@ -13,6 +14,7 @@ const {
   calculateWeeklyWageData,
 } = require('../services/aggregations');
 const { parseScheduleFileData } = require('../parser');
+const { generateToken, sendToken } = require('../utils/token');
 
 const upload = multer();
 
@@ -150,4 +152,22 @@ module.exports = function(app) {
         });
       });
   });
+
+  app.get(
+    '/api/auth/google',
+    passport.authenticate('google-token', { session: false }),
+    function(req, res, next) {
+      if (!req.user) {
+        return res.status(401).json({ message: 'User Not Authenticated' });
+      }
+
+      req.auth = {
+        id: req.user.id,
+      };
+
+      next();
+    },
+    generateToken,
+    sendToken
+  );
 };

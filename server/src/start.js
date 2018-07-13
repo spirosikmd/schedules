@@ -3,6 +3,7 @@ module.exports = function(app) {
 
   return Promise.resolve()
     .then(() => require('./config/mongoose')())
+    .then(() => require('./config/passport')())
     .then(() => require('./config/express')(app))
     .then(() => require('./config/routes')(app))
     .then(() => {

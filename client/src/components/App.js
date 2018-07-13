@@ -6,7 +6,7 @@ import Home from './Home';
 import Settings from './Settings';
 import Schedule from './Schedule';
 import Charts from './Charts';
-import { setUser, createUserFromAuthUser } from '../actions/userActions';
+import { setUser, createUserFromAccessToken } from '../actions/userActions';
 
 class App extends PureComponent {
   state = {
@@ -24,8 +24,8 @@ class App extends PureComponent {
     this.handleGoogleLogoutSuccess = this.handleGoogleLogoutSuccess.bind(this);
   }
 
-  handleGoogleLoginSuccess(authUser) {
-    this.props.createUserFromAuthUser(authUser);
+  handleGoogleLoginSuccess(response) {
+    this.props.createUserFromAccessToken(response.accessToken);
   }
 
   handleGoogleLoginFailure({ error, details }) {
@@ -72,7 +72,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setUser: user => dispatch(setUser(user)),
-  createUserFromAuthUser: email => dispatch(createUserFromAuthUser(email)),
+  createUserFromAccessToken: accessToken =>
+    dispatch(createUserFromAccessToken(accessToken)),
 });
 
 export default connect(

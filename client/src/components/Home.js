@@ -43,7 +43,7 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const { email } = this.props.user.profileObj;
+    const { email } = this.props.user;
 
     fetchSchedules(email)
       .then(schedules => {
@@ -65,7 +65,7 @@ class Home extends Component {
   }
 
   handleScheduleFileUploadFormSubmit(file) {
-    const { email } = this.props.user.profileObj;
+    const { email } = this.props.user;
 
     generateScheduleWithFileAndPerson(email, file)
       .then(() => {
@@ -87,7 +87,7 @@ class Home extends Component {
   }
 
   handleScheduleDelete(scheduleId) {
-    const { email } = this.props.user.profileObj;
+    const { email } = this.props.user;
 
     deleteSchedule(email, scheduleId)
       .then(() => {
@@ -122,7 +122,7 @@ class Home extends Component {
       return;
     }
 
-    const { email } = this.props.user.profileObj;
+    const { email } = this.props.user;
 
     updateSchedule(email, scheduleId, {
       name: parsedNewScheduleName,
@@ -148,9 +148,7 @@ class Home extends Component {
         <div className="sb-grid">
           <div className="sb-col-12">
             <header className="sb-flex sb-justify-content-between sb-margin-bottom">
-              <h1>
-                Welcome to {this.props.user.profileObj.givenName} schedule
-              </h1>
+              <h1>Welcome to {this.props.user.email} schedule</h1>
               <div>
                 <Link className="sb-btn sb-margin-right" to="/charts">
                   Charts

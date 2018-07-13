@@ -42,7 +42,7 @@ class Schedule extends PureComponent {
 
         this.setState({ isCreatingEvents: false });
 
-        const { email } = this.props.user.profileObj;
+        const { email } = this.props.user;
 
         updateSchedule(email, this.props.scheduleId, {
           eventsCreatedOnce: true,
@@ -58,7 +58,7 @@ class Schedule extends PureComponent {
   getSchedule() {
     const search = querystring.parse(this.props.location.search.substring(1));
     const { person, hourlyWage } = search;
-    const { email } = this.props.user.profileObj;
+    const { email } = this.props.user;
 
     fetchScheduleForPerson(email, this.props.scheduleId, person, hourlyWage)
       .then(schedule => this.setState({ schedule }))

@@ -92,18 +92,6 @@ export function updateSettings(userEmail, settingsId, hourlyWage, person) {
   }).then(response => response.json());
 }
 
-export function createUser(email) {
-  return fetch(`${BASE}/users`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email,
-    }),
-  }).then(response => response.json());
-}
-
 export function deleteSchedule(userEmail, scheduleId) {
   return fetch(`${BASE}/schedules/${scheduleId}?userEmail=${userEmail}`, {
     method: 'DELETE',
@@ -133,4 +121,10 @@ export function fetchWeeklyWageDataAggregation(userEmail, person, hourlyWage) {
       },
     }
   ).then(response => response.json());
+}
+
+export function authenticateWithGoogle(accessToken) {
+  return fetch(`${BASE}/auth/google?access_token=${accessToken}`).then(
+    response => response.json()
+  );
 }
