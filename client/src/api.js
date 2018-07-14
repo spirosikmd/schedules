@@ -1,40 +1,48 @@
 const BASE = '/api';
 
-export async function generateScheduleWithFileAndPerson(userEmail, file) {
+function getDefaultHeaders(token) {
+  return {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`,
+  };
+}
+
+export async function generateScheduleWithFileAndPerson(token, file) {
   const form = new FormData();
   form.append('scheduleFile', file);
 
-  return fetch(`${BASE}/schedules?userEmail=${userEmail}`, {
+  return fetch(`${BASE}/schedules`, {
     method: 'POST',
     body: form,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   }).then(response => response.json());
 }
 
 export async function fetchScheduleForPerson(
-  userEmail,
+  token,
   scheduleId,
   person,
   hourlyWage
 ) {
   return fetch(
-    `${BASE}/schedules/${scheduleId}/generate?person=${person}&hourlyWage=${hourlyWage}&userEmail=${userEmail}`,
+    `${BASE}/schedules/${scheduleId}/generate?person=${person}&hourlyWage=${hourlyWage}`,
     {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getDefaultHeaders(token),
     }
   ).then(response => response.json());
 }
 
-export async function fetchSchedules(userEmail) {
-  return fetch(`${BASE}/schedules?userEmail=${userEmail}`).then(response =>
-    response.json()
+export async function fetchSchedules(token) {
+  return fetch(`${BASE}/schedules`, { headers: getDefaultHeaders(token) }).then(
+    response => response.json()
   );
 }
 
-export async function fetchSettings(userEmail) {
-  return fetch(`${BASE}/settings?userEmail=${userEmail}`).then(response =>
-    response.json()
+export async function fetchSettings(token) {
+  return fetch(`${BASE}/settings`, { headers: getDefaultHeaders(token) }).then(
+    response => response.json()
   );
 }
 
@@ -69,22 +77,18 @@ export function createEvents(schedule) {
   return Promise.all(createEventRequests);
 }
 
-export function updateSchedule(userEmail, scheduleId, data) {
-  return fetch(`${BASE}/schedules/${scheduleId}?userEmail=${userEmail}`, {
+export function updateSchedule(token, scheduleId, data) {
+  return fetch(`${BASE}/schedules/${scheduleId}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getDefaultHeaders(token),
     body: JSON.stringify(data),
   }).then(response => response.json());
 }
 
-export function updateSettings(userEmail, settingsId, hourlyWage, person) {
-  return fetch(`${BASE}/settings/${settingsId}?userEmail=${userEmail}`, {
+export function updateSettings(token, settingsId, hourlyWage, person) {
+  return fetch(`${BASE}/settings/${settingsId}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getDefaultHeaders(token),
     body: JSON.stringify({
       hourlyWage,
       person,
@@ -92,33 +96,27 @@ export function updateSettings(userEmail, settingsId, hourlyWage, person) {
   }).then(response => response.json());
 }
 
-export function deleteSchedule(userEmail, scheduleId) {
-  return fetch(`${BASE}/schedules/${scheduleId}?userEmail=${userEmail}`, {
+export function deleteSchedule(token, scheduleId) {
+  return fetch(`${BASE}/schedules/${scheduleId}`, {
     method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: getDefaultHeaders(token),
   }).then(response => response.json());
 }
 
-export function fetchHolyTotal(userEmail, person, hourlyWage) {
+export function fetchHolyTotal(token, person, hourlyWage) {
   return fetch(
-    `${BASE}/aggregations/holy-total?userEmail=${userEmail}&person=${person}&hourlyWage=${hourlyWage}`,
+    `${BASE}/aggregations/holy-total?person=${person}&hourlyWage=${hourlyWage}`,
     {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getDefaultHeaders(token),
     }
   ).then(response => response.json());
 }
 
-export function fetchWeeklyWageDataAggregation(userEmail, person, hourlyWage) {
+export function fetchWeeklyWageDataAggregation(token, person, hourlyWage) {
   return fetch(
-    `${BASE}/aggregations/weekly-wage-data?userEmail=${userEmail}&person=${person}&hourlyWage=${hourlyWage}`,
+    `${BASE}/aggregations/weekly-wage-data?person=${person}&hourlyWage=${hourlyWage}`,
     {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: getDefaultHeaders(token),
     }
   ).then(response => response.json());
 }

@@ -43,19 +43,19 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const { email } = this.props.user;
+    const { token } = this.props;
 
-    fetchSchedules(email)
+    fetchSchedules(token)
       .then(schedules => {
         this.setState({ schedules });
 
-        fetchSettings(email)
+        fetchSettings(token)
           .then(settings => {
             this.setState({
               settings: settings || {},
             });
 
-            fetchHolyTotal(email, settings.person, settings.hourlyWage).then(
+            fetchHolyTotal(token, settings.person, settings.hourlyWage).then(
               response => this.setState({ holyTotal: response.data.holyTotal })
             );
           })
@@ -65,17 +65,17 @@ class Home extends Component {
   }
 
   handleScheduleFileUploadFormSubmit(file) {
-    const { email } = this.props.user;
+    const { token } = this.props;
 
-    generateScheduleWithFileAndPerson(email, file)
+    generateScheduleWithFileAndPerson(token, file)
       .then(() => {
-        fetchSchedules(email).then(schedules => {
+        fetchSchedules(token).then(schedules => {
           this.setState({ schedules });
         });
 
         const { settings } = this.state;
 
-        fetchHolyTotal(email, settings.person, settings.hourlyWage).then(
+        fetchHolyTotal(token, settings.person, settings.hourlyWage).then(
           response => this.setState({ holyTotal: response.data.holyTotal })
         );
       })
@@ -87,17 +87,17 @@ class Home extends Component {
   }
 
   handleScheduleDelete(scheduleId) {
-    const { email } = this.props.user;
+    const { token } = this.props;
 
-    deleteSchedule(email, scheduleId)
+    deleteSchedule(token, scheduleId)
       .then(() => {
-        fetchSchedules(email).then(schedules => {
+        fetchSchedules(token).then(schedules => {
           this.setState({ schedules });
         });
 
         const { settings } = this.state;
 
-        fetchHolyTotal(email, settings.person, settings.hourlyWage).then(
+        fetchHolyTotal(token, settings.person, settings.hourlyWage).then(
           response => this.setState({ holyTotal: response.data.holyTotal })
         );
       })
@@ -122,14 +122,14 @@ class Home extends Component {
       return;
     }
 
-    const { email } = this.props.user;
+    const { token } = this.props;
 
-    updateSchedule(email, scheduleId, {
+    updateSchedule(token, scheduleId, {
       name: parsedNewScheduleName,
     }).then(() => {
       this.setState({ editingScheduleId: '' });
 
-      fetchSchedules(email).then(schedules => {
+      fetchSchedules(token).then(schedules => {
         this.setState({ schedules });
       });
     });
@@ -245,6 +245,7 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
   user: state.userReducer.user,
+  token: state.userReducer.token,
 });
 
 export default connect(mapStateToProps)(Home);

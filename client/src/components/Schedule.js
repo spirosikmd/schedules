@@ -42,9 +42,9 @@ class Schedule extends PureComponent {
 
         this.setState({ isCreatingEvents: false });
 
-        const { email } = this.props.user;
+        const { token } = this.props;
 
-        updateSchedule(email, this.props.scheduleId, {
+        updateSchedule(token, this.props.scheduleId, {
           eventsCreatedOnce: true,
         })
           .then(() => {
@@ -58,9 +58,9 @@ class Schedule extends PureComponent {
   getSchedule() {
     const search = querystring.parse(this.props.location.search.substring(1));
     const { person, hourlyWage } = search;
-    const { email } = this.props.user;
+    const { token } = this.props;
 
-    fetchScheduleForPerson(email, this.props.scheduleId, person, hourlyWage)
+    fetchScheduleForPerson(token, this.props.scheduleId, person, hourlyWage)
       .then(schedule => this.setState({ schedule }))
       .catch(err => console.log(err));
   }
@@ -130,7 +130,7 @@ class Schedule extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  user: state.userReducer.user,
+  token: state.userReducer.token,
 });
 
 export default connect(mapStateToProps)(Schedule);

@@ -24,12 +24,12 @@ class Charts extends PureComponent {
   }
 
   componentDidMount() {
-    const { email } = this.props.user;
+    const { token } = this.props;
 
-    fetchSettings(email)
+    fetchSettings(token)
       .then(settings => {
         fetchWeeklyWageDataAggregation(
-          email,
+          token,
           settings.person,
           settings.hourlyWage
         ).then(response => {
@@ -96,7 +96,7 @@ class Charts extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  user: state.userReducer.user,
+  token: state.userReducer.token,
 });
 
 export default connect(mapStateToProps)(Charts);

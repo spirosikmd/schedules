@@ -6,7 +6,11 @@ import Home from './Home';
 import Settings from './Settings';
 import Schedule from './Schedule';
 import Charts from './Charts';
-import { setUser, createUserFromAccessToken } from '../actions/userActions';
+import {
+  setUser,
+  setToken,
+  createUserFromAccessToken,
+} from '../actions/userActions';
 
 class App extends PureComponent {
   state = {
@@ -34,6 +38,7 @@ class App extends PureComponent {
 
   handleGoogleLogoutSuccess() {
     this.props.setUser(null);
+    this.props.setToken(null);
   }
 
   render() {
@@ -72,6 +77,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setUser: user => dispatch(setUser(user)),
+  setToken: token => dispatch(setToken(token)),
   createUserFromAccessToken: accessToken =>
     dispatch(createUserFromAccessToken(accessToken)),
 });

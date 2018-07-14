@@ -5,15 +5,15 @@ function createAggregationResponse(data) {
   return { data };
 }
 
-function calculateHolyTotal(userEmail, person, hourlyWage) {
+function calculateHolyTotal(userId, person, hourlyWage) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(`Cannot get holy total for user with email ${userEmail}`);
+        return reject(`Cannot get holy total`);
       }
 
       Schedule.find({ user: user._id }, (err, schedules) => {
@@ -41,17 +41,15 @@ function calculateHolyTotal(userEmail, person, hourlyWage) {
   });
 }
 
-function calculateWeeklyWageData(userEmail, person, hourlyWage) {
+function calculateWeeklyWageData(userId, person, hourlyWage) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(
-          `Cannot get weekly wage data for user with email ${userEmail}`
-        );
+        return reject(`Cannot get weekly wage data`);
       }
 
       Schedule.find({ user: user._id }, (err, schedules) => {

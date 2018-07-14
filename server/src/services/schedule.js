@@ -1,17 +1,15 @@
 const Schedule = require('../models/schedule');
 const User = require('../models/user');
 
-function saveScheduleData(userEmail, scheduleName, scheduleData) {
+function saveScheduleData(userId, scheduleName, scheduleData) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(
-          `Cannot save schedule data for user with email ${userEmail}`
-        );
+        return reject(`Cannot save schedule data`);
       }
 
       const data = {
@@ -31,15 +29,15 @@ function saveScheduleData(userEmail, scheduleName, scheduleData) {
   });
 }
 
-function getSchedules(userEmail) {
+function getSchedules(userId) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(`Cannot get schedules for user with email ${userEmail}`);
+        return reject(`Cannot get schedules`);
       }
 
       Schedule.find({ user: user._id }, (err, schedules) => {
@@ -59,17 +57,15 @@ function getSchedules(userEmail) {
   });
 }
 
-function getScheduleDataForPerson(userEmail, scheduleId, person, hourlyWage) {
+function getScheduleDataForPerson(userId, scheduleId, person, hourlyWage) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(
-          `Cannot get schedule data for user with email ${userEmail}`
-        );
+        return reject(`Cannot get schedule data`);
       }
 
       Schedule.findOne(
@@ -121,17 +117,15 @@ function getScheduleDataForPerson(userEmail, scheduleId, person, hourlyWage) {
   });
 }
 
-function updateSchedule(userEmail, scheduleId, data) {
+function updateSchedule(userId, scheduleId, data) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(
-          `Cannot update schedule for user with email ${userEmail}`
-        );
+        return reject(`Cannot update schedule`);
       }
 
       Schedule.findOneAndUpdate(
@@ -150,17 +144,15 @@ function updateSchedule(userEmail, scheduleId, data) {
   });
 }
 
-function deleteSchedule(userEmail, scheduleId) {
+function deleteSchedule(userId, scheduleId) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(
-          `Cannot delete schedule for user with email ${userEmail}`
-        );
+        return reject(`Cannot delete schedule`);
       }
 
       Schedule.findOneAndDelete({ user: user._id, _id: scheduleId }, err => {

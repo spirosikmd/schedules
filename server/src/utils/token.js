@@ -5,7 +5,7 @@ var createToken = function(auth) {
     {
       id: auth.id,
     },
-    process.env.SECRET,
+    process.env.JWT_SECRET,
     {
       expiresIn: 60 * 120,
     }
@@ -18,7 +18,31 @@ module.exports = {
     return next();
   },
   sendToken(req, res) {
-    res.setHeader('x-auth-token', req.token);
-    return res.status(200).send(JSON.stringify(req.user));
+    return res.status(200).json({
+      user: req.user,
+      token: req.token,
+    });
+  },
+  verifyToken(req, res, next) {
+    const token = req.headers['authorization'];
+
+    if (!token) {
+      return res.status(401).json({
+        message: 'User not authenticated',
+      });
+    }
+
+    const parsedToken = token.replace('Bearer ', '');
+
+    jwt.verify(parsedToken, process.env.JWT_SECRET, function(err, user) {
+      if (err) {
+        return res.status(401).json({
+          message: 'User not authenticated',
+        });
+      }
+
+      req.user = user;
+      next();
+    });
   },
 };

@@ -23,9 +23,9 @@ class Settings extends PureComponent {
   }
 
   componentDidMount() {
-    const { email } = this.props.user;
+    const { token } = this.props;
 
-    this.props.fetchSettingsForUser(email).then(() => {
+    this.props.fetchSettingsForUser(token).then(() => {
       const { person, hourlyWage } = this.props.settings;
       this.setState({
         newSettings: { person, hourlyWage },
@@ -45,10 +45,10 @@ class Settings extends PureComponent {
 
     const { _id: settingsId } = this.props.settings;
     const { hourlyWage, person } = this.state.newSettings;
-    const { email } = this.props.user;
+    const { token } = this.props;
 
     this.props
-      .updateSettingsForUser(email, settingsId, hourlyWage, person)
+      .updateSettingsForUser(token, settingsId, hourlyWage, person)
       .then(() => {
         const { person, hourlyWage } = this.props.settings;
         this.setState({
@@ -131,14 +131,14 @@ class Settings extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  user: state.userReducer.user,
+  token: state.userReducer.token,
   settings: state.settingsReducer.settings,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSettingsForUser: email => dispatch(fetchSettingsForUser(email)),
-  updateSettingsForUser: (email, settingsId, hourlyWage, person) =>
-    dispatch(updateSettingsForUser(email, settingsId, hourlyWage, person)),
+  fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
+  updateSettingsForUser: (token, settingsId, hourlyWage, person) =>
+    dispatch(updateSettingsForUser(token, settingsId, hourlyWage, person)),
 });
 
 export default connect(

@@ -1,15 +1,15 @@
 const Settings = require('../models/settings');
 const User = require('../models/user');
 
-function getSettings(userEmail) {
+function getSettings(userId) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(`Cannot get settings for user with email ${userEmail}`);
+        return reject(`Cannot get settings`);
       }
 
       Settings.findOne({ user: user._id }, (err, settings) => {
@@ -37,17 +37,15 @@ function getSettings(userEmail) {
   });
 }
 
-function updateSettings(userEmail, settingsId, hourlyWage, person) {
+function updateSettings(userId, settingsId, hourlyWage, person) {
   return new Promise((resolve, reject) => {
-    User.findOne({ email: userEmail }, (err, user) => {
+    User.findById(userId, (err, user) => {
       if (err) {
         return reject(err);
       }
 
       if (user === null) {
-        return reject(
-          `Cannot update settings for user with email ${userEmail}`
-        );
+        return reject(`Cannot update settings`);
       }
 
       const data = { hourlyWage, person, user: user._id };
