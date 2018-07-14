@@ -148,7 +148,7 @@ class Home extends Component {
         <div className="sb-grid">
           <div className="sb-col-12">
             <header className="sb-flex sb-justify-content-between sb-margin-bottom">
-              <h1>Welcome to {this.props.user.email} schedule</h1>
+              <h1>Welcome to {this.props.user.firstName} schedule</h1>
               <div>
                 <Link className="sb-btn sb-margin-right" to="/charts">
                   Charts
