@@ -130,7 +130,7 @@ class Schedule extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  token: state.userReducer.token,
+  token: state.authReducer.token,
 });
 
 export default connect(mapStateToProps)(Schedule);

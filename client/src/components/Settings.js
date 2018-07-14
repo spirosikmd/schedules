@@ -131,7 +131,7 @@ class Settings extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  token: state.userReducer.token,
+  token: state.authReducer.token,
   settings: state.settingsReducer.settings,
 });
 

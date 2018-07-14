@@ -244,8 +244,8 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.userReducer.user,
-  token: state.userReducer.token,
+  user: state.authReducer.user,
+  token: state.authReducer.token,
 });
 
 export default connect(mapStateToProps)(Home);

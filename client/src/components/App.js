@@ -10,7 +10,7 @@ import {
   setUser,
   setToken,
   createUserFromAccessToken,
-} from '../actions/userActions';
+} from '../actions/authActions';
 
 class App extends PureComponent {
   state = {
@@ -72,7 +72,7 @@ class App extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  user: state.userReducer.user,
+  user: state.authReducer.user,
 });
 
 const mapDispatchToProps = dispatch => ({

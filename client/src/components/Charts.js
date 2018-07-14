@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from 'recharts';
+} from 'recharts/lib';
 import { connect } from 'react-redux';
 import { fetchWeeklyWageDataAggregation, fetchSettings } from '../api';
 
@@ -99,7 +99,7 @@ class Charts extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  token: state.userReducer.token,
+  token: state.authReducer.token,
 });
 
 export default connect(mapStateToProps)(Charts);
