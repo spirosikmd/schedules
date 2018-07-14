@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.6.0
+
+- Use passport with Google token authentication to safely store users.
+- Use token to authenticate requests to api.
+- Use Redux for state management (not complete implementation yet).
+
 ## v0.5.0
 
 - Implement charts page with a chart with the weekly average data.
