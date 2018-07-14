@@ -8,7 +8,6 @@ const {
   deleteSchedule,
 } = require('../services/schedule');
 const { getSettings, updateSettings } = require('../services/settings');
-const { createUser } = require('../services/user');
 const {
   calculateHolyTotal,
   calculateWeeklyWageData,
@@ -119,18 +118,6 @@ module.exports = function(app) {
     const { settingsId } = req.params;
 
     updateSettings(userId, settingsId, hourlyWage, person)
-      .then(data => res.json(data))
-      .catch(error => {
-        res.status(404).json({
-          message: error,
-        });
-      });
-  });
-
-  app.post('/api/users', verifyToken, (req, res) => {
-    const userId = req.user.id;
-
-    createUser(userId)
       .then(data => res.json(data))
       .catch(error => {
         res.status(404).json({
