@@ -1,12 +1,12 @@
 const { parseScheduleFileData } = require('../parser');
-const scheduleService = require('../services/schedule-service');
+const schedulesService = require('../services/schedules-service');
 
 function generateSchedule(req, res) {
   const { scheduleId } = req.params;
   const { person, hourlyWage } = req.query;
   const userId = req.user.id;
 
-  scheduleService
+  schedulesService
     .getScheduleDataForPerson(
       userId,
       scheduleId,
@@ -25,7 +25,7 @@ function deleteSchedule(req, res) {
   const { scheduleId } = req.params;
   const userId = req.user.id;
 
-  scheduleService
+  schedulesService
     .deleteSchedule(userId, scheduleId)
     .then(data => res.json(data))
     .catch(error =>
@@ -40,7 +40,7 @@ function updateSchedule(req, res) {
   const userId = req.user.id;
   const data = req.body;
 
-  scheduleService
+  schedulesService
     .updateSchedule(userId, scheduleId, data)
     .then(data => res.json(data))
     .catch(error =>
@@ -53,7 +53,7 @@ function updateSchedule(req, res) {
 function getSchedules(req, res) {
   const userId = req.user.id;
 
-  scheduleService
+  schedulesService
     .getSchedules(userId)
     .then(data => res.json(data))
     .catch(error => {
@@ -69,7 +69,7 @@ function createSchedule(req, res) {
 
   const scheduleData = parseScheduleFileData(buffer);
 
-  scheduleService
+  schedulesService
     .saveScheduleData(userId, originalname, scheduleData)
     .then(data => res.json(data))
     .catch(error =>
