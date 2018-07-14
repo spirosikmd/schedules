@@ -72,7 +72,10 @@ class Charts extends PureComponent {
         </header>
         <div className="sb-padding">
           {weeklyWageData.length > 0 && (
-            <section style={{ height: 600 }}>
+            <section
+              style={{ height: 600 }}
+              className="sb-tile sb-padding-bottom-xl sb-padding-top sb-padding-right sb-padding-left"
+            >
               <h2>Weekly Wage</h2>
               <ResponsiveContainer>
                 <LineChart
