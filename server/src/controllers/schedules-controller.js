@@ -1,4 +1,5 @@
-const { parseScheduleFileData } = require('../parser');
+const DefaultParser = require('../parser');
+const parseScheduleFileData = require('../services/parser-service');
 const schedulesService = require('../services/schedules-service');
 
 function generateSchedule(req, res) {
@@ -67,7 +68,8 @@ function createSchedule(req, res) {
   const { buffer, originalname } = req.file;
   const userId = req.user.id;
 
-  const scheduleData = parseScheduleFileData(buffer);
+  const parser = new DefaultParser();
+  const scheduleData = parseScheduleFileData({ parser, data: buffer });
 
   schedulesService
     .saveScheduleData(userId, originalname, scheduleData)
