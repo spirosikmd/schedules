@@ -10,7 +10,8 @@ import {
   ResponsiveContainer,
 } from 'recharts/lib';
 import { connect } from 'react-redux';
-import { fetchWeeklyWageDataAggregation, fetchSettings } from '../api';
+import { fetchWeeklyWageDataAggregation } from '../api';
+import { fetchSettingsForUser } from '../actions/settingsActions';
 
 class Charts extends PureComponent {
   state = {
@@ -26,12 +27,13 @@ class Charts extends PureComponent {
   componentDidMount() {
     const { token } = this.props;
 
-    fetchSettings(token)
-      .then(settings => {
+    this.props
+      .fetchSettingsForUser(token)
+      .then(() => {
         fetchWeeklyWageDataAggregation(
           token,
-          settings.person,
-          settings.hourlyWage
+          this.props.settings.person,
+          this.props.settings.hourlyWage
         ).then(response => {
           const chartData = [];
           const weeklyWageData = response.data.weeklyWageData;
@@ -100,6 +102,14 @@ class Charts extends PureComponent {
 
 const mapStateToProps = state => ({
   token: state.authReducer.token,
+  settings: state.settingsReducer.settings,
 });
 
-export default connect(mapStateToProps)(Charts);
+const mapDispatchToProps = dispatch => ({
+  fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Charts);

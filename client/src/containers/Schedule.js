@@ -1,9 +1,9 @@
-import querystring from 'querystring';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import ScheduleItem from './ScheduleItem';
-import ScheduleHeader from './ScheduleHeader';
+import ScheduleItem from '../components/ScheduleItem';
+import ScheduleHeader from '../components/ScheduleHeader';
 import { fetchScheduleForPerson, createEvents, updateSchedule } from '../api';
+import { fetchSettingsForUser } from '../actions/settingsActions';
 
 class Schedule extends PureComponent {
   state = {
@@ -19,7 +19,9 @@ class Schedule extends PureComponent {
   }
 
   componentDidMount() {
-    this.getSchedule();
+    this.props.fetchSettingsForUser(this.props.token).then(() => {
+      this.getSchedule();
+    });
   }
 
   handleBackButtonClick(event) {
@@ -56,8 +58,7 @@ class Schedule extends PureComponent {
   }
 
   getSchedule() {
-    const search = querystring.parse(this.props.location.search.substring(1));
-    const { person, hourlyWage } = search;
+    const { person, hourlyWage } = this.props.settings;
     const { token } = this.props;
 
     fetchScheduleForPerson(token, this.props.scheduleId, person, hourlyWage)
@@ -131,6 +132,14 @@ class Schedule extends PureComponent {
 
 const mapStateToProps = state => ({
   token: state.authReducer.token,
+  settings: state.settingsReducer.settings,
 });
 
-export default connect(mapStateToProps)(Schedule);
+const mapDispatchToProps = dispatch => ({
+  fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Schedule);

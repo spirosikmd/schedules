@@ -2,25 +2,21 @@ import React, { Component } from 'react';
 import { GoogleLogout } from 'react-google-login';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
-import ScheduleFileUploadForm from './ScheduleFileUploadForm';
+import ScheduleFileUploadForm from '../components/ScheduleFileUploadForm';
 import {
   generateScheduleWithFileAndPerson,
   fetchSchedules,
-  fetchSettings,
   deleteSchedule,
   updateSchedule,
   fetchHolyTotal,
 } from '../api';
+import { fetchSettingsForUser } from '../actions/settingsActions';
 
 class Home extends Component {
   state = {
     schedule: [],
     totalHours: 0,
     totalWeeklyWage: 0,
-    settings: {
-      person: '',
-      hourlyWage: 0,
-    },
     selectedScheduleId: '',
     schedules: [],
     isCreatingEvents: false,
@@ -49,14 +45,15 @@ class Home extends Component {
       .then(schedules => {
         this.setState({ schedules });
 
-        fetchSettings(token)
-          .then(settings => {
-            this.setState({
-              settings: settings || {},
-            });
-
-            fetchHolyTotal(token, settings.person, settings.hourlyWage).then(
-              response => this.setState({ holyTotal: response.data.holyTotal })
+        this.props
+          .fetchSettingsForUser(token)
+          .then(() => {
+            fetchHolyTotal(
+              token,
+              this.props.settings.person,
+              this.props.settings.hourlyWage
+            ).then(response =>
+              this.setState({ holyTotal: response.data.holyTotal })
             );
           })
           .catch(err => console.log(err));
@@ -73,7 +70,7 @@ class Home extends Component {
           this.setState({ schedules });
         });
 
-        const { settings } = this.state;
+        const { settings } = this.props;
 
         fetchHolyTotal(token, settings.person, settings.hourlyWage).then(
           response => this.setState({ holyTotal: response.data.holyTotal })
@@ -95,7 +92,7 @@ class Home extends Component {
           this.setState({ schedules });
         });
 
-        const { settings } = this.state;
+        const { settings } = this.props;
 
         fetchHolyTotal(token, settings.person, settings.hourlyWage).then(
           response => this.setState({ holyTotal: response.data.holyTotal })
@@ -171,11 +168,7 @@ class Home extends Component {
                   className="sb-tile sb-padding sb-margin-bottom sb-flex sb-justify-content-between sb-align-items-center"
                 >
                   {this.state.editingScheduleId !== schedule.id ? (
-                    <Link
-                      to={`/schedules/${schedule.id}?person=${
-                        this.state.settings.person
-                      }&hourlyWage=${this.state.settings.hourlyWage}`}
-                    >
+                    <Link to={`/schedules/${schedule.id}`}>
                       {schedule.name}
                     </Link>
                   ) : (
@@ -246,6 +239,14 @@ class Home extends Component {
 const mapStateToProps = state => ({
   user: state.authReducer.user,
   token: state.authReducer.token,
+  settings: state.settingsReducer.settings,
 });
 
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = dispatch => ({
+  fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
+});
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);
