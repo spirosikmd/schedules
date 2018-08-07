@@ -5,7 +5,7 @@ const aggregationsController = require('../controllers/aggregations-controller')
 const settingsController = require('../controllers/settings-controller');
 const schedulesController = require('../controllers/schedules-controller');
 const indexController = require('../controllers/index-controller');
-const authMiddleware = require('../middlewares/auth');
+const { verifyToken } = require('../middlewares/auth');
 
 const BASE = '/api';
 
@@ -14,58 +14,43 @@ const upload = multer();
 module.exports = function(app) {
   app.get('/', indexController.get);
 
-  app.get(
-    `${BASE}/schedules`,
-    authMiddleware.verifyToken,
-    schedulesController.getSchedules
-  );
+  app.use(`${BASE}/schedules`, verifyToken());
+
+  app.get(`${BASE}/schedules`, schedulesController.getSchedules);
 
   app.post(
     `${BASE}/schedules`,
-    authMiddleware.verifyToken,
     upload.single('scheduleFile'),
     schedulesController.createSchedule
   );
 
-  app.put(
-    `${BASE}/schedules/:scheduleId`,
-    authMiddleware.verifyToken,
-    schedulesController.updateSchedule
-  );
+  app.put(`${BASE}/schedules/:scheduleId`, schedulesController.updateSchedule);
 
   app.delete(
     `${BASE}/schedules/:scheduleId`,
-    authMiddleware.verifyToken,
     schedulesController.deleteSchedule
   );
 
   app.get(
     `${BASE}/schedules/:scheduleId/generate`,
-    authMiddleware.verifyToken,
     schedulesController.generateSchedule
   );
 
-  app.get(
-    `${BASE}/settings`,
-    authMiddleware.verifyToken,
-    settingsController.getSettings
-  );
+  app.use(`${BASE}/settings`, verifyToken());
 
-  app.put(
-    `${BASE}/settings/:settingsId`,
-    authMiddleware.verifyToken,
-    settingsController.updateSettings
-  );
+  app.get(`${BASE}/settings`, settingsController.getSettings);
+
+  app.put(`${BASE}/settings/:settingsId`, settingsController.updateSettings);
+
+  app.use(`${BASE}/aggregations`, verifyToken());
 
   app.get(
     `${BASE}/aggregations/holy-total`,
-    authMiddleware.verifyToken,
     aggregationsController.getHolyTotal
   );
 
   app.get(
     `${BASE}/aggregations/weekly-wage-data`,
-    authMiddleware.verifyToken,
     aggregationsController.getWeeklyWageData
   );
 
