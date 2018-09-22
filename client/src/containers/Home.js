@@ -11,6 +11,7 @@ import {
 } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class Home extends Component {
   state = {
@@ -185,7 +186,9 @@ class Home extends Component {
                   </button>
                   <IconButton
                     onClick={() => this.handleScheduleDelete(schedule.id)}
-                  />
+                  >
+                    <DeleteIcon />
+                  </IconButton>
                 </div>
               </div>
             ))}
