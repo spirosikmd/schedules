@@ -1,4 +1,6 @@
 import React, { PureComponent } from 'react';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 function renderTime(time) {
   const date = new Date(time);
@@ -11,31 +13,15 @@ class ScheduleItem extends PureComponent {
     const { daySchedule } = this.props;
 
     return (
-      <div className="sb-tile sb-margin-bottom-s">
-        <div className="sb-flex">
-          <div className="sb-padding" style={{ flex: 3 }}>
-            {new Date(daySchedule.date).toDateString()}
-          </div>
-          <div className="sb-padding" style={{ flex: 1 }}>
-            {daySchedule.location}
-          </div>
-          <div className="sb-padding" style={{ flex: 2 }}>
-            {renderTime(daySchedule.startTime)}
-          </div>
-          <div className="sb-padding" style={{ flex: 2 }}>
-            {renderTime(daySchedule.endTime)}
-          </div>
-          <div className="sb-padding" style={{ flex: 1 }}>
-            {daySchedule.hours}
-          </div>
-          <div className="sb-padding" style={{ flex: 1 }}>
-            {daySchedule.dayWage.toFixed(2)}
-          </div>
-          <div className="sb-padding" style={{ flex: 4 }}>
-            {daySchedule.worksWith.join(', ')}
-          </div>
-        </div>
-      </div>
+      <TableRow>
+        <TableCell>{new Date(daySchedule.date).toDateString()}</TableCell>
+        <TableCell>{daySchedule.location}</TableCell>
+        <TableCell>{renderTime(daySchedule.startTime)}</TableCell>
+        <TableCell>{renderTime(daySchedule.endTime)}</TableCell>
+        <TableCell numeric>{daySchedule.hours}</TableCell>
+        <TableCell numeric>{daySchedule.dayWage.toFixed(2)}</TableCell>
+        <TableCell>{daySchedule.worksWith.join(', ')}</TableCell>
+      </TableRow>
     );
   }
 }

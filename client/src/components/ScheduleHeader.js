@@ -1,20 +1,22 @@
 import React, { PureComponent } from 'react';
-import ScheduleHeaderItem from './ScheduleHeaderItem';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
 
 class ScheduleHeader extends PureComponent {
   render() {
     return (
-      <div className="sb-tile sb-margin-bottom-s">
-        <div className="sb-flex">
-          <ScheduleHeaderItem text="Date" flex="3" />
-          <ScheduleHeaderItem text="Location" flex="1" />
-          <ScheduleHeaderItem text="Start Time" flex="2" />
-          <ScheduleHeaderItem text="End Time" flex="2" />
-          <ScheduleHeaderItem text="Hours" flex="1" />
-          <ScheduleHeaderItem text="Wage" flex="1" />
-          <ScheduleHeaderItem text="Work With" flex="4" />
-        </div>
-      </div>
+      <TableHead>
+        <TableRow>
+          <TableCell>Date</TableCell>
+          <TableCell>Location</TableCell>
+          <TableCell>Start Time</TableCell>
+          <TableCell>End Time</TableCell>
+          <TableCell numeric>Hours</TableCell>
+          <TableCell numeric>Wage</TableCell>
+          <TableCell>Work With</TableCell>
+        </TableRow>
+      </TableHead>
     );
   }
 }
