@@ -9,20 +9,28 @@ import {
   Legend,
   ResponsiveContainer,
 } from 'recharts/lib';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { fetchWeeklyWageDataAggregation } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
+
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 6,
+  },
+  section: {
+    height: 400,
+  },
+});
 
 class Charts extends PureComponent {
   state = {
     weeklyWageData: [],
   };
-
-  constructor(props) {
-    super(props);
-
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-  }
 
   componentDidMount() {
     const { token } = this.props;
@@ -46,38 +54,35 @@ class Charts extends PureComponent {
       .catch(err => console.log(err));
   }
 
-  handleBackButtonClick(event) {
-    event.preventDefault();
-    this.props.navigate('/');
-  }
-
   render() {
+    const { classes } = this.props;
     const { weeklyWageData } = this.state;
 
+    if (weeklyWageData.length <= 0) {
+      return null;
+    }
+
     return (
-      <div className="sb-padding">
-        {weeklyWageData.length > 0 && (
-          <section
-            style={{ height: 600 }}
-            className="sb-tile sb-padding-bottom-xl sb-padding-top sb-padding-right sb-padding-left"
-          >
-            <h2>Weekly Wage</h2>
-            <ResponsiveContainer>
-              <LineChart
-                data={weeklyWageData}
-                margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
-              >
-                <XAxis dataKey="name" />
-                <YAxis />
-                <CartesianGrid strokeDasharray="3 3" />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="weeklyWage" />
-              </LineChart>
-            </ResponsiveContainer>
-          </section>
-        )}
-      </div>
+      <Paper className={classes.root}>
+        <section className={classes.section}>
+          <Typography variant="headline" component="h2">
+            Weekly Wage
+          </Typography>
+          <ResponsiveContainer>
+            <LineChart
+              data={weeklyWageData}
+              margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
+            >
+              <XAxis dataKey="name" />
+              <YAxis />
+              <CartesianGrid strokeDasharray="3 3" />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="weeklyWage" />
+            </LineChart>
+          </ResponsiveContainer>
+        </section>
+      </Paper>
     );
   }
 }
@@ -91,7 +96,9 @@ const mapDispatchToProps = dispatch => ({
   fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Charts);
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Charts)
+);
