@@ -33,6 +33,10 @@ const styles = theme => ({
   editContainer: {
     paddingLeft: theme.spacing.unit * 2,
   },
+  scheduleFileUploadForm: {
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+  },
 });
 
 class Home extends Component {
@@ -173,13 +177,19 @@ class Home extends Component {
                         {schedule.name}
                       </Button>
                     ) : (
-                      <Grid container className={classes.editContainer}>
-                        <TextField
-                          id="newScheduleName"
-                          value={this.state.newScheduleName}
-                          onChange={this.handleNewScheduleNameChange}
-                        />
-                        <div className={classes.editActions}>
+                      <Grid
+                        container
+                        className={classes.editContainer}
+                        spacing={8}
+                      >
+                        <Grid item>
+                          <TextField
+                            id="newScheduleName"
+                            value={this.state.newScheduleName}
+                            onChange={this.handleNewScheduleNameChange}
+                          />
+                        </Grid>
+                        <Grid item>
                           <Button
                             color="primary"
                             onClick={() =>
@@ -197,7 +207,7 @@ class Home extends Component {
                           >
                             cancel
                           </Button>
-                        </div>
+                        </Grid>
                       </Grid>
                     )}
                   </Grid>
@@ -220,7 +230,7 @@ class Home extends Component {
             </Grid>
           ))}
         </Grid>
-        <div>
+        <div className={classes.scheduleFileUploadForm}>
           <ScheduleFileUploadForm
             onSubmit={this.handleScheduleFileUploadFormSubmit}
           />
