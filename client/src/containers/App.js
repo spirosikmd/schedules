@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react';
+import React, { Fragment, PureComponent } from 'react';
 import { Router } from '@reach/router';
-import { GoogleLogin } from 'react-google-login';
 import { connect } from 'react-redux';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { withStyles } from '@material-ui/core/styles';
 import Home from './Home';
 import Settings from './Settings';
 import Schedule from './Schedule';
@@ -11,6 +12,15 @@ import {
   setToken,
   createUserFromAccessToken,
 } from '../actions/authActions';
+import TopBar from '../components/TopBar';
+import Menu from '../components/Menu';
+import Login from '../components/Login';
+
+const styles = theme => ({
+  page: {
+    margin: theme.spacing.unit * 2,
+  },
+});
 
 class App extends PureComponent {
   state = {
@@ -18,6 +28,7 @@ class App extends PureComponent {
       errorCode: '',
       details: '',
     },
+    isDrawerOpen: false,
   };
 
   constructor(props) {
@@ -41,32 +52,45 @@ class App extends PureComponent {
     this.props.setToken(null);
   }
 
+  toggleDrawer(isDrawerOpen) {
+    this.setState({ isDrawerOpen });
+  }
+
   render() {
-    const { user } = this.props;
+    const { user, classes } = this.props;
 
     if (user === null) {
       return (
-        <div className="sb-container sb-padding">
-          <GoogleLogin
-            className="sb-btn sb-btn--primary"
-            clientId="1052222050887-labkfk5agrcfn4dbfaf0qitjq635s5nv.apps.googleusercontent.com"
-            buttonText="Login"
-            scope="https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.me"
-            isSignedIn
-            onSuccess={this.handleGoogleLoginSuccess}
-            onFailure={this.handleGoogleLoginFailure}
-          />
-        </div>
+        <Login
+          onGoogleLoginSuccess={this.handleGoogleLoginSuccess}
+          onGoogleLoginFailure={this.handleGoogleLoginFailure}
+        />
       );
     }
 
     return (
-      <Router>
-        <Home path="/" onGoogleLogoutSuccess={this.handleGoogleLogoutSuccess} />
-        <Schedule path="/schedules/:scheduleId" />
-        <Settings path="/settings" />
-        <Charts path="/charts" />
-      </Router>
+      <Fragment>
+        <CssBaseline />
+        <TopBar
+          user={user}
+          onMenuIconClick={() => this.toggleDrawer(true)}
+          onGoogleLogoutSuccess={this.handleGoogleLogoutSuccess}
+        />
+        <Menu
+          open={this.state.isDrawerOpen}
+          onMenuClose={() => this.toggleDrawer(false)}
+          onMenuContentClick={() => this.toggleDrawer(false)}
+          onMenuContentKeyDown={() => this.toggleDrawer(false)}
+        />
+        <div className={classes.page}>
+          <Router>
+            <Home path="/" />
+            <Schedule path="/schedules/:scheduleId" />
+            <Settings path="/settings" />
+            <Charts path="/charts" />
+          </Router>
+        </div>
+      </Fragment>
     );
   }
 }
@@ -82,7 +106,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(createUserFromAccessToken(accessToken)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)
+);

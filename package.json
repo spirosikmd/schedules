@@ -17,6 +17,6 @@
     "heroku-postbuild": "yarn build:client"
   },
   "devDependencies": {
-    "concurrently": "^3.6.0"
+    "concurrently": "^4.0.1"
   }
 }

@@ -1,9 +1,29 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'react-redux';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import ArrowBack from '@material-ui/icons/ArrowBack';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import { withStyles } from '@material-ui/core/styles';
 import ScheduleItem from '../components/ScheduleItem';
 import ScheduleHeader from '../components/ScheduleHeader';
 import { fetchScheduleForPerson, createEvents, updateSchedule } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
+
+const styles = theme => ({
+  table: {
+    width: '100%',
+    marginTop: theme.spacing.unit,
+    overflowX: 'auto',
+  },
+  info: {
+    marginTop: theme.spacing.unit,
+  },
+});
 
 class Schedule extends PureComponent {
   state = {
@@ -67,6 +87,7 @@ class Schedule extends PureComponent {
   }
 
   render() {
+    const { classes } = this.props;
     const {
       schedule,
       totalHours,
@@ -76,56 +97,71 @@ class Schedule extends PureComponent {
     } = this.state.schedule;
 
     return (
-      <div className="sb-flex sb-flex-column">
-        <header className="sb-header">
-          <button
-            className="sb-header__back"
-            aria-label="Back"
-            onClick={this.handleBackButtonClick}
-          >
-            <svg className="sb-icon" viewBox="0 0 9 16">
-              <path d="M8.02631579,16 C8.13407895,16 8.24181579,15.9588947 8.32402632,15.8766579 C8.48847368,15.7122368 8.48847368,15.4456316 8.32402632,15.2812105 L1.04281579,8 L8.32402632,0.718763158 C8.48847368,0.554342105 8.48847368,0.287736842 8.32402632,0.123315789 C8.15957895,-0.0411052632 7.893,-0.0411315789 7.72857895,0.123315789 L0.149631579,7.70226316 C-0.0148157895,7.86668421 -0.0148157895,8.13328947 0.149631579,8.29771053 L7.72857895,15.8766579 C7.81081579,15.9588947 7.91855263,16 8.02631579,16 L8.02631579,16 Z" />
-            </svg>
-          </button>
-          <div className="sb-header__content">
-            <div className="sb-header__text">
-              <h1 className="sb-header__title sb-title">{name}</h1>
-              {eventsCreatedOnce && (
-                <p className="sb-header__info sb-text">
-                  You have created events for this schedule already!
-                </p>
-              )}
-            </div>
-            <button
-              className="sb-header__btn sb-btn sb-btn--primary"
+      <Fragment>
+        <Grid container alignItems="center" justify="space-between">
+          <Grid item>
+            <Grid container alignItems="center">
+              <Grid item>
+                <IconButton onClick={this.handleBackButtonClick}>
+                  <ArrowBack />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <Grid container alignItems="baseline" spacing={8}>
+                  <Grid item>
+                    <Typography variant="headline" component="h3">
+                      {name}
+                    </Typography>
+                  </Grid>
+                  <Grid item>
+                    {eventsCreatedOnce && (
+                      <Typography>
+                        You have created events for this schedule already!
+                      </Typography>
+                    )}
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
               onClick={this.handleCreateEventsClick}
               disabled={this.state.isCreatingEvents}
             >
               {this.state.isCreatingEvents
                 ? 'creating events...'
                 : 'create events'}
-            </button>
-          </div>
-        </header>
-
-        <div className="sb-padding">
-          <ScheduleHeader />
-
-          {schedule &&
-            schedule.map(daySchedule => (
-              <ScheduleItem key={daySchedule.date} daySchedule={daySchedule} />
-            ))}
-
-          <div>
+            </Button>
+          </Grid>
+        </Grid>
+        <Paper className={classes.table}>
+          <Table>
+            <ScheduleHeader />
+            <TableBody>
+              {schedule &&
+                schedule.map(daySchedule => (
+                  <ScheduleItem
+                    key={daySchedule.date}
+                    daySchedule={daySchedule}
+                  />
+                ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        <div className={classes.info}>
+          <Typography>
             <strong>Total Hours:</strong> {totalHours}
-          </div>
+          </Typography>
 
-          <div>
+          <Typography>
             <strong>Total Weekly Wage:</strong>{' '}
             {totalWeeklyWage && totalWeeklyWage.toFixed(2)} EUR
-          </div>
+          </Typography>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
@@ -139,7 +175,9 @@ const mapDispatchToProps = dispatch => ({
   fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Schedule);
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Schedule)
+);

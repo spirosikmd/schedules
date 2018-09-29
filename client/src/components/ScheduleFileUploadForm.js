@@ -1,4 +1,8 @@
 import React, { PureComponent } from 'react';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 class ScheduleFileUploadForm extends PureComponent {
   constructor(props) {
@@ -6,44 +10,53 @@ class ScheduleFileUploadForm extends PureComponent {
 
     this.handleSubmit = this.handleSubmit.bind(this);
 
-    this.fileInput = React.createRef();
+    this.fileInputRef = React.createRef();
   }
 
   handleSubmit(event) {
     event.preventDefault();
 
-    const file = this.fileInput.current.files[0];
+    const fileInput = this.fileInputRef.current;
+
+    const file = fileInput.files[0];
 
     if (!file) {
       return;
     }
 
     this.props.onSubmit(file);
+
+    fileInput.value = '';
   }
 
   render() {
     return (
-      <form onSubmit={this.handleSubmit} className="sb-flex">
-        <div className="sb-form-control sb-flex sb-align-items-center sb-margin-right">
-          <label
-            className="sb-margin-right"
-            htmlFor="scheduleFile"
-            style={{ flex: 1 }}
-          >
-            Or upload a new one:
-          </label>
-          <input
-            className="sb-input"
-            type="file"
-            id="scheduleFile"
-            ref={this.fileInput}
-            style={{ flex: 2 }}
-          />
-        </div>
-        <button className="sb-btn" type="submit">
-          Upload
-        </button>
-      </form>
+      <Grid container alignItems="center" justify="flex-start" spacing={8}>
+        <Grid item>
+          <Typography>Upload a schedule:</Typography>
+        </Grid>
+        <Grid item>
+          <form onSubmit={this.handleSubmit}>
+            <Grid
+              container
+              alignItems="center"
+              justify="flex-start"
+              spacing={8}
+            >
+              <Grid item>
+                <TextField
+                  type="file"
+                  id="scheduleFile"
+                  inputRef={this.fileInputRef}
+                />
+              </Grid>
+              <Grid item>
+                <Button type="submit">Upload</Button>
+              </Grid>
+            </Grid>
+          </form>
+        </Grid>
+      </Grid>
     );
   }
 }
