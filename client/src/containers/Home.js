@@ -236,7 +236,7 @@ class Home extends Component {
           />
         </div>
         {holyTotal > 0 && (
-          <Typography variant="body1">
+          <Typography>
             <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
           </Typography>
         )}
