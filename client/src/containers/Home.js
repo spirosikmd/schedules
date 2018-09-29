@@ -1,6 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
+import IconButton from '@material-ui/core/IconButton';
+import Button from '@material-ui/core/Button';
+import DeleteIcon from '@material-ui/icons/Delete';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from '@material-ui/core/styles';
 import ScheduleFileUploadForm from '../components/ScheduleFileUploadForm';
 import {
   generateScheduleWithFileAndPerson,
@@ -10,8 +18,15 @@ import {
   fetchHolyTotal,
 } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
+
+const styles = theme => ({
+  item: {
+    padding: theme.spacing.unit,
+  },
+  actions: {
+    textAlign: 'right',
+  },
+});
 
 class Home extends Component {
   state = {
@@ -135,76 +150,79 @@ class Home extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     const { holyTotal } = this.state;
 
     return (
-      <div className="sb-grid sb-padding">
-        <div className="sb-col-12">
-          <div>
-            {this.state.schedules.map(schedule => (
-              <div
-                key={schedule.id}
-                className="sb-tile sb-padding sb-margin-bottom sb-flex sb-justify-content-between sb-align-items-center"
-              >
-                {this.state.editingScheduleId !== schedule.id ? (
-                  <Link to={`/schedules/${schedule.id}`}>{schedule.name}</Link>
-                ) : (
-                  <div className="sb-flex">
-                    <input
-                      type="text"
-                      className="sb-input sb-margin-right"
-                      value={this.state.newScheduleName}
-                      onChange={this.handleNewScheduleNameChange}
-                    />
-                    <button
-                      className="sb-btn sb-margin-right"
+      <Fragment>
+        <Grid container spacing={8}>
+          {this.state.schedules.map(schedule => (
+            <Grid item xs={12} key={schedule.id}>
+              <Paper className={classes.item}>
+                <Grid container alignItems="center">
+                  <Grid item xs={8}>
+                    {this.state.editingScheduleId !== schedule.id ? (
+                      <Button component={Link} to={`/schedules/${schedule.id}`}>
+                        {schedule.name}
+                      </Button>
+                    ) : (
+                      <Grid container>
+                        <TextField
+                          id="newScheduleName"
+                          value={this.state.newScheduleName}
+                          onChange={this.handleNewScheduleNameChange}
+                        />
+                        <Button
+                          color="primary"
+                          onClick={() =>
+                            this.handleUpdateScheduleName(
+                              schedule.id,
+                              schedule.name
+                            )
+                          }
+                        >
+                          update
+                        </Button>
+                        <Button
+                          color="secondary"
+                          onClick={this.handleCancelEditClick}
+                        >
+                          cancel
+                        </Button>
+                      </Grid>
+                    )}
+                  </Grid>
+                  <Grid item xs={4} className={classes.actions}>
+                    <Button
+                      color="secondary"
                       onClick={() =>
-                        this.handleUpdateScheduleName(
-                          schedule.id,
-                          schedule.name
-                        )
+                        this.handleScheduleEdit(schedule.id, schedule.name)
                       }
                     >
-                      update
-                    </button>
-                    <button
-                      className="sb-btn"
-                      onClick={this.handleCancelEditClick}
+                      edit name
+                    </Button>
+                    <IconButton
+                      onClick={() => this.handleScheduleDelete(schedule.id)}
                     >
-                      cancel
-                    </button>
-                  </div>
-                )}
-                <div className="sb-flex">
-                  <button
-                    className="sb-btn sb-btn--subtle sb-margin-right"
-                    onClick={() =>
-                      this.handleScheduleEdit(schedule.id, schedule.name)
-                    }
-                  >
-                    edit
-                  </button>
-                  <IconButton
-                    onClick={() => this.handleScheduleDelete(schedule.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="sb-margin-bottom">
-            <ScheduleFileUploadForm
-              onSubmit={this.handleScheduleFileUploadFormSubmit}
-            />
-          </div>
-          {holyTotal > 0 && (
-            <div>
-              <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
-            </div>
-          )}
+                      <DeleteIcon />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+        <div>
+          <ScheduleFileUploadForm
+            onSubmit={this.handleScheduleFileUploadFormSubmit}
+          />
         </div>
-      </div>
+        {holyTotal > 0 && (
+          <Typography variant="body1">
+            <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
+          </Typography>
+        )}
+      </Fragment>
     );
   }
 }
@@ -219,7 +237,9 @@ const mapDispatchToProps = dispatch => ({
   fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Home)
+);
