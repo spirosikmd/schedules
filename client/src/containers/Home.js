@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -25,6 +26,12 @@ const styles = theme => ({
   },
   actions: {
     textAlign: 'right',
+  },
+  editActions: {
+    marginLeft: theme.spacing.unit,
+  },
+  editContainer: {
+    paddingLeft: theme.spacing.unit * 2,
   },
 });
 
@@ -166,41 +173,42 @@ class Home extends Component {
                         {schedule.name}
                       </Button>
                     ) : (
-                      <Grid container>
+                      <Grid container className={classes.editContainer}>
                         <TextField
                           id="newScheduleName"
                           value={this.state.newScheduleName}
                           onChange={this.handleNewScheduleNameChange}
                         />
-                        <Button
-                          color="primary"
-                          onClick={() =>
-                            this.handleUpdateScheduleName(
-                              schedule.id,
-                              schedule.name
-                            )
-                          }
-                        >
-                          update
-                        </Button>
-                        <Button
-                          color="secondary"
-                          onClick={this.handleCancelEditClick}
-                        >
-                          cancel
-                        </Button>
+                        <div className={classes.editActions}>
+                          <Button
+                            color="primary"
+                            onClick={() =>
+                              this.handleUpdateScheduleName(
+                                schedule.id,
+                                schedule.name
+                              )
+                            }
+                          >
+                            update
+                          </Button>
+                          <Button
+                            color="secondary"
+                            onClick={this.handleCancelEditClick}
+                          >
+                            cancel
+                          </Button>
+                        </div>
                       </Grid>
                     )}
                   </Grid>
                   <Grid item xs={4} className={classes.actions}>
-                    <Button
-                      color="secondary"
+                    <IconButton
                       onClick={() =>
                         this.handleScheduleEdit(schedule.id, schedule.name)
                       }
                     >
-                      edit name
-                    </Button>
+                      <EditIcon />
+                    </IconButton>
                     <IconButton
                       onClick={() => this.handleScheduleDelete(schedule.id)}
                     >
