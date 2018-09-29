@@ -1,6 +1,8 @@
 import React, { Fragment, PureComponent } from 'react';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { withStyles } from '@material-ui/core/styles';
 import Home from './Home';
 import Settings from './Settings';
 import Schedule from './Schedule';
@@ -13,6 +15,14 @@ import {
 import TopBar from '../components/TopBar';
 import Menu from '../components/Menu';
 import Login from '../components/Login';
+
+const styles = theme => ({
+  page: {
+    marginTop: theme.spacing.unit * 2,
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2,
+  },
+});
 
 class App extends PureComponent {
   state = {
@@ -49,7 +59,7 @@ class App extends PureComponent {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, classes } = this.props;
 
     if (user === null) {
       return (
@@ -62,6 +72,7 @@ class App extends PureComponent {
 
     return (
       <Fragment>
+        <CssBaseline />
         <TopBar
           user={user}
           onMenuIconClick={() => this.toggleDrawer(true)}
@@ -73,12 +84,14 @@ class App extends PureComponent {
           onMenuContentClick={() => this.toggleDrawer(false)}
           onMenuContentKeyDown={() => this.toggleDrawer(false)}
         />
-        <Router>
-          <Home path="/" />
-          <Schedule path="/schedules/:scheduleId" />
-          <Settings path="/settings" />
-          <Charts path="/charts" />
-        </Router>
+        <div className={classes.page}>
+          <Router>
+            <Home path="/" />
+            <Schedule path="/schedules/:scheduleId" />
+            <Settings path="/settings" />
+            <Charts path="/charts" />
+          </Router>
+        </div>
       </Fragment>
     );
   }
@@ -95,7 +108,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(createUserFromAccessToken(accessToken)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App);
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(App)
+);
