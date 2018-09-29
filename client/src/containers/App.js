@@ -1,6 +1,5 @@
 import React, { Fragment, PureComponent } from 'react';
 import { Router } from '@reach/router';
-import { GoogleLogin } from 'react-google-login';
 import { connect } from 'react-redux';
 import Home from './Home';
 import Settings from './Settings';
@@ -11,9 +10,9 @@ import {
   setToken,
   createUserFromAccessToken,
 } from '../actions/authActions';
-import Button from '@material-ui/core/Button';
 import TopBar from '../components/TopBar';
 import Menu from '../components/Menu';
+import Login from '../components/Login';
 
 class App extends PureComponent {
   state = {
@@ -54,19 +53,10 @@ class App extends PureComponent {
 
     if (user === null) {
       return (
-        <Button
-          variant="outlined"
-          color="inherit"
-          component={GoogleLogin}
-          clientId="1052222050887-labkfk5agrcfn4dbfaf0qitjq635s5nv.apps.googleusercontent.com"
-          buttonText="Login"
-          scope="https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.me"
-          isSignedIn
-          onSuccess={this.handleGoogleLoginSuccess}
-          onFailure={this.handleGoogleLoginFailure}
-        >
-          Login
-        </Button>
+        <Login
+          onGoogleLoginSuccess={this.handleGoogleLoginSuccess}
+          onGoogleLoginFailure={this.handleGoogleLoginFailure}
+        />
       );
     }
 
