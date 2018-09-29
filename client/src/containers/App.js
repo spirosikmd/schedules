@@ -18,9 +18,7 @@ import Login from '../components/Login';
 
 const styles = theme => ({
   page: {
-    marginTop: theme.spacing.unit * 2,
-    marginLeft: theme.spacing.unit * 2,
-    marginRight: theme.spacing.unit * 2,
+    margin: theme.spacing.unit * 2,
   },
 });
 
