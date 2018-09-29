@@ -33,7 +33,7 @@ class ScheduleFileUploadForm extends PureComponent {
     return (
       <Grid container alignItems="center" justify="flex-start" spacing={8}>
         <Grid item>
-          <Typography>Or upload a new one:</Typography>
+          <Typography>Upload a schedule:</Typography>
         </Grid>
         <Grid item>
           <form onSubmit={this.handleSubmit}>
