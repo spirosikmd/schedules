@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 import {
   fetchSettingsForUser,
@@ -85,38 +86,46 @@ class Settings extends PureComponent {
 
     return (
       <form onSubmit={this.handleSubmit}>
-        <TextField
-          id="person"
-          label="Person"
-          value={newSettings.person}
-          onChange={this.handleInputChange}
-          margin="normal"
-          placeholder="Enter your schedule name"
-          name="person"
-          className={classes.textField}
-        />
-        <TextField
-          id="hourly-wage"
-          label="Hourly Wage"
-          value={newSettings.hourlyWage}
-          onChange={this.handleInputChange}
-          margin="normal"
-          placeholder="Enter your hourly wage"
-          name="hourlyWage"
-          type="number"
-          inputProps={{
-            step: '0.01',
-          }}
-          className={classes.textField}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          disabled={isSaving}
-          type="submit"
-        >
-          {isSaving ? 'Saving...' : 'Save'}
-        </Button>
+        <Grid container justify="flex-start" alignItems="center">
+          <Grid item>
+            <TextField
+              id="person"
+              label="Person"
+              value={newSettings.person}
+              onChange={this.handleInputChange}
+              margin="normal"
+              placeholder="Enter your schedule name"
+              name="person"
+              className={classes.textField}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              id="hourly-wage"
+              label="Hourly Wage"
+              value={newSettings.hourlyWage}
+              onChange={this.handleInputChange}
+              margin="normal"
+              placeholder="Enter your hourly wage"
+              name="hourlyWage"
+              type="number"
+              inputProps={{
+                step: '0.01',
+              }}
+              className={classes.textField}
+            />
+          </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              color="primary"
+              disabled={isSaving}
+              type="submit"
+            >
+              {isSaving ? 'Saving...' : 'Save'}
+            </Button>
+          </Grid>
+        </Grid>
       </form>
     );
   }
