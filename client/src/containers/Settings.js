@@ -1,9 +1,20 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 import {
   fetchSettingsForUser,
   updateSettingsForUser,
 } from '../actions/settingsActions';
+
+const styles = theme => ({
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+});
 
 class Settings extends PureComponent {
   state = {
@@ -69,45 +80,44 @@ class Settings extends PureComponent {
   }
 
   render() {
+    const { classes } = this.props;
     const { newSettings, isSaving } = this.state;
 
     return (
-      <div className="sb-padding">
-        <form onSubmit={this.handleSubmit} className="sb-flex">
-          <div className="sb-form-control sb-margin-right">
-            <input
-              aria-label="Person"
-              placeholder="Enter your schedule name"
-              className="sb-input"
-              id="person"
-              type="text"
-              value={newSettings.person}
-              name="person"
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <div className="sb-form-control sb-margin-right">
-            <input
-              aria-label="Hourly Wage"
-              placeholder="Enter your hourly wage"
-              className="sb-input"
-              id="hourly-wage"
-              type="number"
-              step="0.01"
-              value={newSettings.hourlyWage}
-              name="hourlyWage"
-              onChange={this.handleInputChange}
-            />
-          </div>
-          <button
-            className="sb-btn sb-btn--secondary"
-            disabled={isSaving}
-            type="submit"
-          >
-            {isSaving ? 'Saving...' : 'Save'}
-          </button>
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        <TextField
+          id="person"
+          label="Person"
+          value={newSettings.person}
+          onChange={this.handleInputChange}
+          margin="normal"
+          placeholder="Enter your schedule name"
+          name="person"
+          className={classes.textField}
+        />
+        <TextField
+          id="hourly-wage"
+          label="Hourly Wage"
+          value={newSettings.hourlyWage}
+          onChange={this.handleInputChange}
+          margin="normal"
+          placeholder="Enter your hourly wage"
+          name="hourlyWage"
+          type="number"
+          inputProps={{
+            step: '0.01',
+          }}
+          className={classes.textField}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={isSaving}
+          type="submit"
+        >
+          {isSaving ? 'Saving...' : 'Save'}
+        </Button>
+      </form>
     );
   }
 }
@@ -123,7 +133,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateSettingsForUser(token, settingsId, hourlyWage, person)),
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Settings);
+export default withStyles(styles)(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Settings)
+);
