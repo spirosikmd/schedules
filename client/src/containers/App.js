@@ -61,10 +61,13 @@ class App extends PureComponent {
 
     if (user === null) {
       return (
-        <Login
-          onGoogleLoginSuccess={this.handleGoogleLoginSuccess}
-          onGoogleLoginFailure={this.handleGoogleLoginFailure}
-        />
+        <Fragment>
+          <CssBaseline />
+          <Login
+            onGoogleLoginSuccess={this.handleGoogleLoginSuccess}
+            onGoogleLoginFailure={this.handleGoogleLoginFailure}
+          />
+        </Fragment>
       );
     }
 
