@@ -7,11 +7,7 @@ import Home from './Home';
 import Settings from './Settings';
 import Schedule from './Schedule';
 import Charts from './Charts';
-import {
-  setUser,
-  setToken,
-  createUserFromAccessToken,
-} from '../actions/authActions';
+import { setUser, createUserFromAccessToken } from '../actions/authActions';
 import TopBar from '../components/TopBar';
 import Menu from '../components/Menu';
 import Login from '../components/Login';
@@ -49,7 +45,6 @@ class App extends PureComponent {
 
   handleGoogleLogoutSuccess() {
     this.props.setUser(null);
-    this.props.setToken(null);
   }
 
   toggleDrawer(isDrawerOpen) {
@@ -104,7 +99,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setUser: user => dispatch(setUser(user)),
-  setToken: token => dispatch(setToken(token)),
   createUserFromAccessToken: accessToken =>
     dispatch(createUserFromAccessToken(accessToken)),
 });

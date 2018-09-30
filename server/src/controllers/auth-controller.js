@@ -12,6 +12,12 @@ function createToken(auth) {
   );
 }
 
+function getCookieOptions() {
+  const secure = process.env.NODE_ENV === 'production' ? true : false;
+
+  return { httpOnly: true, secure };
+}
+
 function authenticate(req, res, next) {
   if (!req.user) {
     return res.status(401).json({ message: 'User not authenticated' });
@@ -23,10 +29,12 @@ function authenticate(req, res, next) {
 
   const token = createToken(auth);
 
-  return res.status(200).json({
-    user: req.user,
-    token: token,
-  });
+  return res
+    .status(200)
+    .cookie('token', token, getCookieOptions())
+    .json({
+      user: req.user,
+    });
 }
 
 module.exports = { authenticate };

@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import { connect } from 'react-redux';
 import { fetchWeeklyWageDataAggregation } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
+import withAuth from '../components/withAuth';
 
 const styles = theme => ({
   root: {
@@ -36,13 +37,10 @@ class Charts extends PureComponent {
   };
 
   componentDidMount() {
-    const { token } = this.props;
-
     this.props
-      .fetchSettingsForUser(token)
+      .fetchSettingsForUser()
       .then(() => {
         fetchWeeklyWageDataAggregation(
-          token,
           this.props.settings.person,
           this.props.settings.hourlyWage
         ).then(response => {
@@ -92,17 +90,18 @@ class Charts extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  token: state.authReducer.token,
   settings: state.settingsReducer.settings,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
+  fetchSettingsForUser: () => dispatch(fetchSettingsForUser()),
 });
 
-export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Charts)
+export default withAuth(
+  withStyles(styles)(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(Charts)
+  )
 );

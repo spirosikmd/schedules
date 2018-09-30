@@ -7,16 +7,8 @@ export const setUser = user => dispatch => {
   });
 };
 
-export const setToken = token => dispatch => {
-  dispatch({
-    type: 'SET_TOKEN',
-    token,
-  });
-};
-
 export const createUserFromAccessToken = accessToken => dispatch => {
   return authenticateWithGoogle(accessToken).then(response => {
-    dispatch(setToken(response.token));
     dispatch(setUser(response.user));
   });
 };

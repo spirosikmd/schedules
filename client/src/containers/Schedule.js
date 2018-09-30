@@ -13,6 +13,7 @@ import ScheduleItem from '../components/ScheduleItem';
 import ScheduleHeader from '../components/ScheduleHeader';
 import { fetchScheduleForPerson, createEvents, updateSchedule } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
+import withAuth from '../components/withAuth';
 
 const styles = theme => ({
   table: {
@@ -39,7 +40,7 @@ class Schedule extends PureComponent {
   }
 
   componentDidMount() {
-    this.props.fetchSettingsForUser(this.props.token).then(() => {
+    this.props.fetchSettingsForUser().then(() => {
       this.getSchedule();
     });
   }
@@ -64,9 +65,7 @@ class Schedule extends PureComponent {
 
         this.setState({ isCreatingEvents: false });
 
-        const { token } = this.props;
-
-        updateSchedule(token, this.props.scheduleId, {
+        updateSchedule(this.props.scheduleId, {
           eventsCreatedOnce: true,
         })
           .then(() => {
@@ -79,9 +78,8 @@ class Schedule extends PureComponent {
 
   getSchedule() {
     const { person, hourlyWage } = this.props.settings;
-    const { token } = this.props;
 
-    fetchScheduleForPerson(token, this.props.scheduleId, person, hourlyWage)
+    fetchScheduleForPerson(this.props.scheduleId, person, hourlyWage)
       .then(schedule => this.setState({ schedule }))
       .catch(err => console.log(err));
   }
@@ -140,15 +138,16 @@ class Schedule extends PureComponent {
         <Paper className={classes.table}>
           <Table>
             <ScheduleHeader />
-            <TableBody>
-              {schedule &&
-                schedule.map(daySchedule => (
+            {schedule && (
+              <TableBody>
+                {schedule.map(daySchedule => (
                   <ScheduleItem
                     key={daySchedule.date}
                     daySchedule={daySchedule}
                   />
                 ))}
-            </TableBody>
+              </TableBody>
+            )}
           </Table>
         </Paper>
         <div className={classes.info}>
@@ -167,17 +166,18 @@ class Schedule extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  token: state.authReducer.token,
   settings: state.settingsReducer.settings,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
+  fetchSettingsForUser: () => dispatch(fetchSettingsForUser()),
 });
 
-export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Schedule)
+export default withAuth(
+  withStyles(styles)(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(Schedule)
+  )
 );

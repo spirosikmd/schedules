@@ -59,4 +59,8 @@ module.exports = function(app) {
     passport.authenticate('google-token', { session: false }),
     authController.authenticate
   );
+
+  app.get(`${BASE}/auth/token`, verifyToken(), function(req, res) {
+    res.sendStatus(200);
+  });
 };

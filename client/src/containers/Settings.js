@@ -8,6 +8,7 @@ import {
   fetchSettingsForUser,
   updateSettingsForUser,
 } from '../actions/settingsActions';
+import withAuth from '../components/withAuth';
 
 const styles = theme => ({
   textField: {
@@ -35,9 +36,7 @@ class Settings extends PureComponent {
   }
 
   componentDidMount() {
-    const { token } = this.props;
-
-    this.props.fetchSettingsForUser(token).then(() => {
+    this.props.fetchSettingsForUser().then(() => {
       const { person, hourlyWage } = this.props.settings;
       this.setState({
         newSettings: { person, hourlyWage },
@@ -57,10 +56,9 @@ class Settings extends PureComponent {
 
     const { _id: settingsId } = this.props.settings;
     const { hourlyWage, person } = this.state.newSettings;
-    const { token } = this.props;
 
     this.props
-      .updateSettingsForUser(token, settingsId, hourlyWage, person)
+      .updateSettingsForUser(settingsId, hourlyWage, person)
       .then(() => {
         const { person, hourlyWage } = this.props.settings;
         this.setState({
@@ -132,19 +130,20 @@ class Settings extends PureComponent {
 }
 
 const mapStateToProps = state => ({
-  token: state.authReducer.token,
   settings: state.settingsReducer.settings,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
-  updateSettingsForUser: (token, settingsId, hourlyWage, person) =>
-    dispatch(updateSettingsForUser(token, settingsId, hourlyWage, person)),
+  fetchSettingsForUser: () => dispatch(fetchSettingsForUser()),
+  updateSettingsForUser: (settingsId, hourlyWage, person) =>
+    dispatch(updateSettingsForUser(settingsId, hourlyWage, person)),
 });
 
-export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Settings)
+export default withAuth(
+  withStyles(styles)(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(Settings)
+  )
 );

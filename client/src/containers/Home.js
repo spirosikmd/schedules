@@ -19,6 +19,7 @@ import {
   fetchHolyTotal,
 } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
+import withAuth from '../components/withAuth';
 
 const styles = theme => ({
   item: {
@@ -66,17 +67,14 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    const { token } = this.props;
-
-    fetchSchedules(token)
+    fetchSchedules()
       .then(schedules => {
         this.setState({ schedules });
 
         this.props
-          .fetchSettingsForUser(token)
+          .fetchSettingsForUser()
           .then(() => {
             fetchHolyTotal(
-              token,
               this.props.settings.person,
               this.props.settings.hourlyWage
             ).then(response =>
@@ -89,36 +87,32 @@ class Home extends Component {
   }
 
   handleScheduleFileUploadFormSubmit(file) {
-    const { token } = this.props;
-
-    generateScheduleWithFileAndPerson(token, file)
+    generateScheduleWithFileAndPerson(file)
       .then(() => {
-        fetchSchedules(token).then(schedules => {
+        fetchSchedules().then(schedules => {
           this.setState({ schedules });
         });
 
         const { settings } = this.props;
 
-        fetchHolyTotal(token, settings.person, settings.hourlyWage).then(
-          response => this.setState({ holyTotal: response.data.holyTotal })
+        fetchHolyTotal(settings.person, settings.hourlyWage).then(response =>
+          this.setState({ holyTotal: response.data.holyTotal })
         );
       })
       .catch(err => console.log(err));
   }
 
   handleScheduleDelete(scheduleId) {
-    const { token } = this.props;
-
-    deleteSchedule(token, scheduleId)
+    deleteSchedule(scheduleId)
       .then(() => {
-        fetchSchedules(token).then(schedules => {
+        fetchSchedules().then(schedules => {
           this.setState({ schedules });
         });
 
         const { settings } = this.props;
 
-        fetchHolyTotal(token, settings.person, settings.hourlyWage).then(
-          response => this.setState({ holyTotal: response.data.holyTotal })
+        fetchHolyTotal(settings.person, settings.hourlyWage).then(response =>
+          this.setState({ holyTotal: response.data.holyTotal })
         );
       })
       .catch(err => console.log(err));
@@ -142,14 +136,12 @@ class Home extends Component {
       return;
     }
 
-    const { token } = this.props;
-
-    updateSchedule(token, scheduleId, {
+    updateSchedule(scheduleId, {
       name: parsedNewScheduleName,
     }).then(() => {
       this.setState({ editingScheduleId: '' });
 
-      fetchSchedules(token).then(schedules => {
+      fetchSchedules().then(schedules => {
         this.setState({ schedules });
       });
     });
@@ -247,17 +239,18 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
   user: state.authReducer.user,
-  token: state.authReducer.token,
   settings: state.settingsReducer.settings,
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSettingsForUser: token => dispatch(fetchSettingsForUser(token)),
+  fetchSettingsForUser: () => dispatch(fetchSettingsForUser()),
 });
 
-export default withStyles(styles)(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Home)
+export default withAuth(
+  withStyles(styles)(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(Home)
+  )
 );
