@@ -25,6 +25,9 @@ const styles = theme => ({
   section: {
     height: 400,
   },
+  chart: {
+    fontFamily: theme.typography.fontFamily,
+  },
 });
 
 class Charts extends PureComponent {
@@ -70,13 +73,14 @@ class Charts extends PureComponent {
           </Typography>
           <ResponsiveContainer>
             <LineChart
+              className={classes.chart}
               data={weeklyWageData}
               margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
             >
               <XAxis dataKey="name" />
               <YAxis />
               <CartesianGrid strokeDasharray="3 3" />
-              <Tooltip />
+              <Tooltip formatter={value => value.toFixed(2)} />
               <Legend />
               <Line type="monotone" dataKey="weeklyWage" />
             </LineChart>
