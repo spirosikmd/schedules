@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.8.0
+
+TBD
+
+## v0.7.0
+
+TBD
+
 ## v0.6.0
 
 - Use passport with Google token authentication to safely store users.
