@@ -16,6 +16,7 @@ import { connect } from 'react-redux';
 import { fetchWeeklyWageDataAggregation } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
+import Loader from '../components/Loader';
 
 const styles = theme => ({
   root: {
@@ -34,6 +35,7 @@ const styles = theme => ({
 class Charts extends PureComponent {
   state = {
     weeklyWageData: [],
+    isLoading: true,
   };
 
   componentDidMount() {
@@ -49,7 +51,7 @@ class Charts extends PureComponent {
           Object.keys(weeklyWageData).forEach(name => {
             chartData.push({ name, weeklyWage: weeklyWageData[name] });
           });
-          this.setState({ weeklyWageData: chartData });
+          this.setState({ weeklyWageData: chartData, isLoading: false });
         });
       })
       .catch(err => console.log(err));
@@ -57,7 +59,11 @@ class Charts extends PureComponent {
 
   render() {
     const { classes } = this.props;
-    const { weeklyWageData } = this.state;
+    const { weeklyWageData, isLoading } = this.state;
+
+    if (isLoading) {
+      return <Loader loading={isLoading} />;
+    }
 
     if (weeklyWageData.length <= 0) {
       return null;

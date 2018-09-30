@@ -9,6 +9,7 @@ import {
   updateSettingsForUser,
 } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
+import Loader from '../components/Loader';
 
 const styles = theme => ({
   textField: {
@@ -25,6 +26,7 @@ class Settings extends PureComponent {
       hourlyWage: 0,
     },
     isSaving: false,
+    isLoading: true,
   };
 
   constructor(props) {
@@ -40,6 +42,7 @@ class Settings extends PureComponent {
       const { person, hourlyWage } = this.props.settings;
       this.setState({
         newSettings: { person, hourlyWage },
+        isLoading: false,
       });
     });
   }
@@ -80,7 +83,11 @@ class Settings extends PureComponent {
 
   render() {
     const { classes } = this.props;
-    const { newSettings, isSaving } = this.state;
+    const { newSettings, isSaving, isLoading } = this.state;
+
+    if (isLoading) {
+      return <Loader loading={isLoading} />;
+    }
 
     return (
       <form onSubmit={this.handleSubmit}>

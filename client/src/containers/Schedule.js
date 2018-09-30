@@ -14,6 +14,7 @@ import ScheduleHeader from '../components/ScheduleHeader';
 import { fetchScheduleForPerson, createEvents, updateSchedule } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
+import Loader from '../components/Loader';
 
 const styles = theme => ({
   table: {
@@ -30,6 +31,7 @@ class Schedule extends PureComponent {
   state = {
     schedule: {},
     isCreatingEvents: false,
+    isLoading: true,
   };
 
   constructor(props) {
@@ -80,7 +82,7 @@ class Schedule extends PureComponent {
     const { person, hourlyWage } = this.props.settings;
 
     fetchScheduleForPerson(this.props.scheduleId, person, hourlyWage)
-      .then(schedule => this.setState({ schedule }))
+      .then(schedule => this.setState({ schedule, isLoading: false }))
       .catch(err => console.log(err));
   }
 
@@ -93,6 +95,10 @@ class Schedule extends PureComponent {
       name,
       eventsCreatedOnce,
     } = this.state.schedule;
+
+    if (this.state.isLoading) {
+      return <Loader loading={this.state.isLoading} />;
+    }
 
     return (
       <Fragment>

@@ -1,9 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
-import { checkToken } from '../api';
-import Fade from '@material-ui/core/Fade';
-import Grid from '@material-ui/core/Grid';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import Typography from '@material-ui/core/Typography';
+import { checkToken } from '../api';
+import Loader from './Loader';
 
 export default function withAuth(ComponentToProtect) {
   return class extends PureComponent {
@@ -53,13 +51,7 @@ export default function withAuth(ComponentToProtect) {
         }
       }
 
-      return (
-        <Grid container justify="center" alignItems="center">
-          <Fade in={loading} unmountOnExit>
-            <CircularProgress />
-          </Fade>
-        </Grid>
-      );
+      return <Loader loading={loading} />;
     }
   };
 }

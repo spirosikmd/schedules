@@ -20,6 +20,7 @@ import {
 } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
+import Loader from '../components/Loader';
 
 const styles = theme => ({
   item: {
@@ -52,6 +53,7 @@ class Home extends Component {
     newScheduleName: '',
     holyTotal: 0,
     isDrawerOpen: false,
+    isLoading: true,
   };
 
   constructor(props) {
@@ -69,7 +71,7 @@ class Home extends Component {
   componentDidMount() {
     fetchSchedules()
       .then(schedules => {
-        this.setState({ schedules });
+        this.setState({ schedules, isLoading: false });
 
         this.props
           .fetchSettingsForUser()
@@ -154,12 +156,16 @@ class Home extends Component {
 
   render() {
     const { classes } = this.props;
-    const { holyTotal } = this.state;
+    const { holyTotal, schedules, isLoading } = this.state;
+
+    if (isLoading) {
+      return <Loader loading={isLoading} />;
+    }
 
     return (
       <Fragment>
         <Grid container spacing={8}>
-          {this.state.schedules.map(schedule => (
+          {schedules.map(schedule => (
             <Grid item xs={12} key={schedule.id}>
               <Paper className={classes.item}>
                 <Grid container alignItems="center">
