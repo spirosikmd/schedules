@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.10.0
+
+- Schedules have individual settings.
+- Hourly wage is refactored as schedule setting.
+- Setup migrations.
+
 ## v0.9.0
 
 TBD
