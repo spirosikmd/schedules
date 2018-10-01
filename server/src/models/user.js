@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const timestamps = require('mongoose-timestamp');
 
 const userSchema = mongoose.Schema({
   email: {
@@ -55,5 +56,7 @@ userSchema.statics.upsertGoogleUser = function(
     }
   );
 };
+
+userSchema.plugin(timestamps);
 
 module.exports = mongoose.model('User', userSchema);
