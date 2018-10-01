@@ -40,19 +40,22 @@ function getSchedules(userId) {
         return reject(`Cannot get schedules`);
       }
 
-      Schedule.find({ user: user._id }, (err, schedules) => {
-        if (err) {
-          return reject(err);
-        }
+      Schedule.find({ user: user._id })
+        .sort('-createdAt')
+        .exec((err, schedules) => {
+          if (err) {
+            return reject(err);
+          }
 
-        const simplifiedSchedules = schedules.map(schedule => ({
-          id: schedule._id,
-          name: schedule.name,
-          eventsCreatedOnce: schedule.eventsCreatedOnce,
-        }));
+          const simplifiedSchedules = schedules.map(schedule => ({
+            id: schedule._id,
+            name: schedule.name,
+            eventsCreatedOnce: schedule.eventsCreatedOnce,
+            createdAt: schedule.createdAt,
+          }));
 
-        resolve(simplifiedSchedules);
-      });
+          resolve(simplifiedSchedules);
+        });
     });
   });
 }
