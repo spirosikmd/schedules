@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.11.0
+
+- Schedules are shown in home page in descending created at order.
+
 ## v0.10.0
 
 - Schedules have individual settings.
