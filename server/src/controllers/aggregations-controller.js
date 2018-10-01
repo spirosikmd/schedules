@@ -1,11 +1,11 @@
 const aggregationsService = require('../services/aggregations-service');
 
 function getWeeklyWageData(req, res) {
-  const { person, hourlyWage } = req.query;
+  const { person } = req.query;
   const userId = req.user.id;
 
   aggregationsService
-    .calculateWeeklyWageData(userId, person, hourlyWage)
+    .calculateWeeklyWageData(userId, person)
     .then(data => res.json(data))
     .catch(error => {
       res.status(404).json({
@@ -15,11 +15,11 @@ function getWeeklyWageData(req, res) {
 }
 
 function getHolyTotal(req, res) {
-  const { person, hourlyWage } = req.query;
+  const { person } = req.query;
   const userId = req.user.id;
 
   aggregationsService
-    .calculateHolyTotal(userId, person, hourlyWage)
+    .calculateHolyTotal(userId, person)
     .then(data => res.json(data))
     .catch(error => {
       res.status(404).json({

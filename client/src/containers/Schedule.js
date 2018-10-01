@@ -15,6 +15,7 @@ import { fetchScheduleForPerson, createEvents, updateSchedule } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
+import ScheduleSettings from '../components/ScheduleSettings';
 
 const styles = theme => ({
   table: {
@@ -39,6 +40,7 @@ class Schedule extends PureComponent {
 
     this.handleCreateEventsClick = this.handleCreateEventsClick.bind(this);
     this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+    this.handleSettingsSave = this.handleSettingsSave.bind(this);
   }
 
   componentDidMount() {
@@ -79,25 +81,37 @@ class Schedule extends PureComponent {
   }
 
   getSchedule() {
-    const { person, hourlyWage } = this.props.settings;
+    const { person } = this.props.settings;
 
-    fetchScheduleForPerson(this.props.scheduleId, person, hourlyWage)
+    fetchScheduleForPerson(this.props.scheduleId, person)
       .then(schedule => this.setState({ schedule, isLoading: false }))
       .catch(err => console.log(err));
+  }
+
+  handleSettingsSave(settings) {
+    updateSchedule(this.props.scheduleId, { settings })
+      .then(() => {
+        this.getSchedule();
+      })
+      .catch(console.error);
   }
 
   render() {
     const { classes } = this.props;
     const {
-      schedule,
-      totalHours,
-      totalWeeklyWage,
-      name,
-      eventsCreatedOnce,
-    } = this.state.schedule;
+      schedule: {
+        schedule,
+        totalHours,
+        totalWeeklyWage,
+        name,
+        eventsCreatedOnce,
+        settings,
+      },
+      isLoading,
+    } = this.state;
 
-    if (this.state.isLoading) {
-      return <Loader loading={this.state.isLoading} />;
+    if (isLoading) {
+      return <Loader loading={isLoading} />;
     }
 
     return (
@@ -129,16 +143,26 @@ class Schedule extends PureComponent {
             </Grid>
           </Grid>
           <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={this.handleCreateEventsClick}
-              disabled={this.state.isCreatingEvents}
-            >
-              {this.state.isCreatingEvents
-                ? 'creating events...'
-                : 'create events'}
-            </Button>
+            <Grid container alignItems="center" spacing={8}>
+              <Grid item>
+                <ScheduleSettings
+                  hourlyWage={settings.hourlyWage}
+                  onSave={this.handleSettingsSave}
+                />
+              </Grid>
+              <Grid item>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={this.handleCreateEventsClick}
+                  disabled={this.state.isCreatingEvents}
+                >
+                  {this.state.isCreatingEvents
+                    ? 'creating events...'
+                    : 'create events'}
+                </Button>
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
         <Paper className={classes.table}>

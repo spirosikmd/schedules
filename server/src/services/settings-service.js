@@ -19,7 +19,7 @@ function getSettings(userId) {
 
         if (settings === null) {
           Settings.create(
-            { user: user._id, hourlyWage: 8.55, person: '' },
+            { user: user._id, person: '' },
             (err, newSettings) => {
               if (err) {
                 return reject(err);
@@ -37,7 +37,7 @@ function getSettings(userId) {
   });
 }
 
-function updateSettings(userId, settingsId, hourlyWage, person) {
+function updateSettings(userId, settingsId, person) {
   return new Promise((resolve, reject) => {
     User.findById(userId, (err, user) => {
       if (err) {
@@ -48,7 +48,7 @@ function updateSettings(userId, settingsId, hourlyWage, person) {
         return reject(`Cannot update settings`);
       }
 
-      const data = { hourlyWage, person, user: user._id };
+      const data = { person, user: user._id };
 
       Settings.findOneAndUpdate(
         { _id: settingsId, user: user._id },

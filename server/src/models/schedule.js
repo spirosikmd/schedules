@@ -11,6 +11,9 @@ const scheduleSchema = mongoose.Schema({
   },
   data: [],
   user: { type: Schema.Types.ObjectId, ref: 'User' },
+  settings: {
+    hourlyWage: { type: Number, default: 0 },
+  },
 });
 
 module.exports = mongoose.model('Schedule', scheduleSchema);

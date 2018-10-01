@@ -57,7 +57,7 @@ function getSchedules(userId) {
   });
 }
 
-function getScheduleDataForPerson(userId, scheduleId, person, hourlyWage) {
+function getScheduleDataForPerson(userId, scheduleId, person) {
   return new Promise((resolve, reject) => {
     User.findById(userId, (err, user) => {
       if (err) {
@@ -76,6 +76,7 @@ function getScheduleDataForPerson(userId, scheduleId, person, hourlyWage) {
           }
 
           const scheduleData = foundSchedule.data;
+          const hourlyWage = foundSchedule.settings.hourlyWage;
 
           const schedule = [];
 
@@ -110,6 +111,7 @@ function getScheduleDataForPerson(userId, scheduleId, person, hourlyWage) {
             totalWeeklyWage: totalHours * hourlyWage,
             name: foundSchedule.name,
             eventsCreatedOnce: foundSchedule.eventsCreatedOnce,
+            settings: foundSchedule.settings,
           });
         }
       );

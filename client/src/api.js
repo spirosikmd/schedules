@@ -16,13 +16,10 @@ export async function generateScheduleWithFileAndPerson(file) {
   }).then(response => response.json());
 }
 
-export async function fetchScheduleForPerson(scheduleId, person, hourlyWage) {
-  return fetch(
-    `${BASE}/schedules/${scheduleId}/generate?person=${person}&hourlyWage=${hourlyWage}`,
-    {
-      headers: getDefaultHeaders(),
-    }
-  ).then(response => response.json());
+export async function fetchScheduleForPerson(scheduleId, person) {
+  return fetch(`${BASE}/schedules/${scheduleId}/generate?person=${person}`, {
+    headers: getDefaultHeaders(),
+  }).then(response => response.json());
 }
 
 export async function fetchSchedules() {
@@ -76,12 +73,11 @@ export function updateSchedule(scheduleId, data) {
   }).then(response => response.json());
 }
 
-export function updateSettings(settingsId, hourlyWage, person) {
+export function updateSettings(settingsId, person) {
   return fetch(`${BASE}/settings/${settingsId}`, {
     method: 'PUT',
     headers: getDefaultHeaders(),
     body: JSON.stringify({
-      hourlyWage,
       person,
     }),
   }).then(response => response.json());

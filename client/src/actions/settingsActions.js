@@ -9,14 +9,11 @@ export const fetchSettingsForUser = email => dispatch => {
 export const updateSettingsForUser = (
   email,
   settingsId,
-  hourlyWage,
   person
 ) => dispatch => {
-  return updateSettings(email, settingsId, hourlyWage, person).then(
-    settings => {
-      dispatch(setSettings(settings));
-    }
-  );
+  return updateSettings(email, settingsId, person).then(settings => {
+    dispatch(setSettings(settings));
+  });
 };
 
 export const setSettings = settings => dispatch => {

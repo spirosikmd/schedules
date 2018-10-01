@@ -23,7 +23,6 @@ class Settings extends PureComponent {
   state = {
     newSettings: {
       person: '',
-      hourlyWage: 0,
     },
     isSaving: false,
     isLoading: true,
@@ -39,9 +38,9 @@ class Settings extends PureComponent {
 
   componentDidMount() {
     this.props.fetchSettingsForUser().then(() => {
-      const { person, hourlyWage } = this.props.settings;
+      const { person } = this.props.settings;
       this.setState({
-        newSettings: { person, hourlyWage },
+        newSettings: { person },
         isLoading: false,
       });
     });
@@ -58,17 +57,15 @@ class Settings extends PureComponent {
     this.setState({ isSaving: true });
 
     const { _id: settingsId } = this.props.settings;
-    const { hourlyWage, person } = this.state.newSettings;
+    const { person } = this.state.newSettings;
 
-    this.props
-      .updateSettingsForUser(settingsId, hourlyWage, person)
-      .then(() => {
-        const { person, hourlyWage } = this.props.settings;
-        this.setState({
-          newSettings: { person, hourlyWage },
-          isSaving: false,
-        });
+    this.props.updateSettingsForUser(settingsId, person).then(() => {
+      const { person } = this.props.settings;
+      this.setState({
+        newSettings: { person },
+        isSaving: false,
       });
+    });
   }
 
   handleInputChange(event) {
@@ -105,22 +102,6 @@ class Settings extends PureComponent {
             />
           </Grid>
           <Grid item>
-            <TextField
-              id="hourly-wage"
-              label="Hourly Wage"
-              value={newSettings.hourlyWage}
-              onChange={this.handleInputChange}
-              margin="normal"
-              placeholder="Enter your hourly wage"
-              name="hourlyWage"
-              type="number"
-              inputProps={{
-                step: '0.01',
-              }}
-              className={classes.textField}
-            />
-          </Grid>
-          <Grid item>
             <Button
               variant="contained"
               color="primary"
@@ -142,8 +123,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   fetchSettingsForUser: () => dispatch(fetchSettingsForUser()),
-  updateSettingsForUser: (settingsId, hourlyWage, person) =>
-    dispatch(updateSettingsForUser(settingsId, hourlyWage, person)),
+  updateSettingsForUser: (settingsId, person) =>
+    dispatch(updateSettingsForUser(settingsId, person)),
 });
 
 export default withAuth(

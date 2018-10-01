@@ -4,16 +4,11 @@ const schedulesService = require('../services/schedules-service');
 
 function generateSchedule(req, res) {
   const { scheduleId } = req.params;
-  const { person, hourlyWage } = req.query;
+  const { person } = req.query;
   const userId = req.user.id;
 
   schedulesService
-    .getScheduleDataForPerson(
-      userId,
-      scheduleId,
-      person.toLowerCase(),
-      hourlyWage
-    )
+    .getScheduleDataForPerson(userId, scheduleId, person.toLowerCase())
     .then(data => res.json(data))
     .catch(error => {
       res.status(404).json({

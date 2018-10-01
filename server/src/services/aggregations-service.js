@@ -5,7 +5,7 @@ function createAggregationResponse(data) {
   return { data };
 }
 
-function calculateHolyTotal(userId, person, hourlyWage) {
+function calculateHolyTotal(userId, person) {
   return new Promise((resolve, reject) => {
     User.findById(userId, (err, user) => {
       if (err) {
@@ -24,6 +24,8 @@ function calculateHolyTotal(userId, person, hourlyWage) {
         let holyTotal = 0;
 
         schedules.forEach(schedule => {
+          const hourlyWage = schedule.settings.hourlyWage;
+
           schedule.data.forEach(daySchedule => {
             daySchedule.locations.forEach(location => {
               location.employees.forEach(employee => {
@@ -41,7 +43,7 @@ function calculateHolyTotal(userId, person, hourlyWage) {
   });
 }
 
-function calculateWeeklyWageData(userId, person, hourlyWage) {
+function calculateWeeklyWageData(userId, person) {
   return new Promise((resolve, reject) => {
     User.findById(userId, (err, user) => {
       if (err) {
@@ -60,6 +62,8 @@ function calculateWeeklyWageData(userId, person, hourlyWage) {
         const weeklyWageData = {};
 
         schedules.forEach(schedule => {
+          const hourlyWage = schedule.settings.hourlyWage;
+
           schedule.data.forEach(daySchedule => {
             daySchedule.locations.forEach(location => {
               location.employees.forEach(employee => {

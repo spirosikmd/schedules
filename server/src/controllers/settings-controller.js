@@ -1,12 +1,12 @@
 const settingsService = require('../services/settings-service');
 
 function updateSettings(req, res) {
-  const { hourlyWage, person } = req.body;
+  const { person } = req.body;
   const userId = req.user.id;
   const { settingsId } = req.params;
 
   settingsService
-    .updateSettings(userId, settingsId, hourlyWage, person)
+    .updateSettings(userId, settingsId, person)
     .then(data => res.json(data))
     .catch(error => {
       res.status(404).json({
