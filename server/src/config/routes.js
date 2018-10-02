@@ -1,5 +1,6 @@
 const multer = require('multer');
 const passport = require('passport');
+const { check } = require('express-validator/check');
 const authController = require('../controllers/auth-controller');
 const aggregationsController = require('../controllers/aggregations-controller');
 const settingsController = require('../controllers/settings-controller');
@@ -33,7 +34,18 @@ module.exports = function(app) {
 
   app.get(`${BASE}/schedules/:scheduleId`, schedulesController.getSchedule);
 
-  app.post(`${BASE}/schedules`, schedulesController.createSchedule);
+  app.post(
+    `${BASE}/schedules`,
+    [
+      check('name')
+        .isString()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
+    ],
+    schedulesController.createSchedule
+  );
 
   app.use(`${BASE}/settings`, verifyToken());
 

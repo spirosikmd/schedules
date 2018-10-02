@@ -1,3 +1,4 @@
+const { validationResult } = require('express-validator/check');
 const DefaultParser = require('../parser');
 const parseScheduleFileData = require('../services/parser-service');
 const schedulesService = require('../services/schedules-service');
@@ -77,6 +78,12 @@ function generateSchedule(req, res) {
 }
 
 function createSchedule(req, res) {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   const data = req.body;
   const userId = req.user.id;
 
