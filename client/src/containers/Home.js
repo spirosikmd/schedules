@@ -3,7 +3,6 @@ import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -21,13 +20,11 @@ import {
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
+import ResponsiveConfirmDeleteDialog from '../components/ResponsiveConfirmDeleteDialog';
 
 const styles = theme => ({
   item: {
     padding: theme.spacing.unit,
-  },
-  actions: {
-    textAlign: 'right',
   },
   editActions: {
     marginLeft: theme.spacing.unit,
@@ -210,19 +207,21 @@ class Home extends Component {
                       </Grid>
                     )}
                   </Grid>
-                  <Grid item xs={4} className={classes.actions}>
-                    <IconButton
-                      onClick={() =>
-                        this.handleScheduleEdit(schedule.id, schedule.name)
-                      }
-                    >
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => this.handleScheduleDelete(schedule.id)}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
+                  <Grid item xs={4}>
+                    <Grid container justify="flex-end">
+                      <IconButton
+                        onClick={() =>
+                          this.handleScheduleEdit(schedule.id, schedule.name)
+                        }
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <ResponsiveConfirmDeleteDialog
+                        onDeleteClick={() =>
+                          this.handleScheduleDelete(schedule.id)
+                        }
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Paper>
