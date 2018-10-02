@@ -185,6 +185,7 @@ class Home extends Component {
                             id="newScheduleName"
                             value={this.state.newScheduleName}
                             onChange={this.handleNewScheduleNameChange}
+                            autoFocus
                           />
                         </Grid>
                         <Grid item>
