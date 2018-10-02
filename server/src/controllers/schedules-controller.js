@@ -2,7 +2,7 @@ const DefaultParser = require('../parser');
 const parseScheduleFileData = require('../services/parser-service');
 const schedulesService = require('../services/schedules-service');
 
-function generateSchedule(req, res) {
+function getSchedule(req, res) {
   const { scheduleId } = req.params;
   const { person } = req.query;
   const userId = req.user.id;
@@ -59,7 +59,7 @@ function getSchedules(req, res) {
     });
 }
 
-function createSchedule(req, res) {
+function generateSchedule(req, res) {
   const { buffer, originalname } = req.file;
   const userId = req.user.id;
 
@@ -77,9 +77,9 @@ function createSchedule(req, res) {
 }
 
 module.exports = {
-  generateSchedule,
+  getSchedule,
   deleteSchedule,
   updateSchedule,
-  createSchedule,
+  generateSchedule,
   getSchedules,
 };

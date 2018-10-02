@@ -19,9 +19,9 @@ module.exports = function(app) {
   app.get(`${BASE}/schedules`, schedulesController.getSchedules);
 
   app.post(
-    `${BASE}/schedules`,
+    `${BASE}/schedules/generate`,
     upload.single('scheduleFile'),
-    schedulesController.createSchedule
+    schedulesController.generateSchedule
   );
 
   app.put(`${BASE}/schedules/:scheduleId`, schedulesController.updateSchedule);
@@ -31,10 +31,7 @@ module.exports = function(app) {
     schedulesController.deleteSchedule
   );
 
-  app.get(
-    `${BASE}/schedules/:scheduleId/generate`,
-    schedulesController.generateSchedule
-  );
+  app.get(`${BASE}/schedules/:scheduleId`, schedulesController.getSchedule);
 
   app.use(`${BASE}/settings`, verifyToken());
 
