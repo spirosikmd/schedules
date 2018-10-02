@@ -76,10 +76,25 @@ function generateSchedule(req, res) {
     );
 }
 
+function createSchedule(req, res) {
+  const data = req.body;
+  const userId = req.user.id;
+
+  schedulesService
+    .createSchedule(userId, data)
+    .then(data => res.json(data))
+    .catch(error =>
+      res.status(404).json({
+        message: error,
+      })
+    );
+}
+
 module.exports = {
   getSchedule,
   deleteSchedule,
   updateSchedule,
   generateSchedule,
   getSchedules,
+  createSchedule,
 };

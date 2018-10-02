@@ -171,10 +171,40 @@ function deleteSchedule(userId, scheduleId) {
   });
 }
 
+function createSchedule(userId, data) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject(`Cannot create schedule`);
+      }
+
+      const doc = {
+        name: data.name,
+        user: userId,
+      };
+
+      Schedule.create(doc, (err, schedule) => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve(schedule);
+      });
+
+      resolve({ message: 'Schedule successfully created' });
+    });
+  });
+}
+
 module.exports = {
   getScheduleDataForPerson,
   saveScheduleData,
   getSchedules,
   updateSchedule,
   deleteSchedule,
+  createSchedule,
 };

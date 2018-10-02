@@ -33,6 +33,8 @@ module.exports = function(app) {
 
   app.get(`${BASE}/schedules/:scheduleId`, schedulesController.getSchedule);
 
+  app.post(`${BASE}/schedules`, schedulesController.createSchedule);
+
   app.use(`${BASE}/settings`, verifyToken());
 
   app.get(`${BASE}/settings`, settingsController.getSettings);

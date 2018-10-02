@@ -36,3 +36,11 @@ export function deleteSchedule(scheduleId) {
     headers: getDefaultHeaders(),
   }).then(response => response.json());
 }
+
+export function createSchedule(data) {
+  return fetch(`${BASE}/schedules`, {
+    method: 'POST',
+    headers: getDefaultHeaders(),
+    body: JSON.stringify(data),
+  }).then(response => response.json());
+}
