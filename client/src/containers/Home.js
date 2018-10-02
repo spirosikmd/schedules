@@ -16,11 +16,13 @@ import {
   deleteSchedule,
   updateSchedule,
   fetchHolyTotal,
+  createSchedule,
 } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
 import ResponsiveConfirmDeleteDialog from '../components/ResponsiveConfirmDeleteDialog';
+import NewSchedule from '../components/NewSchedule';
 
 const styles = theme => ({
   item: {
@@ -63,6 +65,7 @@ class Home extends Component {
     this.handleNewScheduleNameChange = this.handleNewScheduleNameChange.bind(
       this
     );
+    this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
   }
 
   componentDidMount() {
@@ -151,6 +154,14 @@ class Home extends Component {
     this.setState({ newScheduleName: value });
   }
 
+  handleCreateSchedule(data) {
+    createSchedule(data).then(() => {
+      fetchSchedules().then(schedules => {
+        this.setState({ schedules });
+      });
+    });
+  }
+
   render() {
     const { classes } = this.props;
     const { holyTotal, schedules, isLoading } = this.state;
@@ -161,7 +172,10 @@ class Home extends Component {
 
     return (
       <Fragment>
-        <Grid container spacing={8}>
+        <Grid container spacing={16}>
+          <Grid item xs={12}>
+            <NewSchedule onCreate={this.handleCreateSchedule} />
+          </Grid>
           {schedules.map(schedule => (
             <Grid item xs={12} key={schedule.id}>
               <Paper className={classes.item}>
