@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Button from '@material-ui/core/Button';
@@ -95,5 +96,13 @@ class NewSchedule extends PureComponent {
     );
   }
 }
+
+NewSchedule.propTypes = {
+  onCreate: PropTypes.func,
+};
+
+NewSchedule.defaultProps = {
+  onCreate: () => {},
+};
 
 export default withStyles(styles)(withMobileDialog()(NewSchedule));
