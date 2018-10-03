@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -26,10 +27,11 @@ class ScheduleSettings extends PureComponent {
   };
 
   handleSave = () => {
-    this.props.onSave &&
-      this.props.onSave({
-        hourlyWage: this.state.hourlyWage,
-      });
+    this.props.onSave({
+      hourlyWage: this.state.hourlyWage,
+    });
+
+    this.handleClose();
   };
 
   handleInputChange = event => {
@@ -80,5 +82,14 @@ class ScheduleSettings extends PureComponent {
     );
   }
 }
+
+ScheduleSettings.propTypes = {
+  hourlyWage: PropTypes.number,
+  onSave: PropTypes.func,
+};
+
+ScheduleSettings.defaultProps = {
+  onSave: () => {},
+};
 
 export default ScheduleSettings;
