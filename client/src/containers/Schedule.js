@@ -16,6 +16,7 @@ import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
 import ScheduleSettings from '../components/ScheduleSettings';
+import MessageSnackbar from '../components/MessageSnackbar';
 
 const styles = theme => ({
   table: {
@@ -33,6 +34,7 @@ class Schedule extends PureComponent {
     schedule: {},
     isCreatingEvents: false,
     isLoading: true,
+    isSnackbarOpen: false,
   };
 
   constructor(props) {
@@ -92,9 +94,18 @@ class Schedule extends PureComponent {
     updateSchedule(this.props.scheduleId, { settings })
       .then(() => {
         this.getSchedule();
+        this.setState({ isSnackbarOpen: true });
       })
       .catch(console.error);
   }
+
+  handleSnackbarClose = (_, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ isSnackbarOpen: false });
+  };
 
   render() {
     const { classes } = this.props;
@@ -108,6 +119,7 @@ class Schedule extends PureComponent {
         settings,
       },
       isLoading,
+      isSnackbarOpen,
     } = this.state;
 
     if (isLoading) {
@@ -190,6 +202,12 @@ class Schedule extends PureComponent {
             {totalWeeklyWage && totalWeeklyWage.toFixed(2)} EUR
           </Typography>
         </div>
+        <MessageSnackbar
+          isOpen={isSnackbarOpen}
+          onClose={this.handleSnackbarClose}
+          message={<span>Settings updated</span>}
+          contentProps={{ 'aria-describedby': 'message-id' }}
+        />
       </Fragment>
     );
   }
