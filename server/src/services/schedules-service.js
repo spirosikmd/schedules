@@ -122,7 +122,11 @@ function getScheduleDataForPerson(userId, scheduleId, person) {
   });
 }
 
-function updateSchedule(userId, scheduleId, data) {
+function updateSchedule(
+  userId,
+  scheduleId,
+  { name, eventsCreatedOnce, settings }
+) {
   return new Promise((resolve, reject) => {
     User.findById(userId, (err, user) => {
       if (err) {
@@ -133,9 +137,15 @@ function updateSchedule(userId, scheduleId, data) {
         return reject(`Cannot update schedule`);
       }
 
+      const doc = {
+        ...(name && { name }),
+        ...(eventsCreatedOnce !== undefined && { eventsCreatedOnce }),
+        ...(settings && { settings }),
+      };
+
       Schedule.findOneAndUpdate(
         { _id: scheduleId, user: user._id },
-        data,
+        doc,
         { new: true },
         (err, schedule) => {
           if (err || schedule === null) {
