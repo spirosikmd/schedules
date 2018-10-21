@@ -34,7 +34,7 @@ class ResponsiveConfirmDeleteDialog extends PureComponent {
   };
 
   render() {
-    const { fullScreen } = this.props;
+    const { fullScreen, title, content } = this.props;
 
     return (
       <div>
@@ -47,14 +47,9 @@ class ResponsiveConfirmDeleteDialog extends PureComponent {
           onClose={this.closeDialog}
           aria-labelledby="responsive-dialog-title"
         >
-          <DialogTitle id="responsive-dialog-title">
-            Delete schedule?
-          </DialogTitle>
+          <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              All the schedule data will be removed permanently and you won't be
-              able to retrieve them again.
-            </DialogContentText>
+            <DialogContentText>{content}</DialogContentText>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleCancelClick} color="primary">
@@ -72,6 +67,8 @@ class ResponsiveConfirmDeleteDialog extends PureComponent {
 
 ResponsiveConfirmDeleteDialog.propTypes = {
   fullScreen: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+  content: PropTypes.string,
   onCancelClick: PropTypes.func,
   onDeleteClick: PropTypes.func,
 };

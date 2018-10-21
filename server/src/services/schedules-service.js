@@ -1,7 +1,8 @@
 const Schedule = require('../models/schedule');
 const User = require('../models/user');
+const ScheduleEntry = require('../models/schedule-entry');
 
-function saveScheduleData(userId, scheduleName, scheduleData, hourlyWage) {
+function generateSchedule(userId, scheduleName, scheduleEntryData, hourlyWage) {
   return new Promise((resolve, reject) => {
     User.findById(userId, (err, user) => {
       if (err) {
@@ -9,12 +10,11 @@ function saveScheduleData(userId, scheduleName, scheduleData, hourlyWage) {
       }
 
       if (user === null) {
-        return reject(`Cannot save schedule data`);
+        return reject('Cannot save schedule data');
       }
 
       const data = {
         name: scheduleName,
-        data: scheduleData,
         user: user._id,
         settings: {
           hourlyWage,
@@ -26,7 +26,21 @@ function saveScheduleData(userId, scheduleName, scheduleData, hourlyWage) {
           return reject(err);
         }
 
-        resolve(schedule);
+        const scheduleEntryDataWithSchedule = scheduleEntryData.map(
+          scheduleEntry => ({
+            ...scheduleEntry,
+            schedule: schedule._id,
+            user: user._id,
+          })
+        );
+
+        ScheduleEntry.insertMany(scheduleEntryDataWithSchedule, err => {
+          if (err) {
+            return reject(err);
+          }
+
+          resolve(schedule);
+        });
       });
     });
   });
@@ -40,7 +54,7 @@ function getSchedules(userId) {
       }
 
       if (user === null) {
-        return reject(`Cannot get schedules`);
+        return reject('Cannot get schedules');
       }
 
       Schedule.find({ user: user._id })
@@ -63,7 +77,7 @@ function getSchedules(userId) {
   });
 }
 
-function getScheduleDataForPerson(userId, scheduleId, person) {
+function getSchedule(userId, scheduleId) {
   return new Promise((resolve, reject) => {
     User.findById(userId, (err, user) => {
       if (err) {
@@ -71,7 +85,7 @@ function getScheduleDataForPerson(userId, scheduleId, person) {
       }
 
       if (user === null) {
-        return reject(`Cannot get schedule data`);
+        return reject('Cannot get schedule data');
       }
 
       Schedule.findOne(
@@ -81,43 +95,36 @@ function getScheduleDataForPerson(userId, scheduleId, person) {
             return reject(err);
           }
 
-          const scheduleData = foundSchedule.data;
           const hourlyWage = foundSchedule.settings.hourlyWage;
 
-          const schedule = [];
+          ScheduleEntry.find({
+            schedule: foundSchedule._id,
+            user: user._id,
+          }).then(scheduleEntries => {
+            const schedule = scheduleEntries.map(scheduleEntry => ({
+              id: scheduleEntry._id,
+              date: scheduleEntry.date,
+              location: scheduleEntry.location,
+              startTime: scheduleEntry.startTime,
+              endTime: scheduleEntry.endTime,
+              dayWage: scheduleEntry.hours * hourlyWage,
+              workWith: scheduleEntry.workWith,
+              hours: scheduleEntry.hours,
+            }));
 
-          scheduleData.forEach(daySchedule => {
-            daySchedule.locations.forEach(location => {
-              location.employees.forEach(employee => {
-                if (employee.name === person) {
-                  schedule.push({
-                    date: daySchedule.date,
-                    location: location.name,
-                    startTime: employee.startTime,
-                    endTime: employee.endTime,
-                    hours: employee.hours,
-                    worksWith: location.employees
-                      .filter(employee => employee.name !== person)
-                      .map(employee => employee.name),
-                    dayWage: employee.hours * hourlyWage,
-                  });
-                }
-              });
+            const totalHours = schedule.reduce(
+              (acc, current) => acc + current.hours,
+              0
+            );
+
+            resolve({
+              schedule,
+              totalHours,
+              totalWeeklyWage: totalHours * hourlyWage,
+              name: foundSchedule.name,
+              eventsCreatedOnce: foundSchedule.eventsCreatedOnce,
+              settings: foundSchedule.settings,
             });
-          });
-
-          const totalHours = schedule.reduce(
-            (acc, current) => acc + current.hours,
-            0
-          );
-
-          resolve({
-            schedule,
-            totalHours,
-            totalWeeklyWage: totalHours * hourlyWage,
-            name: foundSchedule.name,
-            eventsCreatedOnce: foundSchedule.eventsCreatedOnce,
-            settings: foundSchedule.settings,
           });
         }
       );
@@ -137,7 +144,7 @@ function updateSchedule(
       }
 
       if (user === null) {
-        return reject(`Cannot update schedule`);
+        return reject('Cannot update schedule');
       }
 
       const doc = {
@@ -170,15 +177,21 @@ function deleteSchedule(userId, scheduleId) {
       }
 
       if (user === null) {
-        return reject(`Cannot delete schedule`);
+        return reject('Cannot delete schedule');
       }
 
-      Schedule.findOneAndDelete({ user: user._id, _id: scheduleId }, err => {
+      Schedule.findOne({ user: user._id, _id: scheduleId }, (err, schedule) => {
         if (err) {
           return reject(err);
         }
 
-        resolve({ message: 'Schedule successfully deleted' });
+        if (schedule === null) {
+          return reject('Schedule not found');
+        }
+
+        schedule.remove().then(() => {
+          resolve({ message: 'Schedule successfully deleted' });
+        });
       });
     });
   });
@@ -192,7 +205,7 @@ function createSchedule(userId, data) {
       }
 
       if (user === null) {
-        return reject(`Cannot create schedule`);
+        return reject('Cannot create schedule');
       }
 
       const doc = {
@@ -207,17 +220,110 @@ function createSchedule(userId, data) {
 
         resolve(schedule);
       });
-
-      resolve({ message: 'Schedule successfully created' });
     });
   });
 }
 
+function createEntriesForSchedule(userId, scheduleId, entries) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject('Cannot create schedule entry');
+      }
+
+      Schedule.findOne({ _id: scheduleId, user: user._id }, (err, schedule) => {
+        if (err) {
+          return reject(err);
+        }
+
+        if (schedule === null) {
+          return reject('Cannot create schedule entry, schedule not found');
+        }
+
+        const executions = entries.map(({ date, hours }) => {
+          const doc = {
+            date,
+            hours,
+            user: user._id,
+            schedule: schedule._id,
+          };
+
+          return new Promise((resolve, reject) => {
+            ScheduleEntry.create(doc, (err, scheduleEntry) => {
+              if (err) {
+                return reject(err);
+              }
+
+              resolve(scheduleEntry);
+            });
+          });
+        });
+
+        Promise.all(executions)
+          .then(scheduleEntries => {
+            resolve(scheduleEntries);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
+    });
+  });
+}
+
+function updateEntryForSchedule(userId, scheduleId, entryId, { hours, date }) {
+  return new Promise((resolve, reject) => {
+    const doc = {
+      ...(hours !== undefined && { hours }),
+      ...(date !== undefined && { date }),
+    };
+
+    ScheduleEntry.findOneAndUpdate(
+      { user: userId, schedule: scheduleId, _id: entryId },
+      doc,
+      { new: true },
+      (err, scheduleEntry) => {
+        if (err) {
+          return reject(err);
+        }
+
+        if (scheduleEntry === null) {
+          return reject('Cannot update schedule entry');
+        }
+
+        resolve(scheduleEntry);
+      }
+    );
+  });
+}
+
+function deleteEntryForSchedule(userId, scheduleId, entryId) {
+  return new Promise((resolve, reject) => {
+    ScheduleEntry.findOneAndDelete(
+      { user: userId, schedule: scheduleId, _id: entryId },
+      err => {
+        if (err) {
+          return reject(err);
+        }
+
+        resolve({ message: 'Schedule entry successfully deleted' });
+      }
+    );
+  });
+}
+
 module.exports = {
-  getScheduleDataForPerson,
-  saveScheduleData,
+  getSchedule,
+  generateSchedule,
   getSchedules,
   updateSchedule,
   deleteSchedule,
   createSchedule,
+  createEntriesForSchedule,
+  updateEntryForSchedule,
+  deleteEntryForSchedule,
 };

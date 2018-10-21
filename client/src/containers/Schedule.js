@@ -9,10 +9,18 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import { withStyles } from '@material-ui/core/styles';
-import { fetchScheduleForPerson, createEvents, updateSchedule } from '../api';
+import {
+  fetchSchedule,
+  createEvents,
+  updateSchedule,
+  createScheduleEntries,
+  deleteScheduleEntry,
+  updateScheduleEntry,
+} from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
+import CreateEntryForm from '../components/CreateEntryForm';
 
 const ScheduleItem = lazy(() => import('../components/ScheduleItem'));
 const ScheduleHeader = lazy(() => import('../components/ScheduleHeader'));
@@ -36,15 +44,9 @@ class Schedule extends PureComponent {
     isCreatingEvents: false,
     isLoading: true,
     isSnackbarOpen: false,
+    snackbarMessage: '',
+    snackbarVariant: 'success',
   };
-
-  constructor(props) {
-    super(props);
-
-    this.handleCreateEventsClick = this.handleCreateEventsClick.bind(this);
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
-    this.handleSettingsSave = this.handleSettingsSave.bind(this);
-  }
 
   componentDidMount() {
     this.props.fetchSettingsForUser().then(() => {
@@ -52,12 +54,12 @@ class Schedule extends PureComponent {
     });
   }
 
-  handleBackButtonClick(event) {
+  handleBackButtonClick = event => {
     event.preventDefault();
     this.props.navigate('/');
-  }
+  };
 
-  handleCreateEventsClick() {
+  handleCreateEventsClick = () => {
     this.setState({ isCreatingEvents: true });
 
     createEvents(this.state.schedule.schedule)
@@ -81,24 +83,26 @@ class Schedule extends PureComponent {
           .catch(console.error);
       })
       .catch(console.error);
-  }
+  };
 
   getSchedule() {
-    const { person } = this.props.settings;
-
-    fetchScheduleForPerson(this.props.scheduleId, person)
+    fetchSchedule(this.props.scheduleId)
       .then(schedule => this.setState({ schedule, isLoading: false }))
       .catch(err => console.log(err));
   }
 
-  handleSettingsSave(settings) {
+  handleSettingsSave = settings => {
     updateSchedule(this.props.scheduleId, { settings })
       .then(() => {
         this.getSchedule();
-        this.setState({ isSnackbarOpen: true });
+        this.setState({
+          isSnackbarOpen: true,
+          snackbarMessage: 'Settings updated',
+          snackbarVariant: 'success',
+        });
       })
       .catch(console.error);
-  }
+  };
 
   handleSnackbarClose = (_, reason) => {
     if (reason === 'clickaway') {
@@ -106,6 +110,47 @@ class Schedule extends PureComponent {
     }
 
     this.setState({ isSnackbarOpen: false });
+  };
+
+  handleCreateEntry = async data => {
+    try {
+      await createScheduleEntries(this.props.scheduleId, {
+        entries: [data],
+      });
+      this.getSchedule();
+    } catch (error) {
+      this.setState({
+        isSnackbarOpen: true,
+        snackbarMessage: error.message,
+        snackbarVariant: 'error',
+      });
+    }
+  };
+
+  handleDeleteEntry = async entryId => {
+    try {
+      await deleteScheduleEntry(this.props.scheduleId, entryId);
+      this.getSchedule();
+    } catch (error) {
+      this.setState({
+        isSnackbarOpen: true,
+        snackbarMessage: error.message,
+        snackbarVariant: 'error',
+      });
+    }
+  };
+
+  handleEditClick = async (entryId, data) => {
+    try {
+      await updateScheduleEntry(this.props.scheduleId, entryId, data);
+      this.getSchedule();
+    } catch (error) {
+      this.setState({
+        isSnackbarOpen: true,
+        snackbarMessage: error.message,
+        snackbarVariant: 'error',
+      });
+    }
   };
 
   render() {
@@ -121,6 +166,8 @@ class Schedule extends PureComponent {
       },
       isLoading,
       isSnackbarOpen,
+      snackbarMessage,
+      snackbarVariant,
     } = this.state;
 
     return (
@@ -154,6 +201,9 @@ class Schedule extends PureComponent {
           <Grid item>
             <Grid container alignItems="center" spacing={8}>
               <Grid item>
+                <CreateEntryForm onSubmit={this.handleCreateEntry} />
+              </Grid>
+              <Grid item>
                 {settings && (
                   <ScheduleSettings
                     hourlyWage={settings.hourlyWage}
@@ -183,8 +233,12 @@ class Schedule extends PureComponent {
               <TableBody>
                 {schedule.map(daySchedule => (
                   <ScheduleItem
-                    key={daySchedule.date}
+                    key={daySchedule.id}
                     daySchedule={daySchedule}
+                    onEditClick={data =>
+                      this.handleEditClick(daySchedule.id, data)
+                    }
+                    onDeleteClick={() => this.handleDeleteEntry(daySchedule.id)}
                   />
                 ))}
               </TableBody>
@@ -204,8 +258,8 @@ class Schedule extends PureComponent {
         <MessageSnackbar
           isOpen={isSnackbarOpen}
           onClose={this.handleSnackbarClose}
-          message={<span>Settings updated</span>}
-          variant="success"
+          message={snackbarMessage}
+          variant={snackbarVariant}
         />
       </Suspense>
     );

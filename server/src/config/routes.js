@@ -7,6 +7,7 @@ const settingsController = require('../controllers/settings-controller');
 const schedulesController = require('../controllers/schedules-controller');
 const indexController = require('../controllers/index-controller');
 const { verifyToken } = require('../middlewares/auth');
+const { validationErrors } = require('../middlewares/validation-errors');
 
 const BASE = '/api';
 
@@ -20,13 +21,34 @@ module.exports = function(app) {
   app.get(`${BASE}/schedules`, schedulesController.getSchedules);
 
   app.post(
+    `${BASE}/schedules`,
+    [
+      check('name')
+        .isString()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
+    ],
+    validationErrors(),
+    schedulesController.createSchedule
+  );
+
+  app.post(
     `${BASE}/schedules/generate`,
     upload.single('scheduleFile'),
     [
       check('hourlyWage').isFloat({
         min: 0,
       }),
+      check('person')
+        .isString()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
     ],
+    validationErrors(),
     schedulesController.generateSchedule
   );
 
@@ -40,16 +62,49 @@ module.exports = function(app) {
   app.get(`${BASE}/schedules/:scheduleId`, schedulesController.getSchedule);
 
   app.post(
-    `${BASE}/schedules`,
+    `${BASE}/schedules/:scheduleId/entries`,
     [
-      check('name')
-        .isString()
+      check('entries').isArray(),
+      check('entries.*.date')
+        .isRFC3339()
         .exists({
           checkFalsy: true,
           checkNull: true,
         }),
+      check('entries.*.hours')
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        })
+        .toFloat(),
     ],
-    schedulesController.createSchedule
+    validationErrors(),
+    schedulesController.createEntriesForSchedule
+  );
+
+  app.put(
+    `${BASE}/schedules/:scheduleId/entries/:entryId`,
+    [
+      check('date')
+        .isRFC3339()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
+      check('hours')
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        })
+        .toFloat(),
+    ],
+    validationErrors(),
+    schedulesController.updateEntryForSchedule
+  );
+
+  app.delete(
+    `${BASE}/schedules/:scheduleId/entries/:entryId`,
+    schedulesController.deleteEntryForSchedule
   );
 
   app.use(`${BASE}/settings`, verifyToken());

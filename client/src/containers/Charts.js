@@ -12,9 +12,7 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { connect } from 'react-redux';
 import { fetchWeeklyWageDataAggregation } from '../api';
-import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
 
@@ -39,20 +37,17 @@ class Charts extends PureComponent {
   };
 
   componentDidMount() {
-    this.props
-      .fetchSettingsForUser()
-      .then(() => {
-        fetchWeeklyWageDataAggregation(
-          this.props.settings.person,
-          this.props.settings.hourlyWage
-        ).then(response => {
-          const chartData = [];
-          const weeklyWageData = response.data.weeklyWageData;
-          Object.keys(weeklyWageData).forEach(name => {
-            chartData.push({ name, weeklyWage: weeklyWageData[name] });
+    fetchWeeklyWageDataAggregation()
+      .then(response => {
+        const chartData = [];
+        const weeklyWageData = response.data.weeklyWageData;
+        Object.keys(weeklyWageData).forEach(id => {
+          chartData.push({
+            name: weeklyWageData[id].name,
+            weeklyWage: weeklyWageData[id].weeklyWage,
           });
-          this.setState({ weeklyWageData: chartData, isLoading: false });
         });
+        this.setState({ weeklyWageData: chartData, isLoading: false });
       })
       .catch(err => console.log(err));
   }
@@ -95,19 +90,4 @@ class Charts extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  settings: state.settingsReducer.settings,
-});
-
-const mapDispatchToProps = dispatch => ({
-  fetchSettingsForUser: () => dispatch(fetchSettingsForUser()),
-});
-
-export default withAuth(
-  withStyles(styles)(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(Charts)
-  )
-);
+export default withAuth(withStyles(styles)(Charts));

@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,26 +8,17 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 
-class ScheduleFileUploadForm extends PureComponent {
-  constructor(props) {
-    super(props);
+class CreateEntryForm extends PureComponent {
+  state = {
+    open: false,
+    hours: 0,
+    date: '',
+  };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-
-    this.fileInputRef = React.createRef();
-
-    this.state = {
-      open: false,
-      hourlyWage: 0,
-      person: '',
-    };
-  }
-
-  handleInputChange(event) {
+  handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
-  }
+  };
 
   handleClickOpen = () => {
     this.setState({ open: true });
@@ -36,69 +28,52 @@ class ScheduleFileUploadForm extends PureComponent {
     this.setState({ open: false });
   };
 
-  handleSubmit(event) {
+  handleSubmit = event => {
     event.preventDefault();
 
-    const fileInput = this.fileInputRef.current;
+    const { hours, date } = this.state;
 
-    const file = fileInput.files[0];
-
-    if (!file) {
-      return;
-    }
-
-    const { hourlyWage, person } = this.state;
-
-    this.props.onSubmit(file, hourlyWage, person);
+    this.props.onSubmit({ hours, date: new Date(date) });
     this.handleClose();
 
-    fileInput.value = '';
-    this.setState({ hourlyWage: 0, person: '' });
-  }
+    this.setState({ hours: 0, date: '' });
+  };
 
   render() {
     const { fullScreen } = this.props;
 
     return (
       <Fragment>
-        <Button onClick={this.handleClickOpen}>Upload</Button>
+        <Button onClick={this.handleClickOpen}>Create Entry</Button>
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">
-            Upload a new schedule
-          </DialogTitle>
+          <DialogTitle id="form-dialog-title">Create new entry</DialogTitle>
           <DialogContent>
             <TextField
-              type="file"
-              id="scheduleFile"
-              inputRef={this.fileInputRef}
+              margin="normal"
+              id="date"
+              value={this.state.date}
+              onChange={this.handleInputChange}
+              placeholder="When?"
+              name="date"
+              type="date"
               fullWidth
             />
             <TextField
               margin="normal"
-              id="person"
-              label="Set your name in the schedule file"
-              value={this.state.person}
+              id="hours"
+              label="Hours"
+              value={this.state.hours}
               onChange={this.handleInputChange}
-              placeholder="Enter your name in the schedule file"
-              name="person"
-              fullWidth
-            />
-            <TextField
-              margin="normal"
-              id="hourly-wage"
-              label="Set an hourly Wage"
-              value={this.state.hourlyWage}
-              onChange={this.handleInputChange}
-              placeholder="Enter your hourly wage"
-              name="hourlyWage"
+              placeholder="How many hours?"
+              name="hours"
               type="number"
               inputProps={{
-                step: '0.01',
+                min: 0,
               }}
               fullWidth
             />
@@ -108,7 +83,7 @@ class ScheduleFileUploadForm extends PureComponent {
               Cancel
             </Button>
             <Button onClick={this.handleSubmit} color="primary">
-              Upload
+              Create
             </Button>
           </DialogActions>
         </Dialog>
@@ -117,4 +92,9 @@ class ScheduleFileUploadForm extends PureComponent {
   }
 }
 
-export default withMobileDialog()(ScheduleFileUploadForm);
+CreateEntryForm.propTypes = {
+  fullScreen: PropTypes.bool.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+
+export default withMobileDialog()(CreateEntryForm);

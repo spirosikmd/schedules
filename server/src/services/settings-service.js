@@ -9,7 +9,7 @@ function getSettings(userId) {
       }
 
       if (user === null) {
-        return reject(`Cannot get settings`);
+        return reject('Cannot get settings');
       }
 
       Settings.findOne({ user: user._id }, (err, settings) => {
@@ -45,7 +45,7 @@ function updateSettings(userId, settingsId, person) {
       }
 
       if (user === null) {
-        return reject(`Cannot update settings`);
+        return reject('Cannot update settings');
       }
 
       const data = { person, user: user._id };

@@ -31,7 +31,7 @@ class DefaultParser {
     return new Date(timeWithTimezone.utc());
   }
 
-  parse(scheduleData, timezone) {
+  parse(scheduleData, timezone, person) {
     const schedule = xlsx.parse(scheduleData, {
       raw: false,
     });
@@ -90,7 +90,34 @@ class DefaultParser {
       i = j;
     }
 
-    return data;
+    // TODO: change the parsing above to create this structure instead of re-iterating.
+    const scheduleEntries = [];
+    data.forEach(dataItem => {
+      const date = dataItem.date;
+
+      dataItem.locations.forEach(location => {
+        const locationName = location.name;
+
+        location.employees.forEach(employee => {
+          if (employee.name.toLowerCase() !== person.toLowerCase()) return;
+
+          scheduleEntries.push({
+            date: new Date(date),
+            location: locationName,
+            hours: employee.hours,
+            startTime: new Date(employee.startTime),
+            endTime: new Date(employee.endTime),
+            workWith: location.employees
+              .filter(
+                employee => employee.name.toLowerCase() !== person.toLowerCase()
+              )
+              .map(employee => employee.name),
+          });
+        });
+      });
+    });
+
+    return scheduleEntries;
   }
 }
 
