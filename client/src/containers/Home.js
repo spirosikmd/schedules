@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { Link } from '@reach/router';
 import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,7 +9,6 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
-import ScheduleFileUploadForm from '../components/ScheduleFileUploadForm';
 import {
   generateScheduleWithFileAndPerson,
   fetchSchedules,
@@ -21,8 +20,14 @@ import {
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
-import ResponsiveConfirmDeleteDialog from '../components/ResponsiveConfirmDeleteDialog';
-import NewSchedule from '../components/NewSchedule';
+
+const ScheduleFileUploadForm = lazy(() =>
+  import('../components/ScheduleFileUploadForm')
+);
+const ResponsiveConfirmDeleteDialog = lazy(() =>
+  import('../components/ResponsiveConfirmDeleteDialog')
+);
+const NewSchedule = lazy(() => import('../components/NewSchedule'));
 
 const styles = theme => ({
   item: {
@@ -166,12 +171,8 @@ class Home extends Component {
     const { classes } = this.props;
     const { holyTotal, schedules, isLoading } = this.state;
 
-    if (isLoading) {
-      return <Loader loading={isLoading} />;
-    }
-
     return (
-      <Fragment>
+      <Suspense fallback={<Loader loading={isLoading} />}>
         <Grid container spacing={16}>
           <Grid item xs={12}>
             <NewSchedule onCreate={this.handleCreateSchedule} />
@@ -252,7 +253,7 @@ class Home extends Component {
             <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
           </Typography>
         )}
-      </Fragment>
+      </Suspense>
     );
   }
 }

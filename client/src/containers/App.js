@@ -1,16 +1,18 @@
-import React, { Fragment, PureComponent } from 'react';
+import React, { Fragment, PureComponent, Suspense, lazy } from 'react';
 import { Router } from '@reach/router';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
-import Home from './Home';
-import Settings from './Settings';
-import Schedule from './Schedule';
-import Charts from './Charts';
 import { setUser, createUserFromAccessToken } from '../actions/authActions';
-import TopBar from '../components/TopBar';
-import Menu from '../components/Menu';
 import Login from '../components/Login';
+import Loader from '../components/Loader';
+
+const TopBar = lazy(() => import('../components/TopBar'));
+const Menu = lazy(() => import('../components/Menu'));
+const Home = lazy(() => import('./Home'));
+const Settings = lazy(() => import('./Settings'));
+const Schedule = lazy(() => import('./Schedule'));
+const Charts = lazy(() => import('./Charts'));
 
 const styles = theme => ({
   page: {
@@ -67,7 +69,7 @@ class App extends PureComponent {
     }
 
     return (
-      <Fragment>
+      <Suspense fallback={<Loader loading={true} />}>
         <CssBaseline />
         <TopBar
           user={user}
@@ -88,7 +90,7 @@ class App extends PureComponent {
             <Charts path="/charts" />
           </Router>
         </div>
-      </Fragment>
+      </Suspense>
     );
   }
 }

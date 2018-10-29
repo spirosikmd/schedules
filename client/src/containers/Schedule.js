@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent, Suspense, lazy } from 'react';
 import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,14 +9,15 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import { withStyles } from '@material-ui/core/styles';
-import ScheduleItem from '../components/ScheduleItem';
-import ScheduleHeader from '../components/ScheduleHeader';
 import { fetchScheduleForPerson, createEvents, updateSchedule } from '../api';
 import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
-import ScheduleSettings from '../components/ScheduleSettings';
-import MessageSnackbar from '../components/MessageSnackbar';
+
+const ScheduleItem = lazy(() => import('../components/ScheduleItem'));
+const ScheduleHeader = lazy(() => import('../components/ScheduleHeader'));
+const ScheduleSettings = lazy(() => import('../components/ScheduleSettings'));
+const MessageSnackbar = lazy(() => import('../components/MessageSnackbar'));
 
 const styles = theme => ({
   table: {
@@ -122,12 +123,8 @@ class Schedule extends PureComponent {
       isSnackbarOpen,
     } = this.state;
 
-    if (isLoading) {
-      return <Loader loading={isLoading} />;
-    }
-
     return (
-      <Fragment>
+      <Suspense fallback={<Loader loading={isLoading} />}>
         <Grid container alignItems="center" justify="space-between">
           <Grid item>
             <Grid container alignItems="center">
@@ -208,7 +205,7 @@ class Schedule extends PureComponent {
           message={<span>Settings updated</span>}
           contentProps={{ 'aria-describedby': 'message-id' }}
         />
-      </Fragment>
+      </Suspense>
     );
   }
 }
