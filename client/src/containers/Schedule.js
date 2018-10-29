@@ -117,7 +117,7 @@ class Schedule extends PureComponent {
         totalWeeklyWage,
         name,
         eventsCreatedOnce,
-        settings = {},
+        settings,
       },
       isLoading,
       isSnackbarOpen,
@@ -154,10 +154,12 @@ class Schedule extends PureComponent {
           <Grid item>
             <Grid container alignItems="center" spacing={8}>
               <Grid item>
-                <ScheduleSettings
-                  hourlyWage={settings.hourlyWage}
-                  onSave={this.handleSettingsSave}
-                />
+                {settings && (
+                  <ScheduleSettings
+                    hourlyWage={settings.hourlyWage}
+                    onSave={this.handleSettingsSave}
+                  />
+                )}
               </Grid>
               <Grid item>
                 <Button
