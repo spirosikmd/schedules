@@ -10,7 +10,7 @@ const styles = theme => ({
   },
 });
 
-const Loader = React.memo(function({ loading, classes }) {
+const Loader = React.memo(function Loader({ loading, classes }) {
   return (
     <Grid
       container
