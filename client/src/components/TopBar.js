@@ -42,11 +42,7 @@ class TopBar extends PureComponent {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              variant="title"
-              color="inherit"
-              className={classes.grow}
-            >
+            <Typography variant="h6" color="inherit" className={classes.grow}>
               Welcome to {user.firstName} schedule
             </Typography>
             <Button

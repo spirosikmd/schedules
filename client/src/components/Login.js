@@ -50,7 +50,7 @@ class Login extends PureComponent {
           <Avatar className={classes.avatar}>
             <LockIcon />
           </Avatar>
-          <Typography variant="headline">Login</Typography>
+          <Typography variant="h5">Login</Typography>
           <form className={classes.form}>
             <Button
               variant="contained"

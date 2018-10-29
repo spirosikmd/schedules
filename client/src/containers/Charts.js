@@ -72,7 +72,7 @@ class Charts extends PureComponent {
     return (
       <Paper className={classes.root}>
         <section className={classes.section}>
-          <Typography variant="headline" component="h3">
+          <Typography variant="h5" component="h3">
             Weekly Wage
           </Typography>
           <ResponsiveContainer>

@@ -139,7 +139,7 @@ class Schedule extends PureComponent {
               <Grid item>
                 <Grid container alignItems="baseline" spacing={8}>
                   <Grid item>
-                    <Typography variant="headline" component="h3">
+                    <Typography variant="h5" component="h3">
                       {name}
                     </Typography>
                   </Grid>
