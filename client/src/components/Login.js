@@ -53,7 +53,7 @@ class Login extends PureComponent {
           <Typography variant="headline">Login</Typography>
           <form className={classes.form}>
             <Button
-              variant="raised"
+              variant="contained"
               color="primary"
               fullWidth
               component={GoogleLogin}
