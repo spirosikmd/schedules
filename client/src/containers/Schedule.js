@@ -116,7 +116,7 @@ class Schedule extends PureComponent {
         totalWeeklyWage,
         name,
         eventsCreatedOnce,
-        settings,
+        settings = {},
       },
       isLoading,
       isSnackbarOpen,
