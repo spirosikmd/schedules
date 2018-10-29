@@ -54,7 +54,7 @@ class App extends PureComponent {
   render() {
     const { user, classes } = this.props;
 
-    if (user === null) {
+    if (user === null || user === undefined) {
       return (
         <Fragment>
           <CssBaseline />
