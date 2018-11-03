@@ -43,6 +43,9 @@ const styles = theme => ({
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
   },
+  scheduleLink: {
+    paddingLeft: theme.spacing.unit,
+  },
 });
 
 class Home extends Component {
@@ -183,9 +186,11 @@ class Home extends Component {
                 <Grid container alignItems="center">
                   <Grid item xs={8}>
                     {this.state.editingScheduleId !== schedule.id ? (
-                      <Button component={Link} to={`/schedules/${schedule.id}`}>
-                        {schedule.name}
-                      </Button>
+                      <Typography className={classes.scheduleLink}>
+                        <Link to={`/schedules/${schedule.id}`}>
+                          {schedule.name}
+                        </Link>
+                      </Typography>
                     ) : (
                       <Grid
                         container
