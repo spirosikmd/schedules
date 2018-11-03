@@ -62,10 +62,11 @@ function getSchedules(req, res) {
 
 function generateSchedule(req, res) {
   const { buffer, originalname } = req.file;
+  const { timezone } = req.body;
   const userId = req.user.id;
 
   const parser = new DefaultParser();
-  const scheduleData = parseScheduleFileData({ parser, data: buffer });
+  const scheduleData = parseScheduleFileData({ parser, data: buffer, timezone });
 
   schedulesService
     .saveScheduleData(userId, originalname, scheduleData)

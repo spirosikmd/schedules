@@ -1,4 +1,5 @@
 const xlsx = require('node-xlsx').default;
+const moment = require('moment-timezone');
 
 class DefaultParser {
   parseDate(dateToParse) {
@@ -10,21 +11,19 @@ class DefaultParser {
     const dateOnly = lowercasedWithSingleSpacesDate.split(' ')[1];
     const [day, month] = dateOnly.split('-');
     const newDate = new Date(
-      Date.UTC(2018, parseInt(month, 10) - 1, parseInt(day, 10))
+      Date.UTC(new Date().getFullYear(), parseInt(month, 10) - 1, parseInt(day, 10))
     );
     return newDate;
   }
 
-  parseTime(timeToParse, date) {
-    const time = new Date(date.getTime());
+  parseTime(timeToParse, date, timezone) {
     const replacedTime = timeToParse.replace(';', ':');
     const [hours, minutes] = replacedTime.split(':');
-    const utcHours = hours - 2; // TODO: Hard code Amsterdam daylight timezone for now
-    time.setHours(parseInt(utcHours, 10), parseInt(minutes, 10));
-    return time;
+    const timeWithTimezone = moment.tz(date, timezone).hours(hours).minutes(minutes);
+    return timeWithTimezone.utc();
   }
 
-  parse(scheduleData) {
+  parse(scheduleData, timezone) {
     const schedule = xlsx.parse(scheduleData, {
       raw: false,
     });
@@ -49,8 +48,8 @@ class DefaultParser {
         const foundLocation = locations.find(
           location => location.name === daySchedule[1]
         );
-        const startTime = this.parseTime(daySchedule[3], date);
-        const endTime = this.parseTime(daySchedule[4], date);
+        const startTime = this.parseTime(daySchedule[3], date, timezone);
+        const endTime = this.parseTime(daySchedule[4], date, timezone);
         if (foundLocation) {
           foundLocation.employees.push({
             name: daySchedule[2],
