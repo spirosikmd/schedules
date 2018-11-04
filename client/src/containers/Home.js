@@ -28,6 +28,7 @@ const ResponsiveConfirmDeleteDialog = lazy(() =>
   import('../components/ResponsiveConfirmDeleteDialog')
 );
 const NewSchedule = lazy(() => import('../components/NewSchedule'));
+const MessageSnackbar = lazy(() => import('../components/MessageSnackbar'));
 
 const styles = theme => ({
   item: {
@@ -61,6 +62,9 @@ class Home extends Component {
     holyTotal: 0,
     isDrawerOpen: false,
     isLoading: true,
+    isSnackbarOpen: false,
+    snackbarMessage: '',
+    snackbarVariant: 'success',
   };
 
   constructor(props) {
@@ -74,6 +78,7 @@ class Home extends Component {
       this
     );
     this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
+    this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
   }
 
   componentDidMount() {
@@ -109,7 +114,13 @@ class Home extends Component {
           this.setState({ holyTotal: response.data.holyTotal })
         );
       })
-      .catch(err => console.log(err));
+      .catch(error => {
+        this.setState({
+          isSnackbarOpen: true,
+          snackbarMessage: error.message,
+          snackbarVariant: 'error',
+        });
+      });
   }
 
   handleScheduleDelete(scheduleId) {
@@ -170,9 +181,24 @@ class Home extends Component {
     });
   }
 
+  handleSnackbarClose = (_, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ isSnackbarOpen: false });
+  };
+
   render() {
     const { classes } = this.props;
-    const { holyTotal, schedules, isLoading } = this.state;
+    const {
+      holyTotal,
+      schedules,
+      isLoading,
+      isSnackbarOpen,
+      snackbarMessage,
+      snackbarVariant,
+    } = this.state;
 
     return (
       <Suspense fallback={<Loader loading={isLoading} />}>
@@ -258,6 +284,12 @@ class Home extends Component {
             <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
           </Typography>
         )}
+        <MessageSnackbar
+          isOpen={isSnackbarOpen}
+          onClose={this.handleSnackbarClose}
+          message={snackbarMessage}
+          variant={snackbarVariant}
+        />
       </Suspense>
     );
   }

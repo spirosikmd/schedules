@@ -205,7 +205,7 @@ class Schedule extends PureComponent {
           isOpen={isSnackbarOpen}
           onClose={this.handleSnackbarClose}
           message={<span>Settings updated</span>}
-          contentProps={{ 'aria-describedby': 'message-id' }}
+          variant="success"
         />
       </Suspense>
     );

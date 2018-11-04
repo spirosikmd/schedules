@@ -1,10 +1,11 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Snackbar from '@material-ui/core/Snackbar';
+import MessageSnackbarContent from './MessageSnackbarContent';
 
 class MessageSnackbar extends PureComponent {
   render() {
-    const { message, contentProps, isOpen, onClose } = this.props;
+    const { message, variant, isOpen, onClose } = this.props;
 
     return (
       <Snackbar
@@ -15,23 +16,22 @@ class MessageSnackbar extends PureComponent {
         open={isOpen}
         autoHideDuration={4000}
         onClose={onClose}
-        ContentProps={contentProps}
-        message={message}
-      />
+      >
+        <MessageSnackbarContent
+          onClose={onClose}
+          variant={variant}
+          message={message}
+        />
+      </Snackbar>
     );
   }
 }
 
 MessageSnackbar.propTypes = {
-  message: PropTypes.node,
-  onClose: PropTypes.func,
-};
-
-MessageSnackbar.defaultProps = {
-  onClose: () => {},
-  contentProps: {},
-  message: <span>Default message</span>,
-  isOpen: false,
+  isOpen: PropTypes.bool.isRequired,
+  message: PropTypes.node.isRequired,
+  onClose: PropTypes.func.isRequired,
+  variant: PropTypes.string.isRequired,
 };
 
 export default MessageSnackbar;

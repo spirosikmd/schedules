@@ -1,5 +1,13 @@
 import { BASE, getDefaultHeaders } from './shared';
 
+class ApiError extends Error {
+  constructor(message, errors) {
+    super(message);
+
+    this.errors = errors;
+  }
+}
+
 export async function generateScheduleWithFileAndPerson(file, hourlyWage) {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const form = new FormData();
@@ -10,7 +18,15 @@ export async function generateScheduleWithFileAndPerson(file, hourlyWage) {
   return fetch(`${BASE}/schedules/generate`, {
     method: 'POST',
     body: form,
-  }).then(response => response.json());
+  }).then(response => {
+    if (response.status >= 400) {
+      return response.json().then(json => {
+        throw new ApiError('Cannot generate schedule', json.errors);
+      });
+    }
+
+    return response.json();
+  });
 }
 
 export async function fetchScheduleForPerson(scheduleId, person) {
