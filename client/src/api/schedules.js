@@ -11,14 +11,12 @@ export async function generateScheduleWithFileAndPerson(file, hourlyWage) {
   return fetch(`${BASE}/schedules/generate`, {
     method: 'POST',
     body: form,
-  }).then(response => {
-    if (response.status >= 400) {
-      return response.json().then(json => {
-        throw new ApiError('Cannot generate schedule', json.errors);
-      });
+  }).then(async response => {
+    const json = await response.json();
+    if (response.status < 400) {
+      return json;
     }
-
-    return response.json();
+    throw new ApiError('Cannot generate schedule', json.errors);
   });
 }
 
@@ -34,25 +32,28 @@ export async function fetchSchedules() {
   );
 }
 
-export function updateSchedule(scheduleId, data) {
-  return fetch(`${BASE}/schedules/${scheduleId}`, {
+export async function updateSchedule(scheduleId, data) {
+  const response = await fetch(`${BASE}/schedules/${scheduleId}`, {
     method: 'PUT',
     headers: getDefaultHeaders(),
     body: JSON.stringify(data),
-  }).then(response => response.json());
+  });
+  return response.json();
 }
 
-export function deleteSchedule(scheduleId) {
-  return fetch(`${BASE}/schedules/${scheduleId}`, {
+export async function deleteSchedule(scheduleId) {
+  const response = await fetch(`${BASE}/schedules/${scheduleId}`, {
     method: 'DELETE',
     headers: getDefaultHeaders(),
-  }).then(response => response.json());
+  });
+  return response.json();
 }
 
-export function createSchedule(data) {
-  return fetch(`${BASE}/schedules`, {
+export async function createSchedule(data) {
+  const response = await fetch(`${BASE}/schedules`, {
     method: 'POST',
     headers: getDefaultHeaders(),
     body: JSON.stringify(data),
-  }).then(response => response.json());
+  });
+  return response.json();
 }
