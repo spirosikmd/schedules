@@ -22,6 +22,11 @@ module.exports = function(app) {
   app.post(
     `${BASE}/schedules/generate`,
     upload.single('scheduleFile'),
+    [
+      check('hourlyWage').isFloat({
+        min: 0,
+      }),
+    ],
     schedulesController.generateSchedule
   );
 

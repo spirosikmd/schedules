@@ -61,6 +61,12 @@ function getSchedules(req, res) {
 }
 
 function generateSchedule(req, res) {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   const { buffer, originalname } = req.file;
   const { timezone, hourlyWage } = req.body;
   const userId = req.user.id;
