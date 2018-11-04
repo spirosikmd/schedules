@@ -1,9 +1,10 @@
 import { BASE } from './shared';
 
-export function authenticateWithGoogle(accessToken) {
-  return fetch(`${BASE}/auth/google?access_token=${accessToken}`).then(
-    response => response.json()
+export async function authenticateWithGoogle(accessToken) {
+  const response = await fetch(
+    `${BASE}/auth/google?access_token=${accessToken}`
   );
+  return response.json();
 }
 
 export function checkToken() {

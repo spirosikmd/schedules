@@ -6,12 +6,13 @@ export async function fetchSettings() {
   );
 }
 
-export function updateSettings(settingsId, person) {
-  return fetch(`${BASE}/settings/${settingsId}`, {
+export async function updateSettings(settingsId, person) {
+  const response = await fetch(`${BASE}/settings/${settingsId}`, {
     method: 'PUT',
     headers: getDefaultHeaders(),
     body: JSON.stringify({
       person,
     }),
-  }).then(response => response.json());
+  });
+  return response.json();
 }

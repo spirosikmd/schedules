@@ -1,19 +1,17 @@
 import { fetchSettings, updateSettings } from '../api';
 
-export const fetchSettingsForUser = email => dispatch => {
-  return fetchSettings(email).then(settings => {
-    dispatch(setSettings(settings));
-  });
+export const fetchSettingsForUser = email => async dispatch => {
+  const settings = await fetchSettings(email);
+  dispatch(setSettings(settings));
 };
 
 export const updateSettingsForUser = (
   email,
   settingsId,
   person
-) => dispatch => {
-  return updateSettings(email, settingsId, person).then(settings => {
-    dispatch(setSettings(settings));
-  });
+) => async dispatch => {
+  const settings = await updateSettings(email, settingsId, person);
+  dispatch(setSettings(settings));
 };
 
 export const setSettings = settings => dispatch => {
