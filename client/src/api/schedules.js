@@ -1,12 +1,5 @@
 import { BASE, getDefaultHeaders } from './shared';
-
-class ApiError extends Error {
-  constructor(message, errors) {
-    super(message);
-
-    this.errors = errors;
-  }
-}
+import ApiError from './ApiError';
 
 export async function generateScheduleWithFileAndPerson(file, hourlyWage) {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
