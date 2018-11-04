@@ -1,10 +1,11 @@
 import { BASE, getDefaultHeaders } from './shared';
 
-export async function generateScheduleWithFileAndPerson(file) {
+export async function generateScheduleWithFileAndPerson(file, hourlyWage) {
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const form = new FormData();
   form.append('scheduleFile', file);
   form.append('timezone', timezone);
+  form.append('hourlyWage', hourlyWage);
 
   return fetch(`${BASE}/schedules/generate`, {
     method: 'POST',

@@ -96,8 +96,8 @@ class Home extends Component {
       .catch(err => console.log(err));
   }
 
-  handleScheduleFileUploadFormSubmit(file) {
-    generateScheduleWithFileAndPerson(file)
+  handleScheduleFileUploadFormSubmit(file, hourlyWage) {
+    generateScheduleWithFileAndPerson(file, hourlyWage)
       .then(() => {
         fetchSchedules().then(schedules => {
           this.setState({ schedules });

@@ -11,12 +11,19 @@ class ScheduleFileUploadForm extends PureComponent {
     super(props);
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
 
     this.fileInputRef = React.createRef();
 
     this.state = {
       open: false,
+      hourlyWage: 0,
     };
+  }
+
+  handleInputChange(event) {
+    const { name, value } = event.target;
+    this.setState({ [name]: value });
   }
 
   handleClickOpen = () => {
@@ -38,20 +45,19 @@ class ScheduleFileUploadForm extends PureComponent {
       return;
     }
 
-    this.props.onSubmit(file);
+    this.props.onSubmit(file, this.state.hourlyWage);
     this.handleClose();
 
     fileInput.value = '';
+    this.setState({ hourlyWage: 0 });
   }
 
   render() {
-    const { open } = this.state;
-
     return (
       <Fragment>
         <Button onClick={this.handleClickOpen}>Upload</Button>
         <Dialog
-          open={open}
+          open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
@@ -63,6 +69,21 @@ class ScheduleFileUploadForm extends PureComponent {
               type="file"
               id="scheduleFile"
               inputRef={this.fileInputRef}
+              fullWidth
+            />
+            <TextField
+              margin="normal"
+              id="hourly-wage"
+              label="Set an hourly Wage"
+              value={this.state.hourlyWage}
+              onChange={this.handleInputChange}
+              placeholder="Enter your hourly wage"
+              name="hourlyWage"
+              type="number"
+              inputProps={{
+                step: '0.01',
+              }}
+              fullWidth
             />
           </DialogContent>
           <DialogActions>

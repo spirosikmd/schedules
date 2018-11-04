@@ -1,7 +1,7 @@
 const Schedule = require('../models/schedule');
 const User = require('../models/user');
 
-function saveScheduleData(userId, scheduleName, scheduleData) {
+function saveScheduleData(userId, scheduleName, scheduleData, hourlyWage) {
   return new Promise((resolve, reject) => {
     User.findById(userId, (err, user) => {
       if (err) {
@@ -16,6 +16,9 @@ function saveScheduleData(userId, scheduleName, scheduleData) {
         name: scheduleName,
         data: scheduleData,
         user: user._id,
+        settings: {
+          hourlyWage,
+        },
       };
 
       Schedule.create(data, (err, schedule) => {
