@@ -905,10 +905,10 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.6.tgz#9c03d3fed70a8d517c191b7734da2879b50ca26c"
   integrity sha512-ZBFR7TROLVzCkswA3Fmqq+IIJt62/T7aY/Dmz+QkU7CaW2QFqAitCE8Ups7IzmGhcN1YWMBT4Qcoc07jU9hOJQ==
 
-"@types/reach__router@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@types/reach__router/-/reach__router-1.2.1.tgz#f91fe293d4c8b3047e28e6ef530897d84b108b76"
-  integrity sha512-gzQuJDszKU1uyAgyJtR+vkrK9F6w6GfiR1uWn0rMYzuou/3wO5388m5ymUQDtTTjUcSSID/cMvQiCE8N/eOWRQ==
+"@types/reach__router@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@types/reach__router/-/reach__router-1.2.2.tgz#1bd96626c2866a61937758ef6be2f06309124805"
+  integrity sha512-ktF+0xWesuojMlU8UR+7O9qU9Ff76gO/0Lc+QXQYpTDK0qz4a0l/fJYOLmMJKVY7LKGLBmB3TBs7Fvg4nibQsA==
   dependencies:
     "@types/history" "*"
     "@types/react" "*"
