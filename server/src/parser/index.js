@@ -11,7 +11,11 @@ class DefaultParser {
     const dateOnly = lowercasedWithSingleSpacesDate.split(' ')[1];
     const [day, month] = dateOnly.split('-');
     const newDate = new Date(
-      Date.UTC(new Date().getFullYear(), parseInt(month, 10) - 1, parseInt(day, 10))
+      Date.UTC(
+        new Date().getFullYear(),
+        parseInt(month, 10) - 1,
+        parseInt(day, 10)
+      )
     );
     return newDate;
   }
@@ -19,8 +23,11 @@ class DefaultParser {
   parseTime(timeToParse, date, timezone) {
     const replacedTime = timeToParse.replace(';', ':');
     const [hours, minutes] = replacedTime.split(':');
-    const timeWithTimezone = moment.tz(date, timezone).hours(hours).minutes(minutes);
-    return timeWithTimezone.utc();
+    const timeWithTimezone = moment
+      .tz(date, timezone)
+      .hours(hours)
+      .minutes(minutes);
+    return new Date(timeWithTimezone.utc());
   }
 
   parse(scheduleData, timezone) {
