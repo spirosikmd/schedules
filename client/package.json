@@ -9,7 +9,7 @@
     "@material-ui/icons": "^3.0.1",
     "@reach/router": "^1.1.1",
     "prop-types": "^15.6.2",
-    "react": "^16.6.0",
+    "react": "^16.6.1",
     "react-dom": "^16.6.0",
     "react-google-login": "^3.2.1",
     "react-redux": "^5.1.0",
