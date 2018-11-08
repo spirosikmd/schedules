@@ -14,7 +14,8 @@
     "install:client": "cd client && yarn",
     "install:server": "cd server && yarn",
     "postinstall": "yarn install:client && yarn install:server",
-    "heroku-postbuild": "yarn build:client"
+    "heroku-postbuild": "yarn build:client",
+    "test": "cd client && yarn test"
   },
   "devDependencies": {
     "concurrently": "^4.0.1"
