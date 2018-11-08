@@ -1,6 +1,6 @@
 version: 2
 jobs:
-  build:
+  build_client:
     docker:
       - image: circleci/node:carbon
 
@@ -11,14 +11,59 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "yarn.lock" }}
-            - v1-dependencies-
+            - v1-dependencies-client-{{ checksum "client/yarn.lock" }}
+            - v1-dependencies-client
 
-      - run: yarn install
+      - run: yarn install:client
 
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
+          key: v1-dependencies-client{{ checksum "client/yarn.lock" }}
 
-      - run: yarn test
+  test_client:
+    docker:
+      - image: circleci/node:carbon
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-client-{{ checksum "client/yarn.lock" }}
+            - v1-dependencies-client
+
+      - run: yarn test:client
+
+  build_server:
+    docker:
+      - image: circleci/node:carbon
+
+    working_directory: ~/repo
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-dependencies-server-{{ checksum "server/yarn.lock" }}
+            - v1-dependencies-server
+
+      - run: yarn install:server
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-server-{{ checksum "server/yarn.lock" }}
+
+workflows:
+  version: 2
+  build_and_test_client:
+    jobs:
+      - build_client
+      - test_client
+  build_and_test_server:
+    jobs:
+      - build_server
