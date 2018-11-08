@@ -25,17 +25,16 @@ describe('createEvents', () => {
 
     window.gapi = {
       client: {
-        request: jest.fn(),
+        request: jest.fn(() =>
+          Promise.resolve({
+            result: 'success',
+          })
+        ),
       },
     };
   });
 
   it('calls google api request for each schedule item', async () => {
-    window.gapi.client.request.mockReturnValue(
-      Promise.resolve({
-        result: 'success',
-      })
-    );
     await createEvents(schedule);
     expect(window.gapi.client.request).toHaveBeenCalledTimes(2);
     const calls = window.gapi.client.request.mock.calls;
@@ -63,5 +62,10 @@ describe('createEvents', () => {
       method: 'POST',
       path: 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
     });
+  });
+
+  it('returns the result from each response', async () => {
+    const result = await createEvents(schedule);
+    expect(result).toEqual(['success', 'success']);
   });
 });
