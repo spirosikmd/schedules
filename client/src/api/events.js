@@ -4,10 +4,10 @@ function createEventObject(scheduleItem) {
     description: `You work with: ${scheduleItem.worksWith.join(',')}`,
     location: scheduleItem.location,
     start: {
-      dateTime: scheduleItem.startTime,
+      dateTime: new Date(scheduleItem.startTime),
     },
     end: {
-      dateTime: scheduleItem.endTime,
+      dateTime: new Date(scheduleItem.endTime),
     },
   };
 }
