@@ -19,7 +19,7 @@ jobs:
       - save_cache:
           paths:
             - client/node_modules
-          key: v1-dependencies-client{{ checksum "client/yarn.lock" }}
+          key: v1-dependencies-client-{{ checksum "client/yarn.lock" }}
 
   test_client:
     docker:
