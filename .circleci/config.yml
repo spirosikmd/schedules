@@ -63,9 +63,9 @@ workflows:
   build_and_test_client:
     jobs:
       - build_client
-      - test_client
+      - test_client:
           requires:
-              -build_client
+            - build_client
   build_and_test_server:
     jobs:
       - build_server
