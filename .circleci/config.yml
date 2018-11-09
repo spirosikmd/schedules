@@ -18,7 +18,7 @@ jobs:
 
       - save_cache:
           paths:
-            - node_modules
+            - client/node_modules
           key: v1-dependencies-client{{ checksum "client/yarn.lock" }}
 
   test_client:
@@ -55,7 +55,7 @@ jobs:
 
       - save_cache:
           paths:
-            - node_modules
+            - server/node_modules
           key: v1-dependencies-server-{{ checksum "server/yarn.lock" }}
 
 workflows:
