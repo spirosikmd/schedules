@@ -5,6 +5,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 class ScheduleFileUploadForm extends PureComponent {
   constructor(props) {
@@ -53,10 +54,13 @@ class ScheduleFileUploadForm extends PureComponent {
   }
 
   render() {
+    const { fullScreen } = this.props;
+
     return (
       <Fragment>
         <Button onClick={this.handleClickOpen}>Upload</Button>
         <Dialog
+          fullScreen={fullScreen}
           open={this.state.open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
@@ -100,4 +104,4 @@ class ScheduleFileUploadForm extends PureComponent {
   }
 }
 
-export default ScheduleFileUploadForm;
+export default withMobileDialog()(ScheduleFileUploadForm);

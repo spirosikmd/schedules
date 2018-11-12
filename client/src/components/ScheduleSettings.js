@@ -7,6 +7,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
+import withMobileDialog from '@material-ui/core/withMobileDialog';
 
 class ScheduleSettings extends PureComponent {
   constructor(props) {
@@ -40,12 +41,14 @@ class ScheduleSettings extends PureComponent {
   };
 
   render() {
+    const { fullScreen } = this.props;
     const { open, hourlyWage } = this.state;
 
     return (
       <Fragment>
         <Button onClick={this.handleClickOpen}>Settings</Button>
         <Dialog
+          fullScreen={fullScreen}
           open={open}
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
@@ -92,4 +95,4 @@ ScheduleSettings.defaultProps = {
   onSave: () => {},
 };
 
-export default ScheduleSettings;
+export default withMobileDialog()(ScheduleSettings);
