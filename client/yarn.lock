@@ -941,10 +941,10 @@
   resolved "https://registry.yarnpkg.com/@types/recharts-scale/-/recharts-scale-1.0.0.tgz#348c9220d6d9062c44a9d585d686644a97f7e25d"
   integrity sha512-HR/PrCcxYb2YHviTqH7CMdL1TUhUZLTUKzfrkMhxm1HTa5mg/QtP8XMiuSPz6dZ6wecazAOu8aYZ5DqkNlgHHQ==
 
-"@types/recharts@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@types/recharts/-/recharts-1.1.2.tgz#263db0caa03b20445b071d0d3000c5221765e029"
-  integrity sha512-lriVDcpbbSjRK1n1rL41ZxgNhbxJAXZkSZAQ1M91IvNwlM2uc4W9Stevk9ODK1/lzgHpJjc/WJs6aN0s707fCQ==
+"@types/recharts@^1.1.4":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@types/recharts/-/recharts-1.1.4.tgz#eee5cb80daea270498e8570d89c2ae2782b37020"
+  integrity sha512-Zh3BcOc/S8KCDF4yW3Q6DIf60yY/h68IBNXrHyamIDTZRikSVo97OV3/lTPPpw8Jn4+x41aOZaeDbaDellGDbw==
   dependencies:
     "@types/d3-shape" "*"
     "@types/react" "*"
