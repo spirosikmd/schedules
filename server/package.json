@@ -21,11 +21,13 @@
     "passport-google-token": "^0.1.2"
   },
   "devDependencies": {
+    "jest": "^23.6.0",
     "nodemon": "^1.18.8"
   },
   "scripts": {
     "dev": "nodemon index.js",
     "start": "yarn migration:run && node index.js",
+    "test": "jest",
     "migration:create": "mm create",
     "migration:run": "mm migrate"
   }

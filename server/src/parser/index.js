@@ -2,7 +2,11 @@ const xlsx = require('node-xlsx').default;
 const moment = require('moment-timezone');
 
 class DefaultParser {
-  parseDate(dateToParse) {
+  toUTC(year, month, day) {
+    return new Date(Date.UTC(year, month, day));
+  }
+
+  parseDate(dateToParse, year) {
     const lowercasedDate = dateToParse.toLowerCase();
     const lowercasedWithSingleSpacesDate = lowercasedDate.replace(
       /\s\s+/g,
@@ -10,14 +14,11 @@ class DefaultParser {
     );
     const dateOnly = lowercasedWithSingleSpacesDate.split(' ')[1];
     const [day, month] = dateOnly.split('-');
-    const newDate = new Date(
-      Date.UTC(
-        new Date().getFullYear(),
-        parseInt(month, 10) - 1,
-        parseInt(day, 10)
-      )
-    );
-    return newDate;
+    const newMonth = parseInt(month, 10) - 1;
+    if (newMonth >= new Date().getMonth() && year > new Date().getFullYear()) {
+      year = year - 1;
+    }
+    return this.toUTC(year, newMonth, parseInt(day, 10));
   }
 
   parseTime(timeToParse, date, timezone) {
@@ -43,8 +44,9 @@ class DefaultParser {
         i++;
         continue;
       }
+      const year = row[0].split('-')[1];
       let j = i + 1;
-      const date = this.parseDate(schedule[0].data[j][0]);
+      const date = this.parseDate(schedule[0].data[j][0], year);
       const locations = [];
       let daySchedule = schedule[0].data[j];
       while (
