@@ -46,7 +46,7 @@ class DefaultParser {
       }
       const year = row[0].split('-')[1];
       let j = i + 1;
-      const date = this.parseDate(schedule[0].data[j][0], year);
+      const date = this.parseDate(schedule[0].data[j][0], parseInt(year, 10));
       const locations = [];
       let daySchedule = schedule[0].data[j];
       while (
