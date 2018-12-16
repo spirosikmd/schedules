@@ -58,6 +58,7 @@ function calculateWeeklyWageData(userId) {
           const weeklyWageData = [];
 
           scheduleEntries.forEach(scheduleEntry => {
+            const scheduleCreatedAt = scheduleEntry.schedule.createdAt;
             const scheduleName = scheduleEntry.schedule.name;
             const scheduleId = scheduleEntry.schedule._id;
             const scheduleHourlyWage =
@@ -72,10 +73,13 @@ function calculateWeeklyWageData(userId) {
               weeklyWageData.push({
                 id: scheduleId,
                 name: scheduleName,
+                createdAt: scheduleCreatedAt,
                 weeklyWage: scheduleEntry.hours * scheduleHourlyWage,
               });
             }
           });
+
+          weeklyWageData.sort((a, b) => a.createdAt - b.createdAt);
 
           resolve(createAggregationResponse({ weeklyWageData }));
         });
