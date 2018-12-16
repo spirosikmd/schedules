@@ -39,15 +39,8 @@ class Charts extends PureComponent {
   componentDidMount() {
     fetchWeeklyWageDataAggregation()
       .then(response => {
-        const chartData = [];
         const weeklyWageData = response.data.weeklyWageData;
-        Object.keys(weeklyWageData).forEach(id => {
-          chartData.push({
-            name: weeklyWageData[id].name,
-            weeklyWage: weeklyWageData[id].weeklyWage,
-          });
-        });
-        this.setState({ weeklyWageData: chartData, isLoading: false });
+        this.setState({ weeklyWageData, isLoading: false });
       })
       .catch(err => console.log(err));
   }

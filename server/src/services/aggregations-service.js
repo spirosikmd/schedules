@@ -55,21 +55,25 @@ function calculateWeeklyWageData(userId) {
             return reject(err);
           }
 
-          const weeklyWageData = {};
+          const weeklyWageData = [];
 
           scheduleEntries.forEach(scheduleEntry => {
             const scheduleName = scheduleEntry.schedule.name;
             const scheduleId = scheduleEntry.schedule._id;
             const scheduleHourlyWage =
               scheduleEntry.schedule.settings.hourlyWage;
-            if (weeklyWageData[scheduleId]) {
-              weeklyWageData[scheduleId].weeklyWage +=
+            const foundWeeklyWageDataSchedule = weeklyWageData.find(
+              weeklyWageDataSchedule => weeklyWageDataSchedule.id === scheduleId
+            );
+            if (foundWeeklyWageDataSchedule) {
+              foundWeeklyWageDataSchedule.weeklyWage +=
                 scheduleEntry.hours * scheduleHourlyWage;
             } else {
-              weeklyWageData[scheduleId] = {
+              weeklyWageData.push({
+                id: scheduleId,
                 name: scheduleName,
                 weeklyWage: scheduleEntry.hours * scheduleHourlyWage,
-              };
+              });
             }
           });
 
