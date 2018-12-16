@@ -10,13 +10,13 @@ describe('createEvents', () => {
     endTime = new Date('2018-01-02');
     schedule = [
       {
-        worksWith: ['test', 'test2'],
+        workWith: ['test', 'test2'],
         location: 'Test',
         startTime,
         endTime,
       },
       {
-        worksWith: ['test3', 'test4'],
+        workWith: ['test3', 'test4'],
         location: 'Test5',
         startTime,
         endTime,

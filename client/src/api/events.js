@@ -1,7 +1,7 @@
 function createEventObject(scheduleItem) {
   return {
     summary: 'ACC',
-    description: `You work with: ${scheduleItem.worksWith.join(',')}`,
+    description: `You work with: ${scheduleItem.workWith.join(',')}`,
     location: scheduleItem.location,
     start: {
       dateTime: new Date(scheduleItem.startTime),
