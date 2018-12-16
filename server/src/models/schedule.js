@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const timestamps = require('mongoose-timestamp');
+const ScheduleEntry = require('./schedule-entry');
 
 const Schema = mongoose.Schema;
 
@@ -15,6 +16,10 @@ const scheduleSchema = mongoose.Schema({
   settings: {
     hourlyWage: { type: Number, default: 0 },
   },
+});
+
+scheduleSchema.post('remove', doc => {
+  ScheduleEntry.remove({ schedule: doc._id }).exec();
 });
 
 scheduleSchema.plugin(timestamps);

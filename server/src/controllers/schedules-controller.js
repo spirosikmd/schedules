@@ -1,15 +1,13 @@
-const { validationResult } = require('express-validator/check');
 const DefaultParser = require('../parser');
 const parseScheduleFileData = require('../services/parser-service');
 const schedulesService = require('../services/schedules-service');
 
 function getSchedule(req, res) {
   const { scheduleId } = req.params;
-  const { person } = req.query;
   const userId = req.user.id;
 
   schedulesService
-    .getScheduleDataForPerson(userId, scheduleId, person.toLowerCase())
+    .getSchedule(userId, scheduleId)
     .then(data => res.json(data))
     .catch(error => {
       res.status(404).json({
@@ -61,25 +59,20 @@ function getSchedules(req, res) {
 }
 
 function generateSchedule(req, res) {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
   const { buffer, originalname } = req.file;
-  const { timezone, hourlyWage } = req.body;
+  const { timezone, hourlyWage, person } = req.body;
   const userId = req.user.id;
 
   const parser = new DefaultParser();
-  const scheduleData = parseScheduleFileData({
+  const scheduleEntryData = parseScheduleFileData({
     parser,
     data: buffer,
     timezone,
+    person,
   });
 
   schedulesService
-    .saveScheduleData(userId, originalname, scheduleData, hourlyWage)
+    .generateSchedule(userId, originalname, scheduleEntryData, hourlyWage)
     .then(data => res.json(data))
     .catch(error =>
       res.status(404).json({
@@ -89,17 +82,55 @@ function generateSchedule(req, res) {
 }
 
 function createSchedule(req, res) {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    return res.status(422).json({ errors: errors.array() });
-  }
-
   const data = req.body;
   const userId = req.user.id;
 
   schedulesService
     .createSchedule(userId, data)
+    .then(data => res.json(data))
+    .catch(error =>
+      res.status(404).json({
+        message: error,
+      })
+    );
+}
+
+function createEntriesForSchedule(req, res) {
+  const { entries } = req.body;
+  const userId = req.user.id;
+  const { scheduleId } = req.params;
+
+  schedulesService
+    .createEntriesForSchedule(userId, scheduleId, entries)
+    .then(data => res.json(data))
+    .catch(error =>
+      res.status(404).json({
+        message: error,
+      })
+    );
+}
+
+function updateEntryForSchedule(req, res) {
+  const data = req.body;
+  const userId = req.user.id;
+  const { scheduleId, entryId } = req.params;
+
+  schedulesService
+    .updateEntryForSchedule(userId, scheduleId, entryId, data)
+    .then(data => res.json(data))
+    .catch(error =>
+      res.status(404).json({
+        message: error,
+      })
+    );
+}
+
+function deleteEntryForSchedule(req, res) {
+  const userId = req.user.id;
+  const { scheduleId, entryId } = req.params;
+
+  schedulesService
+    .deleteEntryForSchedule(userId, scheduleId, entryId)
     .then(data => res.json(data))
     .catch(error =>
       res.status(404).json({
@@ -115,4 +146,7 @@ module.exports = {
   generateSchedule,
   getSchedules,
   createSchedule,
+  createEntriesForSchedule,
+  updateEntryForSchedule,
+  deleteEntryForSchedule,
 };

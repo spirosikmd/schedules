@@ -1,6 +1,5 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { Link } from '@reach/router';
-import { connect } from 'react-redux';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
@@ -17,7 +16,6 @@ import {
   fetchHolyTotal,
   createSchedule,
 } from '../api';
-import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
 
@@ -86,31 +84,23 @@ class Home extends Component {
       .then(schedules => {
         this.setState({ schedules, isLoading: false });
 
-        this.props
-          .fetchSettingsForUser()
-          .then(() => {
-            fetchHolyTotal(
-              this.props.settings.person,
-              this.props.settings.hourlyWage
-            ).then(response =>
-              this.setState({ holyTotal: response.data.holyTotal })
-            );
-          })
+        fetchHolyTotal()
+          .then(response =>
+            this.setState({ holyTotal: response.data.holyTotal })
+          )
           .catch(err => console.log(err));
       })
       .catch(err => console.log(err));
   }
 
-  handleScheduleFileUploadFormSubmit(file, hourlyWage) {
-    generateScheduleWithFileAndPerson(file, hourlyWage)
+  handleScheduleFileUploadFormSubmit(file, hourlyWage, person) {
+    generateScheduleWithFileAndPerson(file, hourlyWage, person)
       .then(() => {
         fetchSchedules().then(schedules => {
           this.setState({ schedules });
         });
 
-        const { settings } = this.props;
-
-        fetchHolyTotal(settings.person, settings.hourlyWage).then(response =>
+        fetchHolyTotal().then(response =>
           this.setState({ holyTotal: response.data.holyTotal })
         );
       })
@@ -130,9 +120,7 @@ class Home extends Component {
           this.setState({ schedules });
         });
 
-        const { settings } = this.props;
-
-        fetchHolyTotal(settings.person, settings.hourlyWage).then(response =>
+        fetchHolyTotal().then(response =>
           this.setState({ holyTotal: response.data.holyTotal })
         );
       })
@@ -263,6 +251,9 @@ class Home extends Component {
                         <EditIcon />
                       </IconButton>
                       <ResponsiveConfirmDeleteDialog
+                        title="Delete schedule?"
+                        content="All the schedule data will be removed permanently and you won't be
+                      able to retrieve them again."
                         onDeleteClick={() =>
                           this.handleScheduleDelete(schedule.id)
                         }
@@ -295,20 +286,4 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  user: state.authReducer.user,
-  settings: state.settingsReducer.settings,
-});
-
-const mapDispatchToProps = dispatch => ({
-  fetchSettingsForUser: () => dispatch(fetchSettingsForUser()),
-});
-
-export default withAuth(
-  withStyles(styles)(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(Home)
-  )
-);
+export default withAuth(withStyles(styles)(Home));

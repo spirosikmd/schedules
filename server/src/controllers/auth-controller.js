@@ -15,6 +15,7 @@ function createToken(auth) {
 function getCookieOptions() {
   const secure = process.env.NODE_ENV === 'production' ? true : false;
 
+  // TODO: Set expires from expires_in from Google login response.
   return { httpOnly: true, secure };
 }
 
