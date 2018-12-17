@@ -10,7 +10,6 @@ import Loader from '../components/Loader';
 const TopBar = lazy(() => import('../components/TopBar'));
 const Menu = lazy(() => import('../components/Menu'));
 const Home = lazy(() => import('./Home'));
-const Settings = lazy(() => import('./Settings'));
 const Schedule = lazy(() => import('./Schedule'));
 const Charts = lazy(() => import('./Charts'));
 
@@ -86,7 +85,6 @@ class App extends PureComponent {
           <Router>
             <Home path="/" />
             <Schedule path="/schedules/:scheduleId" />
-            <Settings path="/settings" />
             <Charts path="/charts" />
           </Router>
         </div>

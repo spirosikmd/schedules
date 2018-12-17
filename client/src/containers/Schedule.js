@@ -1,5 +1,4 @@
 import React, { PureComponent, Suspense, lazy } from 'react';
-import { connect } from 'react-redux';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from '@material-ui/icons/ArrowBack';
@@ -17,7 +16,6 @@ import {
   deleteScheduleEntry,
   updateScheduleEntry,
 } from '../api';
-import { fetchSettingsForUser } from '../actions/settingsActions';
 import withAuth from '../components/withAuth';
 import Loader from '../components/Loader';
 import CreateEntryForm from '../components/CreateEntryForm';
@@ -49,9 +47,7 @@ class Schedule extends PureComponent {
   };
 
   componentDidMount() {
-    this.props.fetchSettingsForUser().then(() => {
-      this.getSchedule();
-    });
+    this.getSchedule();
   }
 
   handleBackButtonClick = event => {
@@ -266,19 +262,4 @@ class Schedule extends PureComponent {
   }
 }
 
-const mapStateToProps = state => ({
-  settings: state.settingsReducer.settings,
-});
-
-const mapDispatchToProps = dispatch => ({
-  fetchSettingsForUser: () => dispatch(fetchSettingsForUser()),
-});
-
-export default withAuth(
-  withStyles(styles)(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(Schedule)
-  )
-);
+export default withAuth(withStyles(styles)(Schedule));
