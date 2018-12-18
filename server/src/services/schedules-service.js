@@ -100,32 +100,38 @@ function getSchedule(userId, scheduleId) {
           ScheduleEntry.find({
             schedule: foundSchedule._id,
             user: user._id,
-          }).then(scheduleEntries => {
-            const schedule = scheduleEntries.map(scheduleEntry => ({
-              id: scheduleEntry._id,
-              date: scheduleEntry.date,
-              location: scheduleEntry.location,
-              startTime: scheduleEntry.startTime,
-              endTime: scheduleEntry.endTime,
-              dayWage: scheduleEntry.hours * hourlyWage,
-              workWith: scheduleEntry.workWith,
-              hours: scheduleEntry.hours,
-            }));
+          })
+            .sort('date')
+            .exec((err, scheduleEntries) => {
+              if (err) {
+                reject(err);
+              }
 
-            const totalHours = schedule.reduce(
-              (acc, current) => acc + current.hours,
-              0
-            );
+              const schedule = scheduleEntries.map(scheduleEntry => ({
+                id: scheduleEntry._id,
+                date: scheduleEntry.date,
+                location: scheduleEntry.location,
+                startTime: scheduleEntry.startTime,
+                endTime: scheduleEntry.endTime,
+                dayWage: scheduleEntry.hours * hourlyWage,
+                workWith: scheduleEntry.workWith,
+                hours: scheduleEntry.hours,
+              }));
 
-            resolve({
-              schedule,
-              totalHours,
-              totalWeeklyWage: totalHours * hourlyWage,
-              name: foundSchedule.name,
-              eventsCreatedOnce: foundSchedule.eventsCreatedOnce,
-              settings: foundSchedule.settings,
+              const totalHours = schedule.reduce(
+                (acc, current) => acc + current.hours,
+                0
+              );
+
+              resolve({
+                schedule,
+                totalHours,
+                totalWeeklyWage: totalHours * hourlyWage,
+                name: foundSchedule.name,
+                eventsCreatedOnce: foundSchedule.eventsCreatedOnce,
+                settings: foundSchedule.settings,
+              });
             });
-          });
         }
       );
     });
