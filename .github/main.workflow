@@ -16,7 +16,7 @@ action "login" {
 action "push" {
   uses = "actions/heroku@master"
   needs = "login"
-  args = "container:push -a calm-fortress-1234 web"
+  args = "container:push -a schedule-5j7wpm7zpq web"
   secrets = ["HEROKU_API_KEY", "GOOGLE_AUTH_CLIENT_ID", "GOOGLE_AUTH_CLIENT_SECRET", "JWT_SECRET", "MONGO_URI"]
   env = {
     NODE_ENV = "production"
@@ -27,7 +27,7 @@ action "push" {
 action "release" {
   uses = "actions/heroku@master"
   needs = "push"
-  args = "container:release -a calm-fortress-1234 web"
+  args = "container:release -a schedule-5j7wpm7zpq web"
   secrets = ["HEROKU_API_KEY", "GOOGLE_AUTH_CLIENT_ID", "GOOGLE_AUTH_CLIENT_SECRET", "JWT_SECRET", "MONGO_URI"]
   env = {
     NODE_ENV = "production"
