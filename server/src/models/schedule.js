@@ -19,7 +19,7 @@ const scheduleSchema = mongoose.Schema({
 });
 
 scheduleSchema.post('remove', doc => {
-  ScheduleEntry.remove({ schedule: doc._id }).exec();
+  ScheduleEntry.deleteMany({ schedule: doc._id }).exec();
 });
 
 scheduleSchema.plugin(timestamps);
