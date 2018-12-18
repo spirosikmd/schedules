@@ -3,7 +3,6 @@ const passport = require('passport');
 const { check } = require('express-validator/check');
 const authController = require('../controllers/auth-controller');
 const aggregationsController = require('../controllers/aggregations-controller');
-const settingsController = require('../controllers/settings-controller');
 const schedulesController = require('../controllers/schedules-controller');
 const indexController = require('../controllers/index-controller');
 const { verifyToken } = require('../middlewares/auth');
@@ -106,12 +105,6 @@ module.exports = function(app) {
     `${BASE}/schedules/:scheduleId/entries/:entryId`,
     schedulesController.deleteEntryForSchedule
   );
-
-  app.use(`${BASE}/settings`, verifyToken());
-
-  app.get(`${BASE}/settings`, settingsController.getSettings);
-
-  app.put(`${BASE}/settings/:settingsId`, settingsController.updateSettings);
 
   app.use(`${BASE}/aggregations`, verifyToken());
 
