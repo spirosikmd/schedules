@@ -31,8 +31,8 @@ action "Test Client" {
   }
 }
 
-action "login" {
-  needs = ["Build Server", "Build Client"]
+action "Login" {
+  needs = ["Test Server", "Test Client"]
   uses = "actions/heroku@master"
   args = "login"
   secrets = ["HEROKU_API_KEY"]
