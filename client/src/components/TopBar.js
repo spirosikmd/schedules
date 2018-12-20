@@ -43,7 +43,7 @@ class TopBar extends PureComponent {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" className={classes.grow}>
-              {user.firstName} {user.lastName}!
+              {user.firstName} {user.lastName}
             </Typography>
             <Button
               color="inherit"
