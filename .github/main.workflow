@@ -1,6 +1,6 @@
 workflow "Deploy" {
   on = "push"
-  resolves = ["Test Client", "Test Server"]
+  resolves = ["Login"]
 }
 
 action "Build Server" {
