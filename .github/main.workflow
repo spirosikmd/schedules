@@ -5,6 +5,7 @@ workflow "Deploy to Heroku" {
 
 action "Build" {
   uses = "borales/actions-yarn@master"
+  args = "install"
 }
 
 action "Test" {
