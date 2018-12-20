@@ -4,12 +4,11 @@ workflow "Deploy to Heroku" {
 }
 
 action "Build" {
-  uses = "actions/npm@master"
-  args = "install"
+  uses = "borales/actions-yarn@master"
 }
 
 action "Test" {
   needs = "Build"
-  uses = "actions/npm@master"
+  uses = "borales/actions-yarn@master"
   args = "test"
 }
