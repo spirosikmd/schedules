@@ -11,6 +11,7 @@ action "Login" {
 }
 
 action "Build Server" {
+  needs = "Login"
   uses = "borales/actions-yarn@master"
   args = "install:server"
   env = {
@@ -19,6 +20,7 @@ action "Build Server" {
 }
 
 action "Build Client" {
+  needs = "Login"
   uses = "borales/actions-yarn@master"
   args = "install:client"
   env = {
