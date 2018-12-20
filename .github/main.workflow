@@ -1,16 +1,22 @@
 workflow "Deploy" {
   on = "push"
-  resolves = ["Login"]
+  resolves = ["Test Server", "Test Client"]
 }
 
 action "Build Server" {
   uses = "borales/actions-yarn@master"
   args = "install:server"
+  env = {
+    CI = "true"
+  }
 }
 
 action "Build Client" {
   uses = "borales/actions-yarn@master"
   args = "install:client"
+  env = {
+    CI = "true"
+  }
 }
 
 action "Test Server" {
@@ -29,11 +35,4 @@ action "Test Client" {
   env = {
     CI = "true"
   }
-}
-
-action "Login" {
-  needs = ["Test Server", "Test Client"]
-  uses = "actions/heroku@master"
-  args = "login"
-  secrets = ["HEROKU_API_KEY"]
 }
