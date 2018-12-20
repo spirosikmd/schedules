@@ -1,9 +1,8 @@
 workflow "Deploy" {
   on = "push"
-  resolves = ["Test Server", "Test Client"]
+  resolves = "Push"
 }
 
-# Login
 action "Login" {
   uses = "actions/heroku@master"
   args = "container:login"
@@ -44,4 +43,10 @@ action "Test Client" {
   env = {
     CI = "true"
   }
+}
+
+action "Push" {
+  needs = ["Test Server", "Test Client"]
+  uses = "borales/actions-yarn@master"
+  args = "push"
 }

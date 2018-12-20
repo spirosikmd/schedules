@@ -17,7 +17,8 @@
     "heroku-postbuild": "yarn build:client",
     "test:client": "cd client && yarn test",
     "test:server": "cd server && yarn test",
-    "test": "yarn test:client && yarn test:server"
+    "test": "yarn test:client && yarn test:server",
+    "push": "git push heroku master"
   },
   "devDependencies": {
     "concurrently": "^4.1.0"
