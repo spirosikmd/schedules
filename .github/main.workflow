@@ -1,17 +1,31 @@
-workflow "Deploy to Heroku" {
+workflow "Deploy" {
   on = "push"
-  resolves = ["Test"]
+  resolves = ["Test Client", "Test Server"]
 }
 
-action "Build" {
+action "Build Server" {
   uses = "borales/actions-yarn@master"
-  args = "install"
+  args = "install:server"
 }
 
-action "Test" {
-  needs = "Build"
+action "Build Client" {
   uses = "borales/actions-yarn@master"
-  args = "test"
+  args = "install:client"
+}
+
+action "Test Server" {
+  needs = "Build Server"
+  uses = "borales/actions-yarn@master"
+  args = "test:server"
+  env = {
+    CI = "true"
+  }
+}
+
+action "Test Client" {
+  needs = "Build Client"
+  uses = "borales/actions-yarn@master"
+  args = "test:client"
   env = {
     CI = "true"
   }
