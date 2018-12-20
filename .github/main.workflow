@@ -30,3 +30,10 @@ action "Test Client" {
     CI = "true"
   }
 }
+
+action "login" {
+  needs = ["Build Server", "Build Client"]
+  uses = "actions/heroku@master"
+  args = "login"
+  secrets = ["HEROKU_API_KEY"]
+}
