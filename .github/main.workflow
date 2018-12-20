@@ -3,6 +3,13 @@ workflow "Deploy" {
   resolves = ["Test Server", "Test Client"]
 }
 
+# Login
+action "Login" {
+  uses = "actions/heroku@master"
+  args = "container:login"
+  secrets = ["HEROKU_API_KEY"]
+}
+
 action "Build Server" {
   uses = "borales/actions-yarn@master"
   args = "install:server"
