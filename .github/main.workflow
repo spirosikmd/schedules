@@ -12,4 +12,7 @@ action "Test" {
   needs = "Build"
   uses = "borales/actions-yarn@master"
   args = "test"
+  env = {
+    CI = "true"
+  }
 }
