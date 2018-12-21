@@ -1,15 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import configureStore from './store';
 import App from './containers/App';
 import registerServiceWorker from './registerServiceWorker';
 
-window.__MUI_USE_NEXT_TYPOGRAPHY_VARIANTS__ = true;
+const theme = createMuiTheme({
+  typography: { useNextVariants: true },
+});
 
 ReactDOM.render(
   <Provider store={configureStore()}>
-    <App />
+    <MuiThemeProvider theme={theme}>
+      <App />
+    </MuiThemeProvider>
   </Provider>,
   document.getElementById('root')
 );
