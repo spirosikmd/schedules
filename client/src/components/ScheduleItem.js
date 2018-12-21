@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
@@ -20,10 +20,8 @@ function formatDate(dateString) {
   return `${dateToFormat.getFullYear()}-${month}-${day}`;
 }
 
-class ScheduleItem extends PureComponent {
-  render() {
-    const { daySchedule, onEditClick, onDeleteClick } = this.props;
-
+const ScheduleItem = React.memo(
+  ({ daySchedule, onEditClick, onDeleteClick }) => {
     return (
       <TableRow>
         <TableCell>{new Date(daySchedule.date).toDateString()}</TableCell>
@@ -52,7 +50,7 @@ class ScheduleItem extends PureComponent {
       </TableRow>
     );
   }
-}
+);
 
 ScheduleItem.propTypes = {
   daySchedule: PropTypes.object.isRequired,

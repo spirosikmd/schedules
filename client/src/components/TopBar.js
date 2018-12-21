@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -21,15 +21,8 @@ const styles = {
   },
 };
 
-class TopBar extends PureComponent {
-  render() {
-    const {
-      user,
-      onMenuIconClick,
-      onGoogleLogoutSuccess,
-      classes,
-    } = this.props;
-
+const TopBar = React.memo(
+  ({ user, onMenuIconClick, onGoogleLogoutSuccess, classes }) => {
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -57,6 +50,6 @@ class TopBar extends PureComponent {
       </div>
     );
   }
-}
+);
 
 export default withStyles(styles)(TopBar);

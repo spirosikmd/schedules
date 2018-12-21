@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { Link } from '@reach/router';
 import InboxIcon from '@material-ui/icons/Inbox';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
@@ -8,15 +8,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-class Menu extends PureComponent {
-  render() {
-    const {
-      open,
-      onMenuClose,
-      onMenuContentClick,
-      onMenuContentKeyDown,
-    } = this.props;
-
+const Menu = React.memo(
+  ({ open, onMenuClose, onMenuContentClick, onMenuContentKeyDown }) => {
     return (
       <Drawer open={open} onClose={onMenuClose}>
         <div
@@ -43,6 +36,6 @@ class Menu extends PureComponent {
       </Drawer>
     );
   }
-}
+);
 
 export default Menu;

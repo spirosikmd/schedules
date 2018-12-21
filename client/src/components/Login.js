@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { GoogleLogin } from 'react-google-login';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -40,10 +40,8 @@ const styles = theme => ({
   },
 });
 
-class Login extends PureComponent {
-  render() {
-    const { classes } = this.props;
-
+const Login = React.memo(
+  ({ classes, onGoogleLoginSuccess, onGoogleLoginFailure }) => {
     return (
       <main className={classes.layout}>
         <Paper className={classes.paper}>
@@ -62,8 +60,8 @@ class Login extends PureComponent {
               buttonText="Login"
               scope="https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.me"
               isSignedIn
-              onSuccess={this.props.onGoogleLoginSuccess}
-              onFailure={this.props.onGoogleLoginFailure}
+              onSuccess={onGoogleLoginSuccess}
+              onFailure={onGoogleLoginFailure}
             >
               Google
             </Button>
@@ -72,6 +70,6 @@ class Login extends PureComponent {
       </main>
     );
   }
-}
+);
 
 export default withStyles(styles)(Login);

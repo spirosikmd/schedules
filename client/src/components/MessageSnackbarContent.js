@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import cn from 'classnames';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
@@ -43,7 +43,7 @@ const variantIcon = {
   info: InfoIcon,
 };
 
-const MessageSnackbarContent = memo(props => {
+const MessageSnackbarContent = React.memo(props => {
   const { classes, className, message, onClose, variant, ...other } = props;
   const Icon = variantIcon[variant];
 
