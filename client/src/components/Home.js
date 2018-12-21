@@ -16,17 +16,15 @@ import {
   fetchHolyTotal,
   createSchedule,
 } from '../api';
-import withAuth from '../components/withAuth';
-import Loader from '../components/Loader';
+import withAuth from './withAuth';
+import Loader from './Loader';
 
-const ScheduleFileUploadForm = lazy(() =>
-  import('../components/ScheduleFileUploadForm')
-);
+const ScheduleFileUploadForm = lazy(() => import('./ScheduleFileUploadForm'));
 const ResponsiveConfirmDeleteDialog = lazy(() =>
-  import('../components/ResponsiveConfirmDeleteDialog')
+  import('./ResponsiveConfirmDeleteDialog')
 );
-const NewSchedule = lazy(() => import('../components/NewSchedule'));
-const MessageSnackbar = lazy(() => import('../components/MessageSnackbar'));
+const NewSchedule = lazy(() => import('./NewSchedule'));
+const MessageSnackbar = lazy(() => import('./MessageSnackbar'));
 
 const styles = theme => ({
   item: {

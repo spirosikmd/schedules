@@ -9,9 +9,9 @@ import Loader from '../components/Loader';
 
 const TopBar = lazy(() => import('../components/TopBar'));
 const Menu = lazy(() => import('../components/Menu'));
-const Home = lazy(() => import('./Home'));
-const Schedule = lazy(() => import('./Schedule'));
-const Charts = lazy(() => import('./Charts'));
+const Home = lazy(() => import('../components/Home'));
+const Schedule = lazy(() => import('../components/Schedule'));
+const Charts = lazy(() => import('../components/Charts'));
 
 const styles = theme => ({
   page: {

@@ -16,14 +16,14 @@ import {
   deleteScheduleEntry,
   updateScheduleEntry,
 } from '../api';
-import withAuth from '../components/withAuth';
-import Loader from '../components/Loader';
-import CreateEntryForm from '../components/CreateEntryForm';
+import withAuth from './withAuth';
+import Loader from './Loader';
+import CreateEntryForm from './CreateEntryForm';
 
-const ScheduleItem = lazy(() => import('../components/ScheduleItem'));
-const ScheduleHeader = lazy(() => import('../components/ScheduleHeader'));
-const ScheduleSettings = lazy(() => import('../components/ScheduleSettings'));
-const MessageSnackbar = lazy(() => import('../components/MessageSnackbar'));
+const ScheduleItem = lazy(() => import('./ScheduleItem'));
+const ScheduleHeader = lazy(() => import('./ScheduleHeader'));
+const ScheduleSettings = lazy(() => import('./ScheduleSettings'));
+const MessageSnackbar = lazy(() => import('./MessageSnackbar'));
 
 const styles = theme => ({
   table: {

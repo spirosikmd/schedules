@@ -13,8 +13,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { fetchWeeklyWageDataAggregation } from '../api';
-import withAuth from '../components/withAuth';
-import Loader from '../components/Loader';
+import withAuth from './withAuth';
+import Loader from './Loader';
 
 const styles = theme => ({
   root: {
