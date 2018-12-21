@@ -12,8 +12,8 @@ class ScheduleHeader extends PureComponent {
           <TableCell>Location</TableCell>
           <TableCell>Start Time</TableCell>
           <TableCell>End Time</TableCell>
-          <TableCell numeric>Hours</TableCell>
-          <TableCell numeric>Wage</TableCell>
+        <TableCell align="right">Hours</TableCell>
+        <TableCell align="right">Wage</TableCell>
           <TableCell>Work With</TableCell>
           <TableCell />
         </TableRow>

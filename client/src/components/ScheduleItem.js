@@ -30,8 +30,8 @@ class ScheduleItem extends PureComponent {
         <TableCell>{daySchedule.location || '-'}</TableCell>
         <TableCell>{renderTime(daySchedule.startTime)}</TableCell>
         <TableCell>{renderTime(daySchedule.endTime)}</TableCell>
-        <TableCell numeric>{daySchedule.hours}</TableCell>
-        <TableCell numeric>{daySchedule.dayWage.toFixed(2)}</TableCell>
+        <TableCell align="right">{daySchedule.hours}</TableCell>
+        <TableCell align="right">{daySchedule.dayWage.toFixed(2)}</TableCell>
         <TableCell>
           {(daySchedule.workWith && daySchedule.workWith.join(', ')) || '-'}
         </TableCell>
