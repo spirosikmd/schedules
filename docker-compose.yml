@@ -1,0 +1,14 @@
+version: '3'
+services:
+  app:
+    build: .
+    ports:
+      - '5000:5000'
+    links:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/schedule
+  mongo:
+    image: mongo
+    ports:
+      - '27017:27017'
