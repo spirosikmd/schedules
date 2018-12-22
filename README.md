@@ -32,7 +32,7 @@ For the app to work properly you need to have mongo [installed](https://docs.mon
 
 ## Deploy
 
-The app is deployed to Heroku manually!
+The app is deployed to Heroku using [Github Actions](https://github.com/features/actions).
 
 ## Stack
 
