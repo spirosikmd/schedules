@@ -38,13 +38,15 @@ const TopBar = React.memo(
             <Typography variant="h6" color="inherit" className={classes.grow}>
               {user.firstName} {user.lastName}
             </Typography>
-            <Button
-              color="inherit"
-              component={GoogleLogout}
+            <GoogleLogout
+              icon={false}
               onLogoutSuccess={onGoogleLogoutSuccess}
-            >
-              Logout
-            </Button>
+              render={props => (
+                <Button color="inherit" onClick={props.onClick}>
+                  Logout
+                </Button>
+              )}
+            />
           </Toolbar>
         </AppBar>
       </div>

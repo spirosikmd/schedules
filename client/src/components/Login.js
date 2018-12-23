@@ -50,21 +50,25 @@ const Login = React.memo(
           </Avatar>
           <Typography variant="h5">Login</Typography>
           <form className={classes.form}>
-            <Button
-              variant="contained"
-              color="primary"
-              fullWidth
-              component={GoogleLogin}
-              className={classes.submit}
+            <GoogleLogin
               clientId="1052222050887-labkfk5agrcfn4dbfaf0qitjq635s5nv.apps.googleusercontent.com"
-              buttonText="Login"
+              icon={false}
               scope="https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.me"
               isSignedIn
               onSuccess={onGoogleLoginSuccess}
               onFailure={onGoogleLoginFailure}
-            >
-              Google
-            </Button>
+              render={props => (
+                <Button
+                  onClick={props.onClick}
+                  variant="contained"
+                  color="primary"
+                  fullWidth
+                  className={classes.submit}
+                >
+                  Google
+                </Button>
+              )}
+            />
           </form>
         </Paper>
       </main>
