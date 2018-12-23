@@ -8198,10 +8198,10 @@ react-event-listener@^0.6.2:
     prop-types "^15.6.0"
     warning "^4.0.1"
 
-react-google-login@^3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-3.2.1.tgz#9ab6ac3694d0e6e2974f1e588c53cf7b903a36e6"
-  integrity sha512-9+OFbdGDr6vazlcCkLbtN92Wwfb+aG/RJ0ScypTK6Ox5g642z1aDrnmal2V5AqWl2+Ph53sBhRnk0KTvUdNXpA==
+react-google-login@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-4.0.1.tgz#9aae2d408f264a5808f65ae1e9f07c141214baa7"
+  integrity sha512-Ix9rMXmyOQIk3AHsN0VliFCZpJOEO6wBvI0/RdMBAahgktZerWGAEzQcwCwnZESmAPHpq9i4i1J5IuDvmcfnvw==
   dependencies:
     "@types/react" "*"
     prop-types "^15.6.0"
