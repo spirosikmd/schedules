@@ -6,7 +6,7 @@ module.exports = function() {
   return new Promise((resolve, reject) => {
     mongoose.connect(
       MONGO_URI,
-      { useNewUrlParser: true }
+      { useNewUrlParser: true, useCreateIndex: true }
     );
 
     const db = mongoose.connection;
