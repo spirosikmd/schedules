@@ -121,6 +121,12 @@ class Home extends Component {
         fetchHolyTotal().then(response =>
           this.setState({ holyTotal: response.data.holyTotal })
         );
+
+        this.setState({
+          isSnackbarOpen: true,
+          snackbarMessage: 'Schedule deleted',
+          snackbarVariant: 'success',
+        });
       })
       .catch(err => console.log(err));
   }
