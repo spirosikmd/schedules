@@ -1,4 +1,5 @@
 import { BASE } from './shared';
+import ApiError from './ApiError';
 
 export async function authenticateWithGoogle(accessToken) {
   const response = await fetch(
@@ -7,6 +8,10 @@ export async function authenticateWithGoogle(accessToken) {
   return response.json();
 }
 
-export function checkToken() {
-  return fetch(`${BASE}/auth/token`);
+export async function checkToken() {
+  const response = await fetch(`${BASE}/auth/token`);
+  if (response.status === 200) {
+    return response;
+  }
+  throw new ApiError('Token not valid', response.error);
 }
