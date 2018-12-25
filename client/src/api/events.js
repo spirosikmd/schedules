@@ -12,19 +12,28 @@ function createEventObject(scheduleItem) {
   };
 }
 
+function sanitizeSchedule(scheduleItem) {
+  return (
+    scheduleItem.startTime !== undefined && scheduleItem.endTime !== undefined
+  );
+}
+
 export function createEvents(schedule) {
-  const createEventRequests = schedule.map(scheduleItem => {
-    return window.gapi.client
-      .request({
-        path: 'https://www.googleapis.com/calendar/v3/calendars/primary/events',
-        method: 'POST',
-        body: createEventObject(scheduleItem),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(response => response.result);
-  });
+  const createEventRequests = schedule
+    .filter(sanitizeSchedule)
+    .map(scheduleItem => {
+      return window.gapi.client
+        .request({
+          path:
+            'https://www.googleapis.com/calendar/v3/calendars/primary/events',
+          method: 'POST',
+          body: createEventObject(scheduleItem),
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+        .then(response => response.result);
+    });
 
   return Promise.all(createEventRequests);
 }

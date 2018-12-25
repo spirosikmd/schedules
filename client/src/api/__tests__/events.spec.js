@@ -21,6 +21,10 @@ describe('createEvents', () => {
         startTime,
         endTime,
       },
+      {
+        workWith: ['test3', 'test4'],
+        location: 'Test5',
+      },
     ];
 
     window.gapi = {
