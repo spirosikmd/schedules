@@ -186,7 +186,7 @@ class Schedule extends PureComponent {
                   <Grid item>
                     {eventsCreatedOnce && (
                       <Typography>
-                        You have created events for this schedule already!
+                        You've created events for this schedule!
                       </Typography>
                     )}
                   </Grid>
