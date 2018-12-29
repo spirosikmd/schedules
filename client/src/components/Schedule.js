@@ -34,6 +34,9 @@ const styles = theme => ({
   info: {
     marginTop: theme.spacing.unit,
   },
+  createEntry: {
+    marginTop: theme.spacing.unit,
+  },
 });
 
 class Schedule extends PureComponent {
@@ -197,9 +200,6 @@ class Schedule extends PureComponent {
           <Grid item>
             <Grid container alignItems="center" spacing={8}>
               <Grid item>
-                <CreateEntryForm onSubmit={this.handleCreateEntry} />
-              </Grid>
-              <Grid item>
                 {settings && (
                   <ScheduleSettings
                     hourlyWage={settings.hourlyWage}
@@ -241,6 +241,9 @@ class Schedule extends PureComponent {
             )}
           </Table>
         </Paper>
+        <div className={classes.createEntry}>
+          <CreateEntryForm onSubmit={this.handleCreateEntry} />
+        </div>
         <div className={classes.info}>
           <Typography>
             <strong>Total Hours:</strong> {totalHours}
