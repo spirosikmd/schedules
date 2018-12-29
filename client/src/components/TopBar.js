@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import MenuIcon from '@material-ui/icons/Menu';
 import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
+import Avatar from '@material-ui/core/Avatar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import { withStyles } from '@material-ui/core/styles';
 import { GoogleLogout } from 'react-google-login';
 
@@ -21,8 +23,30 @@ const styles = {
   },
 };
 
-const TopBar = React.memo(
-  ({ user, onMenuIconClick, onGoogleLogoutSuccess, classes }) => {
+class TopBar extends PureComponent {
+  state = {
+    anchorEl: null,
+  };
+
+  handleClick = event => {
+    this.setState({ anchorEl: event.currentTarget });
+  };
+
+  handleClose = () => {
+    this.setState({ anchorEl: null });
+  };
+
+  render() {
+    const {
+      user,
+      onMenuIconClick,
+      onGoogleLogoutSuccess,
+      classes,
+      profileImageUrl,
+    } = this.props;
+    const { anchorEl } = this.state;
+    const name = `${user.firstName} ${user.lastName}`;
+
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -35,23 +59,42 @@ const TopBar = React.memo(
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              {user.firstName} {user.lastName}
-            </Typography>
-            <GoogleLogout
-              icon={false}
-              onLogoutSuccess={onGoogleLogoutSuccess}
-              render={props => (
-                <Button color="inherit" onClick={props.onClick}>
-                  Logout
-                </Button>
-              )}
+            <div className={classes.grow} />
+            <Avatar
+              alt={name}
+              src={profileImageUrl}
+              aria-owns={anchorEl ? 'account-menu' : undefined}
+              aria-haspopup="true"
+              onClick={this.handleClick}
             />
+            <Menu
+              id="account-menu"
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={this.handleClose}
+            >
+              <MenuItem>{name}</MenuItem>
+              <GoogleLogout
+                icon={false}
+                onLogoutSuccess={onGoogleLogoutSuccess}
+                render={props => (
+                  <MenuItem onClick={props.onClick}>Logout</MenuItem>
+                )}
+              />
+            </Menu>
           </Toolbar>
         </AppBar>
       </div>
     );
   }
-);
+}
+
+TopBar.propTypes = {
+  user: PropTypes.object.isRequired,
+  onMenuIconClick: PropTypes.func.isRequired,
+  onGoogleLogoutSuccess: PropTypes.func.isRequired,
+  profileImageUrl: PropTypes.string.isRequired,
+  classes: PropTypes.object.isRequired,
+};
 
 export default withStyles(styles)(TopBar);

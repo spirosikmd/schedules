@@ -26,6 +26,7 @@ class App extends PureComponent {
       details: '',
     },
     isDrawerOpen: false,
+    profileImageUrl: '',
   };
 
   constructor(props) {
@@ -38,6 +39,7 @@ class App extends PureComponent {
 
   handleGoogleLoginSuccess(response) {
     this.props.createUserFromAccessToken(response.accessToken);
+    this.setState({ profileImageUrl: response.profileObj.imageUrl });
   }
 
   handleGoogleLoginFailure({ error, details }) {
@@ -72,6 +74,7 @@ class App extends PureComponent {
         <CssBaseline />
         <TopBar
           user={user}
+          profileImageUrl={this.state.profileImageUrl}
           onMenuIconClick={() => this.toggleDrawer(true)}
           onGoogleLogoutSuccess={this.handleGoogleLogoutSuccess}
         />
