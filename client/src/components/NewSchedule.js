@@ -1,25 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Button from '@material-ui/core/Button';
-import ButtonBase from '@material-ui/core/ButtonBase';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-
-const styles = theme => ({
-  createScheduleButton: {
-    padding: theme.spacing.unit * 2,
-    border: '1px dashed',
-    borderRadius: theme.shape.borderRadius,
-    width: '100%',
-  },
-});
 
 class NewSchedule extends PureComponent {
   state = {
@@ -51,16 +39,11 @@ class NewSchedule extends PureComponent {
   };
 
   render() {
-    const { classes, fullScreen } = this.props;
+    const { fullScreen } = this.props;
 
     return (
       <Fragment>
-        <ButtonBase
-          className={classes.createScheduleButton}
-          onClick={this.handleClickOpen}
-        >
-          <Typography variant="button">new schedule</Typography>
-        </ButtonBase>
+        <Button onClick={this.handleClickOpen}>create new</Button>
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}
@@ -105,4 +88,4 @@ NewSchedule.defaultProps = {
   onCreate: () => {},
 };
 
-export default withStyles(styles)(withMobileDialog()(NewSchedule));
+export default withMobileDialog()(NewSchedule);

@@ -30,18 +30,17 @@ const styles = theme => ({
   item: {
     padding: theme.spacing.unit,
   },
-  editActions: {
-    marginLeft: theme.spacing.unit,
+  actions: {
+    marginBottom: theme.spacing.unit,
   },
   editContainer: {
     paddingLeft: theme.spacing.unit * 2,
   },
-  scheduleFileUploadForm: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
-  },
   scheduleLink: {
     paddingLeft: theme.spacing.unit,
+  },
+  info: {
+    marginTop: theme.spacing.unit,
   },
 });
 
@@ -194,10 +193,17 @@ class Home extends Component {
 
     return (
       <Suspense fallback={<Loader loading={isLoading} />}>
-        <Grid container spacing={16}>
-          <Grid item xs={12}>
+        <Grid container spacing={8} className={classes.actions}>
+          <Grid item>
+            <ScheduleFileUploadForm
+              onSubmit={this.handleScheduleFileUploadFormSubmit}
+            />
+          </Grid>
+          <Grid item>
             <NewSchedule onCreate={this.handleCreateSchedule} />
           </Grid>
+        </Grid>
+        <Grid container spacing={16}>
           {schedules.map(schedule => (
             <Grid item xs={12} key={schedule.id}>
               <Paper className={classes.item}>
@@ -269,13 +275,8 @@ class Home extends Component {
             </Grid>
           ))}
         </Grid>
-        <div className={classes.scheduleFileUploadForm}>
-          <ScheduleFileUploadForm
-            onSubmit={this.handleScheduleFileUploadFormSubmit}
-          />
-        </div>
         {holyTotal > 0 && (
-          <Typography>
+          <Typography className={classes.info}>
             <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
           </Typography>
         )}
