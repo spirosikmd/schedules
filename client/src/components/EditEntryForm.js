@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -9,6 +10,13 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
+import Chip from '@material-ui/core/Chip';
+
+const style = theme => ({
+  workWith: {
+    margin: theme.spacing.unit / 2,
+  },
+});
 
 function getTimeDate(date, time) {
   const [hours, minutes] = time.split(':');
@@ -37,6 +45,8 @@ class EditEntryForm extends PureComponent {
     startTime: formatDateToTime(this.props.startTime) || '',
     endTime: formatDateToTime(this.props.endTime) || '',
     location: this.props.location || '',
+    workWith: this.props.workWith || [],
+    workWithPerson: '',
   };
 
   handleInputChange = event => {
@@ -49,7 +59,7 @@ class EditEntryForm extends PureComponent {
   };
 
   handleClose = () => {
-    const { hours, date, startTime, endTime, location } = this.props;
+    const { hours, date, startTime, endTime, location, workWith } = this.props;
 
     this.setState({
       open: false,
@@ -58,13 +68,14 @@ class EditEntryForm extends PureComponent {
       startTime: formatDateToTime(startTime),
       endTime: formatDateToTime(endTime),
       location,
+      workWith,
     });
   };
 
   handleSubmit = event => {
     event.preventDefault();
 
-    const { hours, date, startTime, endTime, location } = this.state;
+    const { hours, date, startTime, endTime, location, workWith } = this.state;
 
     this.props.onSubmit({
       hours,
@@ -72,13 +83,31 @@ class EditEntryForm extends PureComponent {
       startTime: getTimeDate(date, startTime),
       endTime: getTimeDate(date, endTime),
       location,
+      workWith,
     });
 
     this.setState({ open: false });
   };
 
+  handleWorkWithKeyUp = event => {
+    if (event.key !== 'Enter') return;
+    const workWith = event.target.value;
+
+    this.setState(prevState => ({
+      workWith: [...prevState.workWith, workWith],
+      workWithPerson: '',
+    }));
+  };
+
+  handleWorkWithDelete = value => {
+    const workWith = [...this.state.workWith];
+    const index = workWith.indexOf(value);
+    workWith.splice(index, 1);
+    this.setState({ workWith });
+  };
+
   render() {
-    const { fullScreen } = this.props;
+    const { fullScreen, classes } = this.props;
 
     return (
       <Fragment>
@@ -145,6 +174,24 @@ class EditEntryForm extends PureComponent {
               }}
               fullWidth
             />
+            <TextField
+              margin="normal"
+              id="workWith"
+              label="Work with"
+              value={this.state.workWithPerson}
+              onChange={this.handleInputChange}
+              onKeyUp={this.handleWorkWithKeyUp}
+              name="workWithPerson"
+              fullWidth
+            />
+            {this.state.workWith.map((workWith, index) => (
+              <Chip
+                key={index}
+                label={workWith}
+                className={classes.workWith}
+                onDelete={() => this.handleWorkWithDelete(workWith)}
+              />
+            ))}
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="primary">
@@ -165,6 +212,7 @@ EditEntryForm.propTypes = {
   hours: PropTypes.number.isRequired,
   date: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
 };
 
-export default withMobileDialog()(EditEntryForm);
+export default withStyles(style)(withMobileDialog()(EditEntryForm));

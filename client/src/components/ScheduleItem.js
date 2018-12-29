@@ -41,6 +41,7 @@ const ScheduleItem = React.memo(
               startTime={daySchedule.startTime}
               endTime={daySchedule.endTime}
               location={daySchedule.location}
+              workWith={daySchedule.workWith}
               onSubmit={onEditClick}
             />
             <ResponsiveConfirmDeleteDialog

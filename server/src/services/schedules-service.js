@@ -251,13 +251,14 @@ function createEntriesForSchedule(userId, scheduleId, entries) {
         }
 
         const executions = entries.map(
-          ({ date, hours, startTime, endTime, location }) => {
+          ({ date, hours, startTime, endTime, location, workWith }) => {
             const doc = {
               date,
               hours,
               startTime,
               endTime,
               location,
+              workWith,
               user: user._id,
               schedule: schedule._id,
             };
@@ -290,7 +291,7 @@ function updateEntryForSchedule(
   userId,
   scheduleId,
   entryId,
-  { hours, date, startTime, endTime, location }
+  { hours, date, startTime, endTime, location, workWith }
 ) {
   return new Promise((resolve, reject) => {
     const doc = {
@@ -299,6 +300,7 @@ function updateEntryForSchedule(
       ...(startTime !== undefined && { startTime }),
       ...(endTime !== undefined && { endTime }),
       ...(location !== undefined && { location }),
+      ...(workWith !== undefined && { workWith }),
     };
 
     ScheduleEntry.findOneAndUpdate(

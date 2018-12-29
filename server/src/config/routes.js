@@ -89,6 +89,8 @@ module.exports = function(app) {
         })
         .toFloat(),
       check('entries.*.location').isString(),
+      check('entries.*.workWith').isArray(),
+      check('entries.*.workWith.*').isString(),
     ],
     validationErrors(),
     schedulesController.createEntriesForSchedule
@@ -122,6 +124,8 @@ module.exports = function(app) {
           checkNull: true,
         }),
       check('entries.*.location').isString(),
+      check('entries.*.workWith').isArray(),
+      check('entries.*.workWith.*').isString(),
     ],
     validationErrors(),
     schedulesController.updateEntryForSchedule
