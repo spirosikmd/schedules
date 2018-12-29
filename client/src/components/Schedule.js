@@ -36,7 +36,9 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 2,
   },
   toolbar: {
-    paddingRight: theme.spacing.unit,
+    [theme.breakpoints.down('sm')]: {
+      paddingRight: theme.spacing.unit,
+    },
   },
   eventsMessage: {
     marginTop: theme.spacing.unit,
