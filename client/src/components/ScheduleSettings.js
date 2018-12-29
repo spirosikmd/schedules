@@ -10,6 +10,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class ScheduleSettings extends PureComponent {
   constructor(props) {
@@ -48,9 +49,11 @@ class ScheduleSettings extends PureComponent {
 
     return (
       <Fragment>
-        <IconButton onClick={this.handleClickOpen}>
-          <Settings />
-        </IconButton>
+        <Tooltip title="Settings">
+          <IconButton onClick={this.handleClickOpen} aria-label="Settings">
+            <Settings />
+          </IconButton>
+        </Tooltip>
         <Dialog
           fullScreen={fullScreen}
           open={open}

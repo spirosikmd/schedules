@@ -19,7 +19,7 @@ import {
 import withAuth from './withAuth';
 import Loader from './Loader';
 import CreateEntryForm from './CreateEntryForm';
-import { Toolbar } from '@material-ui/core';
+import Toolbar from '@material-ui/core/Toolbar';
 
 const ScheduleItem = lazy(() => import('./ScheduleItem'));
 const ScheduleHeader = lazy(() => import('./ScheduleHeader'));
@@ -174,7 +174,7 @@ class Schedule extends PureComponent {
       <Suspense fallback={<Loader loading={isLoading} />}>
         <Grid container alignItems="center" justify="space-between">
           <Grid item>
-            <IconButton onClick={this.handleBackButtonClick}>
+            <IconButton onClick={this.handleBackButtonClick} aria-label="Back">
               <ArrowBack />
             </IconButton>
           </Grid>
@@ -204,16 +204,14 @@ class Schedule extends PureComponent {
                   <Grid item>
                     <CreateEntryForm onSubmit={this.handleCreateEntry} />
                   </Grid>
-                  <Grid item>
-                    {settings && (
-                      <div>
-                        <ScheduleSettings
-                          hourlyWage={settings.hourlyWage}
-                          onSave={this.handleSettingsSave}
-                        />
-                      </div>
-                    )}
-                  </Grid>
+                  {settings && (
+                    <Grid item>
+                      <ScheduleSettings
+                        hourlyWage={settings.hourlyWage}
+                        onSave={this.handleSettingsSave}
+                      />
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
             </Grid>

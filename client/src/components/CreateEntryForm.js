@@ -9,6 +9,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Add from '@material-ui/icons/Add';
+import Tooltip from '@material-ui/core/Tooltip';
 
 class CreateEntryForm extends PureComponent {
   state = {
@@ -46,9 +47,14 @@ class CreateEntryForm extends PureComponent {
 
     return (
       <Fragment>
-        <IconButton onClick={this.handleClickOpen}>
-          <Add />
-        </IconButton>
+        <Tooltip title="Create new entry">
+          <IconButton
+            onClick={this.handleClickOpen}
+            aria-label="Create new entry"
+          >
+            <Add />
+          </IconButton>
+        </Tooltip>
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}
