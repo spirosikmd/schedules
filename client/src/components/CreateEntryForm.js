@@ -23,6 +23,7 @@ class CreateEntryForm extends PureComponent {
     date: '',
     startTime: '',
     endTime: '',
+    location: '',
   };
 
   handleInputChange = event => {
@@ -41,17 +42,24 @@ class CreateEntryForm extends PureComponent {
   handleSubmit = event => {
     event.preventDefault();
 
-    const { hours, date, startTime, endTime } = this.state;
+    const { hours, date, startTime, endTime, location } = this.state;
 
     this.props.onSubmit({
       hours,
       date: new Date(date),
       startTime: getTimeDate(date, startTime),
       endTime: getTimeDate(date, endTime),
+      location,
     });
     this.handleClose();
 
-    this.setState({ hours: 0, date: '', startTime: '', endTime: '' });
+    this.setState({
+      hours: 0,
+      date: '',
+      startTime: '',
+      endTime: '',
+      location: '',
+    });
   };
 
   render() {
@@ -83,6 +91,15 @@ class CreateEntryForm extends PureComponent {
               onChange={this.handleInputChange}
               name="date"
               type="date"
+              fullWidth
+            />
+            <TextField
+              label="Location"
+              margin="normal"
+              id="location"
+              value={this.state.location}
+              onChange={this.handleInputChange}
+              name="location"
               fullWidth
             />
             <TextField

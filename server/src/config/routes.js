@@ -88,6 +88,7 @@ module.exports = function(app) {
           checkNull: true,
         })
         .toFloat(),
+      check('entries.*.location').isString(),
     ],
     validationErrors(),
     schedulesController.createEntriesForSchedule
