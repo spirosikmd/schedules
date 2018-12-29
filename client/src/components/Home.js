@@ -40,7 +40,7 @@ const styles = theme => ({
     paddingLeft: theme.spacing.unit,
   },
   info: {
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing.unit * 2,
   },
 });
 

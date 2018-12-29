@@ -33,7 +33,7 @@ const styles = theme => ({
     overflowX: 'auto',
   },
   info: {
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing.unit * 2,
   },
   toolbar: {
     paddingRight: theme.spacing.unit,
