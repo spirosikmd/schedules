@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import Grid from '@material-ui/core/Grid';
-import ResponsiveConfirmDeleteDialog from './ResponsiveConfirmDeleteDialog';
+import Checkbox from '@material-ui/core/Checkbox';
 import EditEntryForm from './EditEntryForm';
 
 function renderTime(time) {
@@ -21,9 +21,12 @@ function formatDate(dateString) {
 }
 
 const ScheduleItem = React.memo(
-  ({ daySchedule, onEditClick, onDeleteClick }) => {
+  ({ daySchedule, onEditClick, isSelected, onSelect }) => {
     return (
       <TableRow>
+        <TableCell padding="checkbox">
+          <Checkbox checked={isSelected} onClick={onSelect} />
+        </TableCell>
         <TableCell>{new Date(daySchedule.date).toDateString()}</TableCell>
         <TableCell>{daySchedule.location || '-'}</TableCell>
         <TableCell>{renderTime(daySchedule.startTime)}</TableCell>
@@ -44,11 +47,6 @@ const ScheduleItem = React.memo(
               workWith={daySchedule.workWith}
               onSubmit={onEditClick}
             />
-            <ResponsiveConfirmDeleteDialog
-              title="Delete entry?"
-              content="Are you sure you want to delete this schedule entry?"
-              onDeleteClick={onDeleteClick}
-            />
           </Grid>
         </TableCell>
       </TableRow>
@@ -59,7 +57,8 @@ const ScheduleItem = React.memo(
 ScheduleItem.propTypes = {
   daySchedule: PropTypes.object.isRequired,
   onEditClick: PropTypes.func.isRequired,
-  onDeleteClick: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
+  onSelect: PropTypes.func.isRequired,
 };
 
 export default ScheduleItem;

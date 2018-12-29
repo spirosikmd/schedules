@@ -1,4 +1,5 @@
 import React, { PureComponent, Suspense, lazy } from 'react';
+import classNames from 'classnames';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from '@material-ui/icons/ArrowBack';
@@ -8,6 +9,8 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import { withStyles } from '@material-ui/core/styles';
+import { lighten } from '@material-ui/core/styles/colorManipulator';
+import Toolbar from '@material-ui/core/Toolbar';
 import {
   fetchSchedule,
   createEvents,
@@ -19,7 +22,7 @@ import {
 import withAuth from './withAuth';
 import Loader from './Loader';
 import CreateEntryForm from './CreateEntryForm';
-import Toolbar from '@material-ui/core/Toolbar';
+import ResponsiveConfirmDeleteDialog from './ResponsiveConfirmDeleteDialog';
 
 const ScheduleItem = lazy(() => import('./ScheduleItem'));
 const ScheduleHeader = lazy(() => import('./ScheduleHeader'));
@@ -40,6 +43,16 @@ const styles = theme => ({
       paddingRight: theme.spacing.unit,
     },
   },
+  highlight:
+    theme.palette.type === 'light'
+      ? {
+          color: theme.palette.secondary.main,
+          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
+        }
+      : {
+          color: theme.palette.text.primary,
+          backgroundColor: theme.palette.secondary.dark,
+        },
   eventsMessage: {
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
@@ -54,6 +67,7 @@ class Schedule extends PureComponent {
     isSnackbarOpen: false,
     snackbarMessage: '',
     snackbarVariant: 'success',
+    selected: [],
   };
 
   componentDidMount() {
@@ -133,10 +147,15 @@ class Schedule extends PureComponent {
     }
   };
 
-  handleDeleteEntry = async entryId => {
+  handleDeleteEntries = async () => {
     try {
-      await deleteScheduleEntry(this.props.scheduleId, entryId);
+      await Promise.all(
+        this.state.selected.map(entryId =>
+          deleteScheduleEntry(this.props.scheduleId, entryId)
+        )
+      );
       this.getSchedule();
+      this.setState({ selected: [] });
     } catch (error) {
       this.setState({
         isSnackbarOpen: true,
@@ -159,6 +178,41 @@ class Schedule extends PureComponent {
     }
   };
 
+  handleSelectAllClick = event => {
+    if (event.target.checked) {
+      this.setState(state => ({
+        selected: state.schedule.schedule.map(daySchedule => daySchedule.id),
+      }));
+      return;
+    }
+    this.setState({ selected: [] });
+  };
+
+  isScheduleItemSelected = id => {
+    return this.state.selected.indexOf(id) !== -1;
+  };
+
+  handleScheduleItemSelect = id => {
+    const { selected } = this.state;
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+
+    this.setState({ selected: newSelected });
+  };
+
   render() {
     const { classes } = this.props;
     const {
@@ -174,7 +228,10 @@ class Schedule extends PureComponent {
       isSnackbarOpen,
       snackbarMessage,
       snackbarVariant,
+      selected,
     } = this.state;
+
+    const numSelected = selected.length;
 
     return (
       <Suspense fallback={<Loader loading={isLoading} />}>
@@ -203,33 +260,57 @@ class Schedule extends PureComponent {
           </Typography>
         )}
         <Paper className={classes.table}>
-          <Toolbar className={classes.toolbar}>
+          <Toolbar
+            className={classNames(classes.toolbar, {
+              [classes.highlight]: numSelected > 0,
+            })}
+          >
             <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <Typography variant="h6" id="tableTitle">
-                  {name}
-                </Typography>
+                {numSelected > 0 ? (
+                  <Typography color="inherit" variant="subtitle1">
+                    {numSelected} selected
+                  </Typography>
+                ) : (
+                  <Typography variant="h6" id="tableTitle">
+                    {name}
+                  </Typography>
+                )}
               </Grid>
               <Grid item>
                 <Grid container alignItems="center">
-                  <Grid item>
-                    <CreateEntryForm onSubmit={this.handleCreateEntry} />
-                  </Grid>
-                  {settings && (
-                    <Grid item>
-                      <ScheduleSettings
-                        hourlyWage={settings.hourlyWage}
-                        onSave={this.handleSettingsSave}
-                      />
-                    </Grid>
+                  {numSelected > 0 ? (
+                    <ResponsiveConfirmDeleteDialog
+                      title="Delete selected entries?"
+                      content="Are you sure you want to delete the selected entries?"
+                      onDeleteClick={this.handleDeleteEntries}
+                    />
+                  ) : (
+                    <>
+                      <Grid item>
+                        <CreateEntryForm onSubmit={this.handleCreateEntry} />
+                      </Grid>
+                      {settings && (
+                        <Grid item>
+                          <ScheduleSettings
+                            hourlyWage={settings.hourlyWage}
+                            onSave={this.handleSettingsSave}
+                          />
+                        </Grid>
+                      )}
+                    </>
                   )}
                 </Grid>
               </Grid>
             </Grid>
           </Toolbar>
-          <Table>
-            <ScheduleHeader />
-            {schedule && (
+          {schedule && (
+            <Table>
+              <ScheduleHeader
+                numSelected={numSelected}
+                onSelectAllClick={this.handleSelectAllClick}
+                rowCount={schedule.length}
+              />
               <TableBody>
                 {schedule.map(daySchedule => (
                   <ScheduleItem
@@ -238,12 +319,15 @@ class Schedule extends PureComponent {
                     onEditClick={data =>
                       this.handleEditClick(daySchedule.id, data)
                     }
-                    onDeleteClick={() => this.handleDeleteEntry(daySchedule.id)}
+                    isSelected={this.isScheduleItemSelected(daySchedule.id)}
+                    onSelect={() =>
+                      this.handleScheduleItemSelect(daySchedule.id)
+                    }
                   />
                 ))}
               </TableBody>
-            )}
-          </Table>
+            </Table>
+          )}
         </Paper>
         <div className={classes.info}>
           <Typography>
