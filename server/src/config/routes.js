@@ -149,6 +149,11 @@ module.exports = function(app) {
   );
 
   app.get(
+    `${BASE}/aggregations/weekly-hour-data`,
+    aggregationsController.getWeeklyHourData
+  );
+
+  app.get(
     `${BASE}/auth/google`,
     passport.authenticate('google-token', { session: false }),
     authController.authenticate

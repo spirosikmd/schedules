@@ -12,12 +12,16 @@ import {
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import { fetchWeeklyWageDataAggregation } from '../api';
+import Grid from '@material-ui/core/Grid';
+import {
+  fetchWeeklyWageDataAggregation,
+  fetchWeeklyHourDataAggregation,
+} from '../api';
 import withAuth from './withAuth';
 import Loader from './Loader';
 
 const styles = theme => ({
-  root: {
+  chartRoot: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 6,
@@ -33,52 +37,97 @@ const styles = theme => ({
 class Charts extends PureComponent {
   state = {
     weeklyWageData: [],
-    isLoading: true,
+    weeklyHourData: [],
+    isWeeklyWageDataLoading: false,
+    isWeeklyHourDataLoading: false,
   };
 
   componentDidMount() {
+    this.setState({
+      isWeeklyWageDataLoading: true,
+      isWeeklyHourDataLoading: true,
+    });
     fetchWeeklyWageDataAggregation()
       .then(response => {
         const weeklyWageData = response.data.weeklyWageData;
-        this.setState({ weeklyWageData, isLoading: false });
+        this.setState({ weeklyWageData, isWeeklyWageDataLoading: false });
+      })
+      .catch(err => console.log(err));
+
+    fetchWeeklyHourDataAggregation()
+      .then(response => {
+        const weeklyHourData = response.data.weeklyHourData;
+        this.setState({ weeklyHourData, isWeeklyHourDataLoading: false });
       })
       .catch(err => console.log(err));
   }
 
   render() {
     const { classes } = this.props;
-    const { weeklyWageData, isLoading } = this.state;
-
-    if (isLoading) {
-      return <Loader loading={isLoading} />;
-    }
-
-    if (weeklyWageData.length <= 0) {
-      return null;
-    }
+    const {
+      weeklyWageData,
+      weeklyHourData,
+      isWeeklyWageDataLoading,
+      isWeeklyHourDataLoading,
+    } = this.state;
 
     return (
-      <Paper className={classes.root}>
-        <section className={classes.section}>
-          <Typography variant="h5" component="h3">
-            Weekly Wage
-          </Typography>
-          <ResponsiveContainer>
-            <LineChart
-              className={classes.chart}
-              data={weeklyWageData}
-              margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
-            >
-              <XAxis dataKey="name" />
-              <YAxis />
-              <CartesianGrid strokeDasharray="3 3" />
-              <Tooltip formatter={value => value.toFixed(2)} />
-              <Legend />
-              <Line type="monotone" dataKey="weeklyWage" />
-            </LineChart>
-          </ResponsiveContainer>
-        </section>
-      </Paper>
+      <Grid container spacing={16}>
+        <Grid item xs={12}>
+          <Paper className={classes.chartRoot}>
+            {isWeeklyWageDataLoading ? (
+              <Loader loading={isWeeklyWageDataLoading} />
+            ) : (
+              <section className={classes.section}>
+                <Typography variant="h5" component="h3">
+                  Weekly Wage
+                </Typography>
+                <ResponsiveContainer>
+                  <LineChart
+                    className={classes.chart}
+                    data={weeklyWageData}
+                    margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
+                  >
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <Tooltip formatter={value => value.toFixed(2)} />
+                    <Legend />
+                    <Line type="monotone" dataKey="weeklyWage" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </section>
+            )}
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.chartRoot}>
+            {isWeeklyHourDataLoading ? (
+              <Loader loading={isWeeklyHourDataLoading} />
+            ) : (
+              <section className={classes.section}>
+                <Typography variant="h5" component="h3">
+                  Weekly Hours
+                </Typography>
+                <ResponsiveContainer>
+                  <LineChart
+                    className={classes.chart}
+                    data={weeklyHourData}
+                    margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
+                  >
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <Tooltip formatter={value => value.toFixed(2)} />
+                    <Legend />
+                    <Line type="monotone" dataKey="weeklyHours" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </section>
+            )}
+          </Paper>
+        </Grid>
+      </Grid>
     );
   }
 }

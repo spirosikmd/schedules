@@ -13,3 +13,10 @@ export async function fetchWeeklyWageDataAggregation() {
   });
   return response.json();
 }
+
+export async function fetchWeeklyHourDataAggregation() {
+  const response = await fetch(`${BASE}/aggregations/weekly-hour-data`, {
+    headers: getDefaultHeaders(),
+  });
+  return response.json();
+}

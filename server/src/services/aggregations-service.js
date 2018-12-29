@@ -87,7 +87,55 @@ function calculateWeeklyWageData(userId) {
   });
 }
 
+function calculateWeeklyHourData(userId) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject('Cannot get weekly hour data');
+      }
+
+      ScheduleEntry.find({ user: user._id })
+        .populate('schedule')
+        .exec((err, scheduleEntries) => {
+          if (err) {
+            return reject(err);
+          }
+
+          const weeklyHourData = [];
+
+          scheduleEntries.forEach(scheduleEntry => {
+            const scheduleCreatedAt = scheduleEntry.schedule.createdAt;
+            const scheduleName = scheduleEntry.schedule.name;
+            const scheduleId = scheduleEntry.schedule._id;
+            const foundWeeklyHourDataSchedule = weeklyHourData.find(
+              weeklyHourDataSchedule => weeklyHourDataSchedule.id === scheduleId
+            );
+            if (foundWeeklyHourDataSchedule) {
+              foundWeeklyHourDataSchedule.weeklyHours += scheduleEntry.hours;
+            } else {
+              weeklyHourData.push({
+                id: scheduleId,
+                name: scheduleName,
+                createdAt: scheduleCreatedAt,
+                weeklyHours: scheduleEntry.hours,
+              });
+            }
+          });
+
+          weeklyHourData.sort((a, b) => a.createdAt - b.createdAt);
+
+          resolve(createAggregationResponse({ weeklyHourData }));
+        });
+    });
+  });
+}
+
 module.exports = {
   calculateHolyTotal,
   calculateWeeklyWageData,
+  calculateWeeklyHourData,
 };
