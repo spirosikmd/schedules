@@ -70,6 +70,18 @@ module.exports = function(app) {
           checkFalsy: true,
           checkNull: true,
         }),
+      check('entries.*.startTime')
+        .isRFC3339()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
+      check('entries.*.endTime')
+        .isRFC3339()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
       check('entries.*.hours')
         .exists({
           checkFalsy: true,

@@ -250,24 +250,28 @@ function createEntriesForSchedule(userId, scheduleId, entries) {
           return reject('Cannot create schedule entry, schedule not found');
         }
 
-        const executions = entries.map(({ date, hours }) => {
-          const doc = {
-            date,
-            hours,
-            user: user._id,
-            schedule: schedule._id,
-          };
+        const executions = entries.map(
+          ({ date, hours, startTime, endTime }) => {
+            const doc = {
+              date,
+              hours,
+              startTime,
+              endTime,
+              user: user._id,
+              schedule: schedule._id,
+            };
 
-          return new Promise((resolve, reject) => {
-            ScheduleEntry.create(doc, (err, scheduleEntry) => {
-              if (err) {
-                return reject(err);
-              }
+            return new Promise((resolve, reject) => {
+              ScheduleEntry.create(doc, (err, scheduleEntry) => {
+                if (err) {
+                  return reject(err);
+                }
 
-              resolve(scheduleEntry);
+                resolve(scheduleEntry);
+              });
             });
-          });
-        });
+          }
+        );
 
         Promise.all(executions)
           .then(scheduleEntries => {

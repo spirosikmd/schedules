@@ -11,11 +11,18 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Add from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 
+function getTimeDate(date, time) {
+  const [hours, minutes] = time.split(':');
+  return new Date(new Date(date).setHours(hours, minutes));
+}
+
 class CreateEntryForm extends PureComponent {
   state = {
     open: false,
     hours: 0,
     date: '',
+    startTime: '',
+    endTime: '',
   };
 
   handleInputChange = event => {
@@ -34,12 +41,17 @@ class CreateEntryForm extends PureComponent {
   handleSubmit = event => {
     event.preventDefault();
 
-    const { hours, date } = this.state;
+    const { hours, date, startTime, endTime } = this.state;
 
-    this.props.onSubmit({ hours, date: new Date(date) });
+    this.props.onSubmit({
+      hours,
+      date: new Date(date),
+      startTime: getTimeDate(date, startTime),
+      endTime: getTimeDate(date, endTime),
+    });
     this.handleClose();
 
-    this.setState({ hours: 0, date: '' });
+    this.setState({ hours: 0, date: '', startTime: '', endTime: '' });
   };
 
   render() {
@@ -64,13 +76,33 @@ class CreateEntryForm extends PureComponent {
           <DialogTitle id="form-dialog-title">Create new entry</DialogTitle>
           <DialogContent>
             <TextField
+              label="Date"
               margin="normal"
               id="date"
               value={this.state.date}
               onChange={this.handleInputChange}
-              placeholder="When?"
               name="date"
               type="date"
+              fullWidth
+            />
+            <TextField
+              label="Start time"
+              margin="normal"
+              id="start-time"
+              value={this.state.startTime}
+              onChange={this.handleInputChange}
+              name="startTime"
+              type="time"
+              fullWidth
+            />
+            <TextField
+              label="End time"
+              margin="normal"
+              id="end-time"
+              value={this.state.endTime}
+              onChange={this.handleInputChange}
+              name="endTime"
+              type="time"
               fullWidth
             />
             <TextField
