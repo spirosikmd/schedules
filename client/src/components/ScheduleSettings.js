@@ -1,6 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Settings from '@material-ui/icons/Settings';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -46,7 +48,9 @@ class ScheduleSettings extends PureComponent {
 
     return (
       <Fragment>
-        <Button onClick={this.handleClickOpen}>Settings</Button>
+        <IconButton onClick={this.handleClickOpen}>
+          <Settings />
+        </IconButton>
         <Dialog
           fullScreen={fullScreen}
           open={open}
