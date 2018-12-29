@@ -286,11 +286,19 @@ function createEntriesForSchedule(userId, scheduleId, entries) {
   });
 }
 
-function updateEntryForSchedule(userId, scheduleId, entryId, { hours, date }) {
+function updateEntryForSchedule(
+  userId,
+  scheduleId,
+  entryId,
+  { hours, date, startTime, endTime, location }
+) {
   return new Promise((resolve, reject) => {
     const doc = {
       ...(hours !== undefined && { hours }),
       ...(date !== undefined && { date }),
+      ...(startTime !== undefined && { startTime }),
+      ...(endTime !== undefined && { endTime }),
+      ...(location !== undefined && { location }),
     };
 
     ScheduleEntry.findOneAndUpdate(

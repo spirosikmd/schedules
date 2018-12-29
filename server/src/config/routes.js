@@ -109,6 +109,19 @@ module.exports = function(app) {
           checkNull: true,
         })
         .toFloat(),
+      check('entries.*.startTime')
+        .isRFC3339()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
+      check('entries.*.endTime')
+        .isRFC3339()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
+      check('entries.*.location').isString(),
     ],
     validationErrors(),
     schedulesController.updateEntryForSchedule

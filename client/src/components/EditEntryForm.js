@@ -10,11 +10,33 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 
+function getTimeDate(date, time) {
+  const [hours, minutes] = time.split(':');
+  return new Date(new Date(date).setHours(hours, minutes));
+}
+
+function formatDateToTime(date) {
+  if (!date) return;
+  const dateObject = new Date(date);
+  const hours = dateObject
+    .getHours()
+    .toString()
+    .padStart(2, '0');
+  const minutes = dateObject
+    .getMinutes()
+    .toString()
+    .padStart(2, '0');
+  return `${hours}:${minutes}`;
+}
+
 class EditEntryForm extends PureComponent {
   state = {
     open: false,
     hours: this.props.hours || 0,
     date: this.props.date || '',
+    startTime: formatDateToTime(this.props.startTime) || '',
+    endTime: formatDateToTime(this.props.endTime) || '',
+    location: this.props.location || '',
   };
 
   handleInputChange = event => {
@@ -27,17 +49,30 @@ class EditEntryForm extends PureComponent {
   };
 
   handleClose = () => {
-    const { hours, date } = this.props;
+    const { hours, date, startTime, endTime, location } = this.props;
 
-    this.setState({ open: false, hours, date });
+    this.setState({
+      open: false,
+      hours,
+      date,
+      startTime: formatDateToTime(startTime),
+      endTime: formatDateToTime(endTime),
+      location,
+    });
   };
 
   handleSubmit = event => {
     event.preventDefault();
 
-    const { hours, date } = this.state;
+    const { hours, date, startTime, endTime, location } = this.state;
 
-    this.props.onSubmit({ hours, date: new Date(date) });
+    this.props.onSubmit({
+      hours,
+      date: new Date(date),
+      startTime: getTimeDate(date, startTime),
+      endTime: getTimeDate(date, endTime),
+      location,
+    });
 
     this.setState({ open: false });
   };
@@ -58,13 +93,42 @@ class EditEntryForm extends PureComponent {
           <DialogTitle id="form-dialog-title">Edit entry</DialogTitle>
           <DialogContent>
             <TextField
+              label="Date"
               margin="normal"
               id="date"
               value={this.state.date}
               onChange={this.handleInputChange}
-              placeholder="When?"
               name="date"
               type="date"
+              fullWidth
+            />
+            <TextField
+              label="Location"
+              margin="normal"
+              id="location"
+              value={this.state.location}
+              onChange={this.handleInputChange}
+              name="location"
+              fullWidth
+            />
+            <TextField
+              label="Start time"
+              margin="normal"
+              id="start-time"
+              value={this.state.startTime}
+              onChange={this.handleInputChange}
+              name="startTime"
+              type="time"
+              fullWidth
+            />
+            <TextField
+              label="End time"
+              margin="normal"
+              id="end-time"
+              value={this.state.endTime}
+              onChange={this.handleInputChange}
+              name="endTime"
+              type="time"
               fullWidth
             />
             <TextField

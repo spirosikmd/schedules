@@ -38,6 +38,9 @@ const ScheduleItem = React.memo(
             <EditEntryForm
               date={formatDate(daySchedule.date)}
               hours={daySchedule.hours}
+              startTime={daySchedule.startTime}
+              endTime={daySchedule.endTime}
+              location={daySchedule.location}
               onSubmit={onEditClick}
             />
             <ResponsiveConfirmDeleteDialog
