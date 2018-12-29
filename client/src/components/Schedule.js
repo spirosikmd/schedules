@@ -19,6 +19,7 @@ import {
 import withAuth from './withAuth';
 import Loader from './Loader';
 import CreateEntryForm from './CreateEntryForm';
+import { Toolbar } from '@material-ui/core';
 
 const ScheduleItem = lazy(() => import('./ScheduleItem'));
 const ScheduleHeader = lazy(() => import('./ScheduleHeader'));
@@ -33,6 +34,9 @@ const styles = theme => ({
   },
   info: {
     marginTop: theme.spacing.unit,
+  },
+  toolbar: {
+    paddingRight: theme.spacing.unit,
   },
 });
 
@@ -170,59 +174,50 @@ class Schedule extends PureComponent {
       <Suspense fallback={<Loader loading={isLoading} />}>
         <Grid container alignItems="center" justify="space-between">
           <Grid item>
-            <Grid container alignItems="center">
+            <IconButton onClick={this.handleBackButtonClick}>
+              <ArrowBack />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={this.handleCreateEventsClick}
+              disabled={this.state.isCreatingEvents}
+            >
+              {this.state.isCreatingEvents
+                ? 'creating events...'
+                : 'create events'}
+            </Button>
+          </Grid>
+        </Grid>
+        <Paper className={classes.table}>
+          <Toolbar className={classes.toolbar}>
+            <Grid container alignItems="center" justify="space-between">
               <Grid item>
-                <IconButton onClick={this.handleBackButtonClick}>
-                  <ArrowBack />
-                </IconButton>
+                <Typography variant="h6" id="tableTitle">
+                  {name}
+                </Typography>
               </Grid>
               <Grid item>
-                <Grid container alignItems="baseline" spacing={8}>
+                <Grid container alignItems="center">
                   <Grid item>
-                    <Typography variant="h5" component="h3">
-                      {name}
-                    </Typography>
+                    <CreateEntryForm onSubmit={this.handleCreateEntry} />
                   </Grid>
                   <Grid item>
-                    {eventsCreatedOnce && (
-                      <Typography>
-                        You've created events for this schedule!
-                      </Typography>
+                    {settings && (
+                      <div>
+                        <ScheduleSettings
+                          hourlyWage={settings.hourlyWage}
+                          onSave={this.handleSettingsSave}
+                        />
+                      </div>
                     )}
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container alignItems="center" spacing={8}>
-              <Grid item>
-                {settings && (
-                  <ScheduleSettings
-                    hourlyWage={settings.hourlyWage}
-                    onSave={this.handleSettingsSave}
-                  />
-                )}
-              </Grid>
-              <Grid item>
-                <CreateEntryForm onSubmit={this.handleCreateEntry} />
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={this.handleCreateEventsClick}
-                  disabled={this.state.isCreatingEvents}
-                >
-                  {this.state.isCreatingEvents
-                    ? 'creating events...'
-                    : 'create events'}
-                </Button>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Paper className={classes.table}>
+          </Toolbar>
           <Table>
             <ScheduleHeader />
             {schedule && (

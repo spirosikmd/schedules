@@ -2,11 +2,13 @@ import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
+import Add from '@material-ui/icons/Add';
 
 class CreateEntryForm extends PureComponent {
   state = {
@@ -44,7 +46,9 @@ class CreateEntryForm extends PureComponent {
 
     return (
       <Fragment>
-        <Button onClick={this.handleClickOpen}>Create Entry</Button>
+        <IconButton onClick={this.handleClickOpen}>
+          <Add />
+        </IconButton>
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}
