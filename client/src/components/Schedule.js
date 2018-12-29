@@ -38,6 +38,10 @@ const styles = theme => ({
   toolbar: {
     paddingRight: theme.spacing.unit,
   },
+  eventsMessage: {
+    marginTop: theme.spacing.unit,
+    marginBottom: theme.spacing.unit,
+  },
 });
 
 class Schedule extends PureComponent {
@@ -191,6 +195,11 @@ class Schedule extends PureComponent {
             </Button>
           </Grid>
         </Grid>
+        {eventsCreatedOnce && (
+          <Typography className={classes.eventsMessage}>
+            You've created events for this schedule!
+          </Typography>
+        )}
         <Paper className={classes.table}>
           <Toolbar className={classes.toolbar}>
             <Grid container alignItems="center" justify="space-between">
