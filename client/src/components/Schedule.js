@@ -1,6 +1,5 @@
 import React, { PureComponent, Suspense, lazy } from 'react';
 import classNames from 'classnames';
-import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Grid from '@material-ui/core/Grid';
@@ -23,6 +22,7 @@ import withAuth from './withAuth';
 import Loader from './Loader';
 import CreateEntryForm from './CreateEntryForm';
 import ResponsiveConfirmDeleteDialog from './ResponsiveConfirmDeleteDialog';
+import CreateEventsDialog from './CreateEventsDialog';
 
 const ScheduleItem = lazy(() => import('./ScheduleItem'));
 const ScheduleHeader = lazy(() => import('./ScheduleHeader'));
@@ -229,6 +229,7 @@ class Schedule extends PureComponent {
       snackbarMessage,
       snackbarVariant,
       selected,
+      isCreatingEvents,
     } = this.state;
 
     const numSelected = selected.length;
@@ -242,23 +243,13 @@ class Schedule extends PureComponent {
             </IconButton>
           </Grid>
           <Grid item>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={this.handleCreateEventsClick}
-              disabled={this.state.isCreatingEvents}
-            >
-              {this.state.isCreatingEvents
-                ? 'creating events...'
-                : 'create events'}
-            </Button>
+            <CreateEventsDialog
+              onCreateEventsClick={this.handleCreateEventsClick}
+              eventsCreatedOnce={eventsCreatedOnce}
+              isCreatingEvents={isCreatingEvents}
+            />
           </Grid>
         </Grid>
-        {eventsCreatedOnce && (
-          <Typography className={classes.eventsMessage}>
-            You've created events for this schedule!
-          </Typography>
-        )}
         <Paper className={classes.table}>
           <Toolbar
             className={classNames(classes.toolbar, {
