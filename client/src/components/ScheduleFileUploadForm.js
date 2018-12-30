@@ -82,7 +82,7 @@ class ScheduleFileUploadForm extends PureComponent {
               label="Set your name in the schedule file"
               value={this.state.person}
               onChange={this.handleInputChange}
-              placeholder="Enter your name in the schedule file"
+              placeholder={`For example angela, or jenny`}
               name="person"
               fullWidth
             />

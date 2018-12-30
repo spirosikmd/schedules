@@ -67,7 +67,7 @@ class ScheduleSettings extends PureComponent {
               autoFocus
               margin="normal"
               id="hourly-wage"
-              label="Hourly Wage"
+              label="Hourly wage"
               value={hourlyWage}
               onChange={this.handleInputChange}
               placeholder="Enter your hourly wage"
