@@ -169,7 +169,7 @@ module.exports = function(app) {
           checkNull: true,
         }),
       check('expires_in')
-        .isString()
+        .toInt()
         .exists({
           checkFalsy: true,
           checkNull: true,

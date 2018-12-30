@@ -8,7 +8,7 @@ function createToken(auth) {
     process.env.JWT_SECRET,
     {
       // This is set from Google login response and it is 1 hour by default.
-      expiresIn: parseInt(auth.expiresIn, 10),
+      expiresIn: auth.expiresIn,
     }
   );
 }
