@@ -68,9 +68,7 @@ class ScheduleFileUploadForm extends PureComponent {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">
-            Upload a new schedule
-          </DialogTitle>
+          <DialogTitle id="form-dialog-title">Upload new schedule</DialogTitle>
           <DialogContent>
             <TextField
               type="file"

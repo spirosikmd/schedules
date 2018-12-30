@@ -50,7 +50,7 @@ class NewSchedule extends PureComponent {
           onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
-          <DialogTitle id="form-dialog-title">New Schedule</DialogTitle>
+          <DialogTitle id="form-dialog-title">Create new schedule</DialogTitle>
           <DialogContent>
             <DialogContentText>
               Provide the following details to create new schedule.
