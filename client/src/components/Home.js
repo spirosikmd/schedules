@@ -1,4 +1,4 @@
-import React, { Component, Suspense, lazy } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from '@reach/router';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
@@ -18,13 +18,10 @@ import {
 } from '../api';
 import withAuth from './withAuth';
 import Loader from './Loader';
-
-const ScheduleFileUploadForm = lazy(() => import('./ScheduleFileUploadForm'));
-const ResponsiveConfirmDeleteDialog = lazy(() =>
-  import('./ResponsiveConfirmDeleteDialog')
-);
-const NewSchedule = lazy(() => import('./NewSchedule'));
-const MessageSnackbar = lazy(() => import('./MessageSnackbar'));
+import ScheduleFileUploadForm from './ScheduleFileUploadForm';
+import ResponsiveConfirmDeleteDialog from './ResponsiveConfirmDeleteDialog';
+import NewSchedule from './NewSchedule';
+import MessageSnackbar from './MessageSnackbar';
 
 const styles = theme => ({
   item: {
@@ -56,41 +53,27 @@ class Home extends Component {
     newScheduleName: '',
     holyTotal: 0,
     isDrawerOpen: false,
-    isLoading: true,
+    isLoadingSchedules: false,
     isSnackbarOpen: false,
     snackbarMessage: '',
     snackbarVariant: 'success',
   };
 
-  constructor(props) {
-    super(props);
-
-    this.handleScheduleFileUploadFormSubmit = this.handleScheduleFileUploadFormSubmit.bind(
-      this
-    );
-    this.handleCancelEditClick = this.handleCancelEditClick.bind(this);
-    this.handleNewScheduleNameChange = this.handleNewScheduleNameChange.bind(
-      this
-    );
-    this.handleCreateSchedule = this.handleCreateSchedule.bind(this);
-    this.handleSnackbarClose = this.handleSnackbarClose.bind(this);
-  }
-
   componentDidMount() {
+    this.setState({ isLoadingSchedules: true });
+
     fetchSchedules()
       .then(schedules => {
-        this.setState({ schedules, isLoading: false });
-
-        fetchHolyTotal()
-          .then(response =>
-            this.setState({ holyTotal: response.data.holyTotal })
-          )
-          .catch(err => console.log(err));
+        this.setState({ schedules, isLoadingSchedules: false });
       })
+      .catch(err => console.log(err));
+
+    fetchHolyTotal()
+      .then(response => this.setState({ holyTotal: response.data.holyTotal }))
       .catch(err => console.log(err));
   }
 
-  handleScheduleFileUploadFormSubmit(file, hourlyWage, person) {
+  handleScheduleFileUploadFormSubmit = (file, hourlyWage, person) => {
     generateScheduleWithFileAndPerson(file, hourlyWage, person)
       .then(() => {
         fetchSchedules().then(schedules => {
@@ -108,9 +91,9 @@ class Home extends Component {
           snackbarVariant: 'error',
         });
       });
-  }
+  };
 
-  handleScheduleDelete(scheduleId) {
+  handleScheduleDelete = scheduleId => {
     deleteSchedule(scheduleId)
       .then(() => {
         fetchSchedules().then(schedules => {
@@ -128,17 +111,17 @@ class Home extends Component {
         });
       })
       .catch(err => console.log(err));
-  }
+  };
 
-  handleScheduleEdit(scheduleId, newScheduleName) {
+  handleScheduleEdit = (scheduleId, newScheduleName) => {
     this.setState({ editingScheduleId: scheduleId, newScheduleName });
-  }
+  };
 
-  handleCancelEditClick() {
+  handleCancelEditClick = () => {
     this.setState({ editingScheduleId: '', newScheduleName: '' });
-  }
+  };
 
-  handleUpdateScheduleName(scheduleId, scheduleName) {
+  handleUpdateScheduleName = (scheduleId, scheduleName) => {
     const { newScheduleName } = this.state;
 
     const parsedNewScheduleName = newScheduleName.trim();
@@ -157,20 +140,20 @@ class Home extends Component {
         this.setState({ schedules });
       });
     });
-  }
+  };
 
-  handleNewScheduleNameChange(event) {
+  handleNewScheduleNameChange = event => {
     const value = event.target.value;
     this.setState({ newScheduleName: value });
-  }
+  };
 
-  handleCreateSchedule(data) {
+  handleCreateSchedule = data => {
     createSchedule(data).then(() => {
       fetchSchedules().then(schedules => {
         this.setState({ schedules });
       });
     });
-  }
+  };
 
   handleSnackbarClose = (_, reason) => {
     if (reason === 'clickaway') {
@@ -185,14 +168,14 @@ class Home extends Component {
     const {
       holyTotal,
       schedules,
-      isLoading,
+      isLoadingSchedules,
       isSnackbarOpen,
       snackbarMessage,
       snackbarVariant,
     } = this.state;
 
     return (
-      <Suspense fallback={<Loader loading={isLoading} />}>
+      <Fragment>
         <Grid container spacing={8} className={classes.actions}>
           <Grid item>
             <ScheduleFileUploadForm
@@ -204,76 +187,80 @@ class Home extends Component {
           </Grid>
         </Grid>
         <Grid container spacing={16}>
-          {schedules.map(schedule => (
-            <Grid item xs={12} key={schedule.id}>
-              <Paper className={classes.item}>
-                <Grid container alignItems="center">
-                  <Grid item xs={8}>
-                    {this.state.editingScheduleId !== schedule.id ? (
-                      <Typography className={classes.scheduleLink}>
-                        <Link to={`/schedules/${schedule.id}`}>
-                          {schedule.name}
-                        </Link>
-                      </Typography>
-                    ) : (
-                      <Grid
-                        container
-                        className={classes.editContainer}
-                        spacing={8}
-                      >
-                        <Grid item>
-                          <TextField
-                            id="newScheduleName"
-                            value={this.state.newScheduleName}
-                            onChange={this.handleNewScheduleNameChange}
-                            autoFocus
-                          />
+          {isLoadingSchedules ? (
+            <Loader loading={true} />
+          ) : (
+            schedules.map(schedule => (
+              <Grid item xs={12} key={schedule.id}>
+                <Paper className={classes.item}>
+                  <Grid container alignItems="center">
+                    <Grid item xs={8}>
+                      {this.state.editingScheduleId !== schedule.id ? (
+                        <Typography className={classes.scheduleLink}>
+                          <Link to={`/schedules/${schedule.id}`}>
+                            {schedule.name}
+                          </Link>
+                        </Typography>
+                      ) : (
+                        <Grid
+                          container
+                          className={classes.editContainer}
+                          spacing={8}
+                        >
+                          <Grid item>
+                            <TextField
+                              id="newScheduleName"
+                              value={this.state.newScheduleName}
+                              onChange={this.handleNewScheduleNameChange}
+                              autoFocus
+                            />
+                          </Grid>
+                          <Grid item>
+                            <Button
+                              color="primary"
+                              onClick={() =>
+                                this.handleUpdateScheduleName(
+                                  schedule.id,
+                                  schedule.name
+                                )
+                              }
+                            >
+                              update
+                            </Button>
+                            <Button
+                              color="secondary"
+                              onClick={this.handleCancelEditClick}
+                            >
+                              cancel
+                            </Button>
+                          </Grid>
                         </Grid>
-                        <Grid item>
-                          <Button
-                            color="primary"
-                            onClick={() =>
-                              this.handleUpdateScheduleName(
-                                schedule.id,
-                                schedule.name
-                              )
-                            }
-                          >
-                            update
-                          </Button>
-                          <Button
-                            color="secondary"
-                            onClick={this.handleCancelEditClick}
-                          >
-                            cancel
-                          </Button>
-                        </Grid>
-                      </Grid>
-                    )}
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Grid container justify="flex-end">
-                      <IconButton
-                        onClick={() =>
-                          this.handleScheduleEdit(schedule.id, schedule.name)
-                        }
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <ResponsiveConfirmDeleteDialog
-                        title="Delete schedule?"
-                        content="All the schedule data will be removed permanently and you won't be
+                      )}
+                    </Grid>
+                    <Grid item xs={4}>
+                      <Grid container justify="flex-end">
+                        <IconButton
+                          onClick={() =>
+                            this.handleScheduleEdit(schedule.id, schedule.name)
+                          }
+                        >
+                          <EditIcon />
+                        </IconButton>
+                        <ResponsiveConfirmDeleteDialog
+                          title="Delete schedule?"
+                          content="All the schedule data will be removed permanently and you won't be
                       able to retrieve them again."
-                        onDeleteClick={() =>
-                          this.handleScheduleDelete(schedule.id)
-                        }
-                      />
+                          onDeleteClick={() =>
+                            this.handleScheduleDelete(schedule.id)
+                          }
+                        />
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-              </Paper>
-            </Grid>
-          ))}
+                </Paper>
+              </Grid>
+            ))
+          )}
         </Grid>
         {holyTotal > 0 && (
           <Typography className={classes.info}>
@@ -286,7 +273,7 @@ class Home extends Component {
           message={snackbarMessage}
           variant={snackbarVariant}
         />
-      </Suspense>
+      </Fragment>
     );
   }
 }

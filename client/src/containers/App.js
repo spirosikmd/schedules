@@ -6,9 +6,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { setUser, createUserFromAccessToken } from '../actions/authActions';
 import Login from '../components/Login';
 import Loader from '../components/Loader';
+import TopBar from '../components/TopBar';
+import Menu from '../components/Menu';
 
-const TopBar = lazy(() => import('../components/TopBar'));
-const Menu = lazy(() => import('../components/Menu'));
 const Home = lazy(() => import('../components/Home'));
 const Schedule = lazy(() => import('../components/Schedule'));
 const Charts = lazy(() => import('../components/Charts'));
@@ -73,7 +73,7 @@ class App extends PureComponent {
     }
 
     return (
-      <Suspense fallback={<Loader loading={true} />}>
+      <Fragment>
         <CssBaseline />
         <TopBar
           user={user}
@@ -88,13 +88,15 @@ class App extends PureComponent {
           onMenuContentKeyDown={() => this.toggleDrawer(false)}
         />
         <div className={classes.page}>
-          <Router>
-            <Home path="/" />
-            <Schedule path="/schedules/:scheduleId" />
-            <Charts path="/charts" />
-          </Router>
+          <Suspense fallback={<Loader loading={true} />}>
+            <Router>
+              <Home path="/" />
+              <Schedule path="/schedules/:scheduleId" />
+              <Charts path="/charts" />
+            </Router>
+          </Suspense>
         </div>
-      </Suspense>
+      </Fragment>
     );
   }
 }
