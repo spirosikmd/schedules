@@ -11,7 +11,6 @@ const scheduleSchema = mongoose.Schema({
     required: true,
     default: false,
   },
-  data: [],
   user: { type: Schema.Types.ObjectId, ref: 'User' },
   settings: {
     hourlyWage: { type: Number, default: 0 },
