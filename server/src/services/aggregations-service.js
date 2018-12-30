@@ -48,38 +48,36 @@ function calculateWeeklyWageData(userId) {
         return reject('Cannot get weekly wage data');
       }
 
-      ScheduleEntry.find({ user: user._id })
-        .populate('schedule')
-        .exec((err, scheduleEntries) => {
+      ScheduleEntry.aggregate()
+        .match({ user: mongoose.Types.ObjectId(user._id) })
+        .lookup({
+          from: 'schedules',
+          localField: 'schedule',
+          foreignField: '_id',
+          as: 'schedule',
+        })
+        .group({
+          _id: '$schedule',
+          weeklyWage: {
+            $sum: {
+              $multiply: [
+                '$hours',
+                { $arrayElemAt: ['$schedule.settings.hourlyWage', 0] },
+              ],
+            },
+          },
+        })
+        .project({
+          _id: 0,
+          weeklyWage: 1,
+          name: { $arrayElemAt: ['$_id.name', 0] },
+          createdAt: { $arrayElemAt: ['$_id.createdAt', 0] },
+        })
+        .sort({ createdAt: 1 })
+        .exec((err, weeklyWageData) => {
           if (err) {
             return reject(err);
           }
-
-          const weeklyWageData = [];
-
-          scheduleEntries.forEach(scheduleEntry => {
-            const scheduleCreatedAt = scheduleEntry.schedule.createdAt;
-            const scheduleName = scheduleEntry.schedule.name;
-            const scheduleId = scheduleEntry.schedule._id;
-            const scheduleHourlyWage =
-              scheduleEntry.schedule.settings.hourlyWage;
-            const foundWeeklyWageDataSchedule = weeklyWageData.find(
-              weeklyWageDataSchedule => weeklyWageDataSchedule.id === scheduleId
-            );
-            if (foundWeeklyWageDataSchedule) {
-              foundWeeklyWageDataSchedule.weeklyWage +=
-                scheduleEntry.hours * scheduleHourlyWage;
-            } else {
-              weeklyWageData.push({
-                id: scheduleId,
-                name: scheduleName,
-                createdAt: scheduleCreatedAt,
-                weeklyWage: scheduleEntry.hours * scheduleHourlyWage,
-              });
-            }
-          });
-
-          weeklyWageData.sort((a, b) => a.createdAt - b.createdAt);
 
           resolve(createAggregationResponse({ weeklyWageData }));
         });
