@@ -73,7 +73,7 @@ class TopBar extends PureComponent {
               open={Boolean(anchorEl)}
               onClose={this.handleClose}
             >
-              <MenuItem>{name}</MenuItem>
+              <MenuItem disabled={true}>{name}</MenuItem>
               <GoogleLogout
                 icon={false}
                 onLogoutSuccess={onGoogleLogoutSuccess}
