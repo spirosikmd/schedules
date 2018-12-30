@@ -137,6 +137,11 @@ function calculateHoursPerLocation(userId) {
       ScheduleEntry.aggregate()
         .match({ user: mongoose.Types.ObjectId(user._id) })
         .group({ _id: '$location', hours: { $sum: '$hours' } })
+        .project({
+          _id: 0,
+          location: '$_id',
+          hours: 1,
+        })
         .exec((err, locationHourData) => {
           if (err) {
             return reject(err);

@@ -101,13 +101,13 @@ class Charts extends PureComponent {
                   <LineChart
                     className={classes.chart}
                     data={weeklyWageData}
-                    margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
+                    margin={{ top: 15, right: 30 }}
                   >
-                    <XAxis dataKey="name" />
-                    <YAxis />
+                    <XAxis dataKey="name" tickMargin={10} />
+                    <YAxis tickMargin={10} tickFormatter={tick => `€${tick}`} />
                     <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip formatter={value => value.toFixed(2)} />
-                    <Line type="monotone" dataKey="weeklyWage" />
+                    <Tooltip formatter={value => `€${value.toFixed(2)}`} />
+                    <Line type="monotone" dataKey="weeklyWage" name="wage" />
                   </LineChart>
                 </ResponsiveContainer>
               </section>
@@ -127,13 +127,13 @@ class Charts extends PureComponent {
                   <LineChart
                     className={classes.chart}
                     data={weeklyHourData}
-                    margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
+                    margin={{ top: 15, right: 30 }}
                   >
-                    <XAxis dataKey="name" />
-                    <YAxis />
+                    <XAxis dataKey="name" tickMargin={10} />
+                    <YAxis tickMargin={10} />
                     <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip formatter={value => value.toFixed(2)} />
-                    <Line type="monotone" dataKey="weeklyHours" />
+                    <Tooltip />
+                    <Line type="monotone" dataKey="weeklyHours" name="hours" />
                   </LineChart>
                 </ResponsiveContainer>
               </section>
@@ -155,8 +155,8 @@ class Charts extends PureComponent {
                     data={locationHourData}
                     margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
                   >
-                    <XAxis dataKey="_id" />
-                    <YAxis />
+                    <XAxis dataKey="location" tickMargin={10} />
+                    <YAxis tickMargin={10} />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
                     <Bar dataKey="hours" fill="#3182bd" />
