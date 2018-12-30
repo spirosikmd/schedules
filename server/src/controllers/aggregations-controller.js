@@ -39,4 +39,22 @@ function getWeeklyHourData(req, res) {
     });
 }
 
-module.exports = { getWeeklyWageData, getHolyTotal, getWeeklyHourData };
+function getLocationHourData(req, res) {
+  const userId = req.user.id;
+
+  aggregationsService
+    .calculateHoursPerLocation(userId)
+    .then(data => res.json(data))
+    .catch(error => {
+      res.status(404).json({
+        message: error,
+      });
+    });
+}
+
+module.exports = {
+  getWeeklyWageData,
+  getHolyTotal,
+  getWeeklyHourData,
+  getLocationHourData,
+};

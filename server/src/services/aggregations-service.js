@@ -1,5 +1,5 @@
+const mongoose = require('mongoose');
 const User = require('../models/user');
-const Schedule = require('../models/schedule');
 const ScheduleEntry = require('../models/schedule-entry');
 
 function createAggregationResponse(data) {
@@ -134,8 +134,34 @@ function calculateWeeklyHourData(userId) {
   });
 }
 
+function calculateHoursPerLocation(userId) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject('Cannot get weekly hour data');
+      }
+
+      ScheduleEntry.aggregate()
+        .match({ user: mongoose.Types.ObjectId(user._id) })
+        .group({ _id: '$location', hours: { $sum: '$hours' } })
+        .exec((err, locationHourData) => {
+          if (err) {
+            return reject(err);
+          }
+
+          resolve(createAggregationResponse({ locationHourData }));
+        });
+    });
+  });
+}
+
 module.exports = {
   calculateHolyTotal,
   calculateWeeklyWageData,
   calculateWeeklyHourData,
+  calculateHoursPerLocation,
 };

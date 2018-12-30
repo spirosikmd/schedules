@@ -20,3 +20,10 @@ export async function fetchWeeklyHourDataAggregation() {
   });
   return response.json();
 }
+
+export async function fetchLocationHourDataAggregation() {
+  const response = await fetch(`${BASE}/aggregations/location-hour-data`, {
+    headers: getDefaultHeaders(),
+  });
+  return response.json();
+}

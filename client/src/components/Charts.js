@@ -6,8 +6,9 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
+  BarChart,
+  Bar,
 } from 'recharts/lib';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -16,6 +17,7 @@ import Grid from '@material-ui/core/Grid';
 import {
   fetchWeeklyWageDataAggregation,
   fetchWeeklyHourDataAggregation,
+  fetchLocationHourDataAggregation,
 } from '../api';
 import withAuth from './withAuth';
 import Loader from './Loader';
@@ -38,15 +40,19 @@ class Charts extends PureComponent {
   state = {
     weeklyWageData: [],
     weeklyHourData: [],
+    locationHourData: [],
     isWeeklyWageDataLoading: false,
     isWeeklyHourDataLoading: false,
+    isLocationHourDataLoading: false,
   };
 
   componentDidMount() {
     this.setState({
       isWeeklyWageDataLoading: true,
       isWeeklyHourDataLoading: true,
+      isLocationHourDataLoading: true,
     });
+
     fetchWeeklyWageDataAggregation()
       .then(response => {
         const weeklyWageData = response.data.weeklyWageData;
@@ -60,6 +66,13 @@ class Charts extends PureComponent {
         this.setState({ weeklyHourData, isWeeklyHourDataLoading: false });
       })
       .catch(err => console.log(err));
+
+    fetchLocationHourDataAggregation()
+      .then(response => {
+        const locationHourData = response.data.locationHourData;
+        this.setState({ locationHourData, isLocationHourDataLoading: false });
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -67,8 +80,10 @@ class Charts extends PureComponent {
     const {
       weeklyWageData,
       weeklyHourData,
+      locationHourData,
       isWeeklyWageDataLoading,
       isWeeklyHourDataLoading,
+      isLocationHourDataLoading,
     } = this.state;
 
     return (
@@ -80,7 +95,7 @@ class Charts extends PureComponent {
             ) : (
               <section className={classes.section}>
                 <Typography variant="h5" component="h3">
-                  Weekly Wage
+                  Wage per week
                 </Typography>
                 <ResponsiveContainer>
                   <LineChart
@@ -92,7 +107,6 @@ class Charts extends PureComponent {
                     <YAxis />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip formatter={value => value.toFixed(2)} />
-                    <Legend />
                     <Line type="monotone" dataKey="weeklyWage" />
                   </LineChart>
                 </ResponsiveContainer>
@@ -107,7 +121,7 @@ class Charts extends PureComponent {
             ) : (
               <section className={classes.section}>
                 <Typography variant="h5" component="h3">
-                  Weekly Hours
+                  Hours per week
                 </Typography>
                 <ResponsiveContainer>
                   <LineChart
@@ -119,9 +133,34 @@ class Charts extends PureComponent {
                     <YAxis />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip formatter={value => value.toFixed(2)} />
-                    <Legend />
                     <Line type="monotone" dataKey="weeklyHours" />
                   </LineChart>
+                </ResponsiveContainer>
+              </section>
+            )}
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.chartRoot}>
+            {isLocationHourDataLoading ? (
+              <Loader loading={isLocationHourDataLoading} />
+            ) : (
+              <section className={classes.section}>
+                <Typography variant="h5" component="h3">
+                  Hours per location
+                </Typography>
+                <ResponsiveContainer>
+                  <BarChart
+                    className={classes.chart}
+                    data={locationHourData}
+                    margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
+                  >
+                    <XAxis dataKey="_id" />
+                    <YAxis />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <Tooltip />
+                    <Bar dataKey="hours" fill="#3182bd" />
+                  </BarChart>
                 </ResponsiveContainer>
               </section>
             )}
