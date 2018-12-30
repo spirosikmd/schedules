@@ -7,32 +7,41 @@ function createToken(auth) {
     },
     process.env.JWT_SECRET,
     {
-      expiresIn: 60 * 120,
+      // This is set from Google login response and it is 1 hour by default.
+      expiresIn: parseInt(auth.expiresIn, 10),
     }
   );
 }
 
-function getCookieOptions() {
-  const secure = process.env.NODE_ENV === 'production' ? true : false;
+function getCookieOptions(expiresIn) {
+  const secure = process.env.NODE_ENV === 'production';
+  // This is set from Google login response and it is 1 hour by default.
+  const expires = new Date(Date.now() + expiresIn * 1000);
 
-  // TODO: Set expires from expires_in from Google login response.
-  return { httpOnly: true, secure };
+  return {
+    httpOnly: true,
+    secure,
+    expires,
+  };
 }
 
-function authenticate(req, res, next) {
+function authenticate(req, res) {
   if (!req.user) {
     return res.status(401).json({ message: 'User not authenticated' });
   }
 
+  const expiresIn = req.query.expires_in;
+
   const auth = {
     id: req.user.id,
+    expiresIn,
   };
 
   const token = createToken(auth);
 
   return res
     .status(200)
-    .cookie('token', token, getCookieOptions())
+    .cookie('token', token, getCookieOptions(expiresIn))
     .json({
       user: req.user,
     });

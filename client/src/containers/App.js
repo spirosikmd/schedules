@@ -38,7 +38,10 @@ class App extends PureComponent {
   }
 
   handleGoogleLoginSuccess(response) {
-    this.props.createUserFromAccessToken(response.accessToken);
+    this.props.createUserFromAccessToken(
+      response.accessToken,
+      response.tokenObj.expires_in
+    );
     this.setState({ profileImageUrl: response.profileObj.imageUrl });
   }
 
@@ -102,8 +105,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setUser: user => dispatch(setUser(user)),
-  createUserFromAccessToken: accessToken =>
-    dispatch(createUserFromAccessToken(accessToken)),
+  createUserFromAccessToken: (accessToken, expiresIn) =>
+    dispatch(createUserFromAccessToken(accessToken, expiresIn)),
 });
 
 export default withStyles(styles)(

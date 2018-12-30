@@ -1,9 +1,9 @@
 import { BASE } from './shared';
 import ApiError from './ApiError';
 
-export async function authenticateWithGoogle(accessToken) {
+export async function authenticateWithGoogle(accessToken, expiresIn) {
   const response = await fetch(
-    `${BASE}/auth/google?access_token=${accessToken}`
+    `${BASE}/auth/google?access_token=${accessToken}&expires_in=${expiresIn}`
   );
   return response.json();
 }

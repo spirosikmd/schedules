@@ -161,6 +161,21 @@ module.exports = function(app) {
   app.get(
     `${BASE}/auth/google`,
     passport.authenticate('google-token', { session: false }),
+    [
+      check('access_token')
+        .isString()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
+      check('expires_in')
+        .isString()
+        .exists({
+          checkFalsy: true,
+          checkNull: true,
+        }),
+    ],
+    validationErrors(),
     authController.authenticate
   );
 

@@ -31,7 +31,8 @@ export default function withAuth(ComponentToProtect) {
         if (redirect) {
           return (
             <Typography>
-              Something went wrong! Logout and login again :)
+              Your session has expired! Refresh the page or logout and login
+              again :)
             </Typography>
           );
         } else {

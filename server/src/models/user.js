@@ -14,7 +14,6 @@ const userSchema = mongoose.Schema({
   googleProvider: {
     type: {
       id: String,
-      token: String,
     },
     select: false,
   },
@@ -43,7 +42,6 @@ userSchema.statics.upsertGoogleUser = function(
         lastName: profile.name.familyName,
         googleProvider: {
           id: profile.id,
-          token: accessToken,
         },
       });
 

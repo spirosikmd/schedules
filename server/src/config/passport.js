@@ -3,7 +3,7 @@ const User = require('../models/user');
 const GoogleStrategy = require('passport-google-token').Strategy;
 
 module.exports = function() {
-  return new Promise((resolve, reject) => {
+  return new Promise(resolve => {
     passport.use(
       new GoogleStrategy(
         {
