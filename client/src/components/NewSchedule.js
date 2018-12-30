@@ -67,7 +67,7 @@ class NewSchedule extends PureComponent {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
+            <Button onClick={this.handleClose} color="secondary">
               Cancel
             </Button>
             <Button onClick={this.handleCreateClick} color="primary">

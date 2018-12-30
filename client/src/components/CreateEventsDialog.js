@@ -57,7 +57,7 @@ class CreateEventsDialog extends PureComponent {
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.closeDialog} color="primary">
+            <Button onClick={this.closeDialog} color="secondary">
               Cancel
             </Button>
             <Button onClick={this.handleCreateClick} color="primary" autoFocus>

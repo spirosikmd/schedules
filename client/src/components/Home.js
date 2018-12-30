@@ -217,6 +217,12 @@ class Home extends Component {
                           </Grid>
                           <Grid item>
                             <Button
+                              color="secondary"
+                              onClick={this.handleCancelEditClick}
+                            >
+                              cancel
+                            </Button>
+                            <Button
                               color="primary"
                               onClick={() =>
                                 this.handleUpdateScheduleName(
@@ -226,12 +232,6 @@ class Home extends Component {
                               }
                             >
                               update
-                            </Button>
-                            <Button
-                              color="secondary"
-                              onClick={this.handleCancelEditClick}
-                            >
-                              cancel
                             </Button>
                           </Grid>
                         </Grid>

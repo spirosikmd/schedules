@@ -52,7 +52,7 @@ class ResponsiveConfirmDeleteDialog extends PureComponent {
             <DialogContentText>{content}</DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleCancelClick} color="primary">
+            <Button onClick={this.handleCancelClick} color="secondary">
               Cancel
             </Button>
             <Button onClick={this.handleDeleteClick} color="primary" autoFocus>
