@@ -111,7 +111,10 @@ class EditEntryForm extends PureComponent {
 
     return (
       <Fragment>
-        <IconButton onClick={this.handleClickOpen}>
+        <IconButton
+          aria-label="Edit schedule entry"
+          onClick={this.handleClickOpen}
+        >
           <EditIcon />
         </IconButton>
         <Dialog

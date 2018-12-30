@@ -38,7 +38,7 @@ class ResponsiveConfirmDeleteDialog extends PureComponent {
 
     return (
       <div>
-        <IconButton onClick={this.handleClickOpen}>
+        <IconButton aria-label="Delete schedule" onClick={this.handleClickOpen}>
           <DeleteIcon />
         </IconButton>
         <Dialog

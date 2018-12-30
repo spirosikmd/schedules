@@ -240,6 +240,7 @@ class Home extends Component {
                     <Grid item xs={4}>
                       <Grid container justify="flex-end">
                         <IconButton
+                          aria-label="Edit schedule name"
                           onClick={() =>
                             this.handleScheduleEdit(schedule.id, schedule.name)
                           }
