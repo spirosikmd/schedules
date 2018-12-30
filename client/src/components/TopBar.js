@@ -21,6 +21,9 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
+  avatar: {
+    cursor: 'pointer',
+  },
 };
 
 class TopBar extends PureComponent {
@@ -61,6 +64,7 @@ class TopBar extends PureComponent {
             </IconButton>
             <div className={classes.grow} />
             <Avatar
+              className={classes.avatar}
               alt={name}
               src={profileImageUrl}
               aria-owns={anchorEl ? 'account-menu' : undefined}
