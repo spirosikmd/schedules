@@ -120,6 +120,7 @@ class EditEntryForm extends PureComponent {
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}
+          onClose={this.handleClose}
           aria-labelledby="form-dialog-title"
         >
           <DialogTitle id="form-dialog-title">Edit entry</DialogTitle>
