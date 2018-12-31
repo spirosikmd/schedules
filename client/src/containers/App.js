@@ -1,5 +1,5 @@
 import React, { Fragment, PureComponent, Suspense, lazy } from 'react';
-import { Router } from '@reach/router';
+import { Router, navigate } from '@reach/router';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
@@ -12,6 +12,7 @@ import Menu from '../components/Menu';
 const Home = lazy(() => import('../components/Home'));
 const Schedule = lazy(() => import('../components/Schedule'));
 const Charts = lazy(() => import('../components/Charts'));
+const SettingsPage = lazy(() => import('../settings/SettingsPage'));
 
 const styles = theme => ({
   page: {
@@ -29,29 +30,22 @@ class App extends PureComponent {
     profileImageUrl: '',
   };
 
-  constructor(props) {
-    super(props);
-
-    this.handleGoogleLoginSuccess = this.handleGoogleLoginSuccess.bind(this);
-    this.handleGoogleLoginFailure = this.handleGoogleLoginFailure.bind(this);
-    this.handleGoogleLogoutSuccess = this.handleGoogleLogoutSuccess.bind(this);
-  }
-
-  handleGoogleLoginSuccess(response) {
+  handleGoogleLoginSuccess = response => {
     this.props.createUserFromAccessToken(
       response.accessToken,
       response.tokenObj.expires_in
     );
     this.setState({ profileImageUrl: response.profileObj.imageUrl });
-  }
+  };
 
-  handleGoogleLoginFailure({ error, details }) {
+  handleGoogleLoginFailure = ({ error, details }) => {
     this.setState({ error: { errorCode: error, details } });
-  }
+  };
 
-  handleGoogleLogoutSuccess() {
+  handleGoogleLogoutSuccess = () => {
     this.props.setUser(null);
-  }
+    navigate('/');
+  };
 
   toggleDrawer(isDrawerOpen) {
     this.setState({ isDrawerOpen });
@@ -93,6 +87,7 @@ class App extends PureComponent {
               <Home path="/" />
               <Schedule path="/schedules/:scheduleId" />
               <Charts path="/charts" />
+              <SettingsPage path="/settings" />
             </Router>
           </Suspense>
         </div>

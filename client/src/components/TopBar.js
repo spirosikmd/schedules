@@ -11,9 +11,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { GoogleLogout } from 'react-google-login';
 
 const styles = {
-  root: {
-    flexGrow: 1,
-  },
   grow: {
     flexGrow: 1,
   },
@@ -51,7 +48,7 @@ class TopBar extends PureComponent {
     const name = `${user.firstName} ${user.lastName}`;
 
     return (
-      <div className={classes.root}>
+      <div className={classes.grow}>
         <AppBar position="static">
           <Toolbar>
             <IconButton

@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const timestamps = require('mongoose-timestamp');
+const Schedule = require('./schedule');
+const ScheduleEntry = require('./schedule-entry');
 
 const userSchema = mongoose.Schema({
   email: {
@@ -54,6 +56,11 @@ userSchema.statics.upsertGoogleUser = function(
     }
   );
 };
+
+userSchema.post('remove', doc => {
+  Schedule.deleteMany({ user: doc._id }).exec();
+  ScheduleEntry.deleteMany({ user: doc._id }).exec();
+});
 
 userSchema.plugin(timestamps);
 

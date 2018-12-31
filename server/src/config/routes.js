@@ -5,6 +5,7 @@ const authController = require('../controllers/auth-controller');
 const aggregationsController = require('../controllers/aggregations-controller');
 const schedulesController = require('../controllers/schedules-controller');
 const indexController = require('../controllers/index-controller');
+const usersController = require('../controllers/users-controller');
 const { verifyToken } = require('../middlewares/auth');
 const { validationErrors } = require('../middlewares/validation-errors');
 
@@ -182,4 +183,6 @@ module.exports = function(app) {
   app.get(`${BASE}/auth/token`, verifyToken(), function(req, res) {
     res.sendStatus(200);
   });
+
+  app.delete(`${BASE}/auth/users`, verifyToken(), usersController.deleteUser);
 };

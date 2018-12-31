@@ -15,3 +15,10 @@ export async function checkToken() {
   }
   throw new ApiError('Token not valid', response.error);
 }
+
+export async function deleteUser() {
+  const response = await fetch(`${BASE}/auth/users`, {
+    method: 'DELETE',
+  });
+  return response.json();
+}
