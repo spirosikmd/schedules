@@ -1,7 +1,7 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import notFound from './notFound.svg';
 import { Typography } from '@material-ui/core';
+import notFound from './notFound.svg';
 
 const styles = theme => ({
   root: {
