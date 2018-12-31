@@ -12,8 +12,16 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 8,
   },
   image: {
-    width: '75%',
-    height: '75%',
+    width: '400px',
+    height: '400px',
+    [theme.breakpoints.down('sm')]: {
+      width: '75%',
+      height: '75%',
+    },
+    [theme.breakpoints.between('sm', 'md')]: {
+      width: '50%',
+      height: '50%',
+    },
   },
   text: {
     marginTop: theme.spacing.unit * 4,
