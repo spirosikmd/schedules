@@ -10,6 +10,7 @@ import Login from './Login';
 import TopBar from './TopBar';
 import Menu from './Menu';
 
+const NotFound = lazy(() => import('./NotFound'));
 const SchedulesPage = lazy(() =>
   import('../../schedules/components/SchedulesPage')
 );
@@ -93,6 +94,7 @@ class App extends PureComponent {
         <div className={classes.page}>
           <Suspense fallback={<Loader loading={true} />}>
             <Router>
+              <NotFound default />
               <SchedulesPage path="/" />
               <SchedulePage path="/schedules/:scheduleId" />
               <StatisticsPage path="/statistics" />
