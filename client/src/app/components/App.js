@@ -91,7 +91,7 @@ class App extends PureComponent {
           onMenuContentClick={() => this.toggleDrawer(false)}
           onMenuContentKeyDown={() => this.toggleDrawer(false)}
         />
-        <div className={classes.page}>
+        <main className={classes.page}>
           <Suspense fallback={<Loader loading={true} />}>
             <Router>
               <NotFound default />
@@ -101,7 +101,7 @@ class App extends PureComponent {
               <SettingsPage path="/settings" />
             </Router>
           </Suspense>
-        </div>
+        </main>
       </Fragment>
     );
   }

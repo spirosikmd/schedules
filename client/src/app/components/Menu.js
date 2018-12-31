@@ -13,7 +13,7 @@ const Menu = React.memo(
   ({ open, onMenuClose, onMenuContentClick, onMenuContentKeyDown }) => {
     return (
       <Drawer open={open} onClose={onMenuClose}>
-        <div
+        <nav
           tabIndex={0}
           role="button"
           onClick={onMenuContentClick}
@@ -39,7 +39,7 @@ const Menu = React.memo(
               <ListItemText primary="Settings" />
             </ListItem>
           </List>
-        </div>
+        </nav>
       </Drawer>
     );
   }
