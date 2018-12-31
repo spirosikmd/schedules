@@ -18,8 +18,8 @@ import {
   deleteScheduleEntry,
   updateScheduleEntry,
 } from '../api';
-import withAuth from './withAuth';
-import Loader from './Loader';
+import withAuth from '../shared/components/withAuth';
+import Loader from '../shared/components/Loader';
 import CreateEntryForm from './CreateEntryForm';
 import ResponsiveConfirmDeleteDialog from './ResponsiveConfirmDeleteDialog';
 import CreateEventsDialog from './CreateEventsDialog';

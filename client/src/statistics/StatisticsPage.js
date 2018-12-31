@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import {
   LineChart,
   Line,
@@ -14,13 +15,13 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import withAuth from '../shared/components/withAuth';
+import Loader from '../shared/components/Loader';
 import {
-  fetchWeeklyWageDataAggregation,
-  fetchWeeklyHourDataAggregation,
-  fetchLocationHourDataAggregation,
-} from '../api';
-import withAuth from './withAuth';
-import Loader from './Loader';
+  fetchWeeklyWageData,
+  fetchWeeklyHourData,
+  fetchLocationHourData,
+} from './api';
 
 const styles = theme => ({
   chartRoot: {
@@ -36,7 +37,7 @@ const styles = theme => ({
   },
 });
 
-class Charts extends PureComponent {
+class StatisticsPage extends PureComponent {
   state = {
     weeklyWageData: [],
     weeklyHourData: [],
@@ -53,21 +54,21 @@ class Charts extends PureComponent {
       isLocationHourDataLoading: true,
     });
 
-    fetchWeeklyWageDataAggregation()
+    fetchWeeklyWageData()
       .then(response => {
         const weeklyWageData = response.data.weeklyWageData;
         this.setState({ weeklyWageData, isWeeklyWageDataLoading: false });
       })
       .catch(err => console.log(err));
 
-    fetchWeeklyHourDataAggregation()
+    fetchWeeklyHourData()
       .then(response => {
         const weeklyHourData = response.data.weeklyHourData;
         this.setState({ weeklyHourData, isWeeklyHourDataLoading: false });
       })
       .catch(err => console.log(err));
 
-    fetchLocationHourDataAggregation()
+    fetchLocationHourData()
       .then(response => {
         const locationHourData = response.data.locationHourData;
         this.setState({ locationHourData, isLocationHourDataLoading: false });
@@ -159,7 +160,37 @@ class Charts extends PureComponent {
                     <YAxis tickMargin={10} />
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
-                    <Bar dataKey="hours" fill="#3182bd" />
+                    <Bar dataKey="hours" fill="#3f51b5" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </section>
+            )}
+          </Paper>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.chartRoot}>
+            {isLocationHourDataLoading ? (
+              <Loader loading={isLocationHourDataLoading} />
+            ) : (
+              <section className={classes.section}>
+                <Typography variant="h5" component="h3">
+                  Number of times per location
+                </Typography>
+                <ResponsiveContainer>
+                  <BarChart
+                    className={classes.chart}
+                    data={locationHourData}
+                    margin={{ top: 15, right: 30, left: 0, bottom: 5 }}
+                  >
+                    <XAxis dataKey="location" tickMargin={10} />
+                    <YAxis tickMargin={10} />
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <Tooltip />
+                    <Bar
+                      dataKey="numberOfTimes"
+                      fill="#3f51b5"
+                      name="number of times"
+                    />
                   </BarChart>
                 </ResponsiveContainer>
               </section>
@@ -171,4 +202,8 @@ class Charts extends PureComponent {
   }
 }
 
-export default withAuth(withStyles(styles)(Charts));
+StatisticsPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withAuth(withStyles(styles)(StatisticsPage));

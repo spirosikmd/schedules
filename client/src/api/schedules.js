@@ -1,5 +1,5 @@
-import { BASE, getDefaultHeaders } from './shared';
-import ApiError from './ApiError';
+import { BASE, getDefaultHeaders } from '../shared/api';
+import ApiError from '../shared/ApiError';
 
 export async function generateScheduleWithFileAndPerson(
   file,

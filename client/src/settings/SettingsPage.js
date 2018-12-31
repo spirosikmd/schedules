@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import DeleteUserDialog from './DeleteUserDialog';
 import { deleteUser } from '../actions/authActions';
+import withAuth from '../shared/components/withAuth';
 
 const SettingsPage = React.memo(({ deleteUser }) => {
   const handleDeleteClick = async () => {
@@ -20,4 +21,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   null,
   mapDispatchToProps
-)(SettingsPage);
+)(withAuth(SettingsPage));

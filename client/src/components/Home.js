@@ -16,8 +16,8 @@ import {
   fetchHolyTotal,
   createSchedule,
 } from '../api';
-import withAuth from './withAuth';
-import Loader from './Loader';
+import withAuth from '../shared/components/withAuth';
+import Loader from '../shared/components/Loader';
 import ScheduleFileUploadForm from './ScheduleFileUploadForm';
 import ResponsiveConfirmDeleteDialog from './ResponsiveConfirmDeleteDialog';
 import NewSchedule from './NewSchedule';

@@ -1,5 +1,5 @@
-import { BASE } from './shared';
-import ApiError from './ApiError';
+import { BASE } from '../shared/api';
+import ApiError from '../shared/ApiError';
 
 export async function authenticateWithGoogle(accessToken, expiresIn) {
   const response = await fetch(

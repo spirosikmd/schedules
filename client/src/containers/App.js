@@ -5,13 +5,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import { setUser, createUserFromAccessToken } from '../actions/authActions';
 import Login from '../components/Login';
-import Loader from '../components/Loader';
+import Loader from '../shared/components/Loader';
 import TopBar from '../components/TopBar';
 import Menu from '../components/Menu';
 
 const Home = lazy(() => import('../components/Home'));
 const Schedule = lazy(() => import('../components/Schedule'));
-const Charts = lazy(() => import('../components/Charts'));
+const StatisticsPage = lazy(() => import('../statistics/StatisticsPage'));
 const SettingsPage = lazy(() => import('../settings/SettingsPage'));
 
 const styles = theme => ({
@@ -86,7 +86,7 @@ class App extends PureComponent {
             <Router>
               <Home path="/" />
               <Schedule path="/schedules/:scheduleId" />
-              <Charts path="/charts" />
+              <StatisticsPage path="/statistics" />
               <SettingsPage path="/settings" />
             </Router>
           </Suspense>

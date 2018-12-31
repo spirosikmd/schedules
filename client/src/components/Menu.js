@@ -26,11 +26,11 @@ const Menu = React.memo(
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button component={Link} to="/charts">
+            <ListItem button component={Link} to="/statistics">
               <ListItemIcon>
                 <ShowChartIcon />
               </ListItemIcon>
-              <ListItemText primary="Charts" />
+              <ListItemText primary="Statistics" />
             </ListItem>
             <ListItem button component={Link} to="/settings">
               <ListItemIcon>
