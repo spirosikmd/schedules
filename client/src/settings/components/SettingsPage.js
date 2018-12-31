@@ -5,9 +5,9 @@ import DeleteUserDialog from './DeleteUserDialog';
 import { deleteUserAndLogout } from '../actions';
 import withAuth from '../../shared/components/withAuth';
 
-const SettingsPage = React.memo(({ deleteUser }) => {
+const SettingsPage = React.memo(({ deleteUser: deleteUserAndLogout }) => {
   const handleDeleteClick = async () => {
-    await deleteUser();
+    await deleteUserAndLogout();
     navigate('/');
   };
 
@@ -15,7 +15,7 @@ const SettingsPage = React.memo(({ deleteUser }) => {
 });
 
 const mapDispatchToProps = dispatch => ({
-  deleteUser: () => dispatch(deleteUserAndLogout()),
+  deleteUserAndLogout: () => dispatch(deleteUserAndLogout()),
 });
 
 export default connect(
