@@ -73,6 +73,15 @@ class TopBar extends PureComponent {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={this.handleClose}
+              getContentAnchorEl={null}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
             >
               <MenuItem disabled={true}>{name}</MenuItem>
               <GoogleLogout
