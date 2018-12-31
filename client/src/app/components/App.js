@@ -3,16 +3,25 @@ import { Router, navigate } from '@reach/router';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
-import { setUser, createUserFromAccessToken } from '../actions/authActions';
-import Login from '../components/Login';
-import Loader from '../shared/components/Loader';
-import TopBar from '../components/TopBar';
-import Menu from '../components/Menu';
+import Loader from '../../shared/components/Loader';
+import { setUser } from '../../shared/actions';
+import { createUserFromAccessToken } from '../actions';
+import Login from './Login';
+import TopBar from './TopBar';
+import Menu from './Menu';
 
-const Home = lazy(() => import('../components/Home'));
-const Schedule = lazy(() => import('../components/Schedule'));
-const StatisticsPage = lazy(() => import('../statistics/StatisticsPage'));
-const SettingsPage = lazy(() => import('../settings/SettingsPage'));
+const SchedulesPage = lazy(() =>
+  import('../../schedules/components/SchedulesPage')
+);
+const SchedulePage = lazy(() =>
+  import('../../schedule/components/SchedulePage')
+);
+const StatisticsPage = lazy(() =>
+  import('../../statistics/components/StatisticsPage')
+);
+const SettingsPage = lazy(() =>
+  import('../../settings/components/SettingsPage')
+);
 
 const styles = theme => ({
   page: {
@@ -84,8 +93,8 @@ class App extends PureComponent {
         <div className={classes.page}>
           <Suspense fallback={<Loader loading={true} />}>
             <Router>
-              <Home path="/" />
-              <Schedule path="/schedules/:scheduleId" />
+              <SchedulesPage path="/" />
+              <SchedulePage path="/schedules/:scheduleId" />
               <StatisticsPage path="/statistics" />
               <SettingsPage path="/settings" />
             </Router>

@@ -1,4 +1,4 @@
-import { BASE, getDefaultHeaders } from '../shared/api';
+import { BASE, getDefaultHeaders } from '../../shared/api';
 
 export async function fetchWeeklyWageData() {
   const response = await fetch(`${BASE}/aggregations/weekly-wage-data`, {

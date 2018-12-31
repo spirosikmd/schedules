@@ -15,13 +15,13 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
-import withAuth from '../shared/components/withAuth';
-import Loader from '../shared/components/Loader';
+import withAuth from '../../shared/components/withAuth';
+import Loader from '../../shared/components/Loader';
 import {
   fetchWeeklyWageData,
   fetchWeeklyHourData,
   fetchLocationHourData,
-} from './api';
+} from '../api';
 
 const styles = theme => ({
   chartRoot: {

@@ -8,20 +8,20 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
+import withAuth from '../../shared/components/withAuth';
+import Loader from '../../shared/components/Loader';
+import ResponsiveConfirmDeleteDialog from '../../shared/components/ResponsiveConfirmDeleteDialog';
+import MessageSnackbar from '../../shared/components/MessageSnackbar';
+import { updateSchedule } from '../../shared/api';
+import ScheduleFileUploadForm from './ScheduleFileUploadForm';
+import NewSchedule from './NewSchedule';
 import {
   generateScheduleWithFileAndPerson,
   fetchSchedules,
   deleteSchedule,
-  updateSchedule,
   fetchHolyTotal,
   createSchedule,
 } from '../api';
-import withAuth from '../shared/components/withAuth';
-import Loader from '../shared/components/Loader';
-import ScheduleFileUploadForm from './ScheduleFileUploadForm';
-import ResponsiveConfirmDeleteDialog from './ResponsiveConfirmDeleteDialog';
-import NewSchedule from './NewSchedule';
-import MessageSnackbar from './MessageSnackbar';
 
 const styles = theme => ({
   item: {
@@ -41,7 +41,7 @@ const styles = theme => ({
   },
 });
 
-class Home extends Component {
+class SchedulesPage extends Component {
   state = {
     schedule: [],
     totalHours: 0,
@@ -279,4 +279,4 @@ class Home extends Component {
   }
 }
 
-export default withAuth(withStyles(styles)(Home));
+export default withAuth(withStyles(styles)(SchedulesPage));

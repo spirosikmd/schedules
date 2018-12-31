@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import Typography from '@material-ui/core/Typography';
-import { checkToken } from '../../api';
+import { checkToken } from '../api';
 import Loader from './Loader';
 
 export default function withAuth(ComponentToProtect) {

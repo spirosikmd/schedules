@@ -10,23 +10,22 @@ import TableBody from '@material-ui/core/TableBody';
 import { withStyles } from '@material-ui/core/styles';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import Toolbar from '@material-ui/core/Toolbar';
-import {
-  fetchSchedule,
-  createEvents,
-  updateSchedule,
-  createScheduleEntries,
-  deleteScheduleEntry,
-  updateScheduleEntry,
-} from '../api';
-import withAuth from '../shared/components/withAuth';
-import Loader from '../shared/components/Loader';
+import { fetchSchedule, updateSchedule } from '../../shared/api';
+import withAuth from '../../shared/components/withAuth';
+import Loader from '../../shared/components/Loader';
+import MessageSnackbar from '../../shared/components/MessageSnackbar';
+import ResponsiveConfirmDeleteDialog from '../../shared/components/ResponsiveConfirmDeleteDialog';
 import CreateEntryForm from './CreateEntryForm';
-import ResponsiveConfirmDeleteDialog from './ResponsiveConfirmDeleteDialog';
 import CreateEventsDialog from './CreateEventsDialog';
 import ScheduleItem from './ScheduleItem';
 import ScheduleHeader from './ScheduleHeader';
 import ScheduleSettings from './ScheduleSettings';
-import MessageSnackbar from './MessageSnackbar';
+import {
+  createEvents,
+  createScheduleEntries,
+  deleteScheduleEntry,
+  updateScheduleEntry,
+} from '../api';
 
 const styles = theme => ({
   table: {
@@ -58,7 +57,7 @@ const styles = theme => ({
   },
 });
 
-class Schedule extends PureComponent {
+class SchedulePage extends PureComponent {
   state = {
     schedule: {},
     isCreatingEvents: false,
@@ -348,4 +347,4 @@ class Schedule extends PureComponent {
   }
 }
 
-export default withAuth(withStyles(styles)(Schedule));
+export default withAuth(withStyles(styles)(SchedulePage));
