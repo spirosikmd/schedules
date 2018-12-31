@@ -1,4 +1,4 @@
-import { createEvents } from '../events';
+import { createEvents } from '../';
 
 describe('createEvents', () => {
   let schedule;
