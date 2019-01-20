@@ -33,7 +33,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
-    "@types/reach__router": "^1.2.2",
+    "@types/reach__router": "^1.2.3",
     "@types/recharts": "^1.1.6"
   }
 }
