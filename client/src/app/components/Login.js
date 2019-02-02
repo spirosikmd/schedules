@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { GoogleLogin } from 'react-google-login';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import LockIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -38,6 +39,14 @@ const styles = theme => ({
   },
   submit: {
     marginTop: theme.spacing.unit * 3,
+    position: 'relative',
+  },
+  submitProgress: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    marginTop: -12,
+    marginLeft: -12,
   },
 });
 
@@ -58,16 +67,23 @@ const Login = React.memo(
               onSuccess={onGoogleLoginSuccess}
               onFailure={onGoogleLoginFailure}
               render={props => (
-                <Button
-                  onClick={props.onClick}
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  className={classes.submit}
-                  disabled={isLoggingIn}
-                >
-                  {isLoggingIn ? 'Loading...' : 'Google'}
-                </Button>
+                <div className={classes.submit}>
+                  <Button
+                    onClick={props.onClick}
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    disabled={isLoggingIn}
+                  >
+                    Google
+                  </Button>
+                  {isLoggingIn && (
+                    <CircularProgress
+                      size={24}
+                      className={classes.submitProgress}
+                    />
+                  )}
+                </div>
               )}
             />
           </form>
