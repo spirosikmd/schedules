@@ -53,7 +53,6 @@ const Login = React.memo(
             <GoogleLogin
               clientId="1052222050887-labkfk5agrcfn4dbfaf0qitjq635s5nv.apps.googleusercontent.com"
               icon={false}
-              scope="https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/plus.me"
               isSignedIn
               onSuccess={onGoogleLoginSuccess}
               onFailure={onGoogleLoginFailure}
