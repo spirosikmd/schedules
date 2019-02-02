@@ -46,10 +46,13 @@ export async function updateScheduleEntry(scheduleId, entryId, data) {
 }
 
 function createEventObject(scheduleItem) {
-  return {
+  let eventObject = {
     summary: 'ACC',
-    description: `You work with: ${scheduleItem.workWith.join(',')}`,
-    location: scheduleItem.location,
+    ...(scheduleItem.location !== undefined && {
+      location: scheduleItem.location,
+    }),
+    description:
+      "We don't know who you work with, but you definitely are not working alone :)",
     start: {
       dateTime: new Date(scheduleItem.startTime),
     },
@@ -57,6 +60,17 @@ function createEventObject(scheduleItem) {
       dateTime: new Date(scheduleItem.endTime),
     },
   };
+
+  if (scheduleItem.workWith && scheduleItem.workWith.length > 0) {
+    eventObject = {
+      ...eventObject,
+      ...{
+        description: `You work with: ${scheduleItem.workWith.join(',')}`,
+      },
+    };
+  }
+
+  return eventObject;
 }
 
 function sanitizeSchedule(scheduleItem) {
@@ -65,7 +79,20 @@ function sanitizeSchedule(scheduleItem) {
   );
 }
 
-export function createEvents(schedule) {
+function loadGoogleLibraries(library) {
+  return new Promise((resolve, reject) => {
+    window.gapi.load(library, {
+      callback: resolve,
+      onerror: reject,
+      timeout: 5000,
+      ontimeout: reject,
+    });
+  });
+}
+
+export async function createEvents(schedule) {
+  await loadGoogleLibraries('client');
+
   const createEventRequests = schedule
     .filter(sanitizeSchedule)
     .map(scheduleItem => {
