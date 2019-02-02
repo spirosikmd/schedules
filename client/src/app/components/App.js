@@ -38,14 +38,19 @@ class App extends PureComponent {
     },
     isDrawerOpen: false,
     profileImageUrl: '',
+    isLoggingIn: false,
   };
 
-  handleGoogleLoginSuccess = response => {
-    this.props.createUserFromAccessToken(
+  handleGoogleLoginSuccess = async response => {
+    this.setState({ isLoggingIn: true });
+    await this.props.createUserFromAccessToken(
       response.accessToken,
       response.tokenObj.expires_in
     );
-    this.setState({ profileImageUrl: response.profileObj.imageUrl });
+    this.setState({
+      profileImageUrl: response.profileObj.imageUrl,
+      isLoggingIn: false,
+    });
   };
 
   handleGoogleLoginFailure = ({ error, details }) => {
@@ -69,6 +74,7 @@ class App extends PureComponent {
         <Fragment>
           <CssBaseline />
           <Login
+            isLoggingIn={this.state.isLoggingIn}
             onGoogleLoginSuccess={this.handleGoogleLoginSuccess}
             onGoogleLoginFailure={this.handleGoogleLoginFailure}
           />

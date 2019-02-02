@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { GoogleLogin } from 'react-google-login';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -41,7 +42,7 @@ const styles = theme => ({
 });
 
 const Login = React.memo(
-  ({ classes, onGoogleLoginSuccess, onGoogleLoginFailure }) => {
+  ({ classes, isLoggingIn, onGoogleLoginSuccess, onGoogleLoginFailure }) => {
     return (
       <main className={classes.layout}>
         <Paper className={classes.paper}>
@@ -63,8 +64,9 @@ const Login = React.memo(
                   color="primary"
                   fullWidth
                   className={classes.submit}
+                  disabled={isLoggingIn}
                 >
-                  Google
+                  {isLoggingIn ? 'Loading...' : 'Google'}
                 </Button>
               )}
             />
@@ -74,5 +76,12 @@ const Login = React.memo(
     );
   }
 );
+
+Login.propTypes = {
+  classes: PropTypes.object.isRequired,
+  isLoggingIn: PropTypes.bool.isRequired,
+  onGoogleLoginSuccess: PropTypes.func.isRequired,
+  onGoogleLoginFailure: PropTypes.func.isRequired,
+};
 
 export default withStyles(styles)(Login);
