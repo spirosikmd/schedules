@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "jest": "^24.1.0",
-    "nodemon": "^1.18.9"
+    "nodemon": "^1.18.10"
   },
   "scripts": {
     "dev": "nodemon index.js",
