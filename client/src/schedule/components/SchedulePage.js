@@ -1,5 +1,4 @@
 import React, { PureComponent, Fragment } from 'react';
-import classNames from 'classnames';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Grid from '@material-ui/core/Grid';
@@ -8,18 +7,14 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import { withStyles } from '@material-ui/core/styles';
-import { lighten } from '@material-ui/core/styles/colorManipulator';
-import Toolbar from '@material-ui/core/Toolbar';
 import { fetchSchedule, updateSchedule } from '../../shared/api';
 import withAuth from '../../shared/components/withAuth';
 import Loader from '../../shared/components/Loader';
 import MessageSnackbar from '../../shared/components/MessageSnackbar';
-import ResponsiveConfirmDeleteDialog from '../../shared/components/ResponsiveConfirmDeleteDialog';
-import CreateEntryForm from './CreateEntryForm';
 import CreateEventsDialog from './CreateEventsDialog';
 import ScheduleItem from './ScheduleItem';
 import ScheduleHeader from './ScheduleHeader';
-import ScheduleSettings from './ScheduleSettings';
+import ScheduleToolbar from './ScheduleToolbar';
 import {
   createEvents,
   createScheduleEntries,
@@ -36,21 +31,6 @@ const styles = theme => ({
   info: {
     marginTop: theme.spacing.unit * 2,
   },
-  toolbar: {
-    [theme.breakpoints.down('sm')]: {
-      paddingRight: theme.spacing.unit,
-    },
-  },
-  highlight:
-    theme.palette.type === 'light'
-      ? {
-          color: theme.palette.secondary.main,
-          backgroundColor: lighten(theme.palette.secondary.light, 0.85),
-        }
-      : {
-          color: theme.palette.text.primary,
-          backgroundColor: theme.palette.secondary.dark,
-        },
   eventsMessage: {
     marginTop: theme.spacing.unit,
     marginBottom: theme.spacing.unit,
@@ -254,50 +234,14 @@ class SchedulePage extends PureComponent {
           <Loader loading={true} />
         ) : (
           <Paper className={classes.table}>
-            <Toolbar
-              className={classNames(classes.toolbar, {
-                [classes.highlight]: numSelected > 0,
-              })}
-            >
-              <Grid container alignItems="center" justify="space-between">
-                <Grid item>
-                  {numSelected > 0 ? (
-                    <Typography color="inherit" variant="subtitle1">
-                      {numSelected} selected
-                    </Typography>
-                  ) : (
-                    <Typography variant="h6" id="tableTitle">
-                      {name}
-                    </Typography>
-                  )}
-                </Grid>
-                <Grid item>
-                  <Grid container alignItems="center">
-                    {numSelected > 0 ? (
-                      <ResponsiveConfirmDeleteDialog
-                        title="Delete selected entries?"
-                        content="Are you sure you want to delete the selected entries?"
-                        onDeleteClick={this.handleDeleteEntries}
-                      />
-                    ) : (
-                      <>
-                        <Grid item>
-                          <CreateEntryForm onSubmit={this.handleCreateEntry} />
-                        </Grid>
-                        {settings && (
-                          <Grid item>
-                            <ScheduleSettings
-                              hourlyWage={settings.hourlyWage}
-                              onSave={this.handleSettingsSave}
-                            />
-                          </Grid>
-                        )}
-                      </>
-                    )}
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Toolbar>
+            <ScheduleToolbar
+              name={name}
+              numSelected={numSelected}
+              hourlyWage={settings && settings.hourlyWage}
+              onDeleteEntries={this.handleDeleteEntries}
+              onCreateEntry={this.handleCreateEntry}
+              onSettingsSave={this.handleSettingsSave}
+            />
             {schedule && (
               <Table>
                 <ScheduleHeader
