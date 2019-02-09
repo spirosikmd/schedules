@@ -193,6 +193,33 @@ class SchedulePage extends PureComponent {
     this.setState({ selected: newSelected });
   };
 
+  handleCreateEventForEntry = () => {
+    const { selected, schedule } = this.state;
+
+    const entries = schedule.schedule.filter(entry =>
+      selected.includes(entry.id)
+    );
+
+    createEvents(entries)
+      .then(events => {
+        events.forEach(event => {
+          console.log(
+            `Event created: ${event.created} | ${event.description} | ${
+              event.location
+            }`
+          );
+        });
+
+        this.setState({
+          selected: [],
+          isSnackbarOpen: true,
+          snackbarMessage: 'Created events for selected entries',
+          snackbarVariant: 'success',
+        });
+      })
+      .catch(console.error);
+  };
+
   render() {
     const { classes } = this.props;
     const {
@@ -241,6 +268,7 @@ class SchedulePage extends PureComponent {
               onDeleteEntries={this.handleDeleteEntries}
               onCreateEntry={this.handleCreateEntry}
               onSettingsSave={this.handleSettingsSave}
+              onCreateEventForEntry={this.handleCreateEventForEntry}
             />
             {schedule && (
               <Table>

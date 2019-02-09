@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,6 +9,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import { lighten } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
+import CalendarIcon from '@material-ui/icons/CalendarToday';
+import IconButton from '@material-ui/core/IconButton';
 
 const styles = theme => ({
   toolbar: {
@@ -36,6 +38,7 @@ const ScheduleToolbar = ({
   onDeleteEntries,
   onCreateEntry,
   onSettingsSave,
+  onCreateEventForEntry,
 }) => {
   return (
     <Toolbar
@@ -58,11 +61,19 @@ const ScheduleToolbar = ({
         <Grid item>
           <Grid container alignItems="center">
             {numSelected > 0 ? (
-              <ResponsiveConfirmDeleteDialog
-                title="Delete selected entries?"
-                content="Are you sure you want to delete the selected entries?"
-                onDeleteClick={onDeleteEntries}
-              />
+              <Fragment>
+                <IconButton
+                  onClick={onCreateEventForEntry}
+                  aria-label="Create event for entry"
+                >
+                  <CalendarIcon />
+                </IconButton>
+                <ResponsiveConfirmDeleteDialog
+                  title="Delete selected entries?"
+                  content="Are you sure you want to delete the selected entries?"
+                  onDeleteClick={onDeleteEntries}
+                />
+              </Fragment>
             ) : (
               <>
                 <Grid item>
@@ -93,6 +104,7 @@ ScheduleToolbar.propTypes = {
   onDeleteEntries: PropTypes.func.isRequired,
   onCreateEntry: PropTypes.func.isRequired,
   onSettingsSave: PropTypes.func.isRequired,
+  onCreateEventForEntry: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ScheduleToolbar);
