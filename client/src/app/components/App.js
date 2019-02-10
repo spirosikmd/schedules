@@ -1,4 +1,5 @@
 import React, { Fragment, PureComponent, Suspense, lazy } from 'react';
+import PropTypes from 'prop-types';
 import { Router, navigate } from '@reach/router';
 import { connect } from 'react-redux';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -112,6 +113,13 @@ class App extends PureComponent {
     );
   }
 }
+
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+  user: PropTypes.object,
+  setUser: PropTypes.func.isRequired,
+  createUserFromAccessToken: PropTypes.func.isRequired,
+};
 
 const mapStateToProps = state => ({
   user: state.authReducer.user,
