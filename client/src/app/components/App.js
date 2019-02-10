@@ -125,11 +125,10 @@ const mapStateToProps = state => ({
   user: state.authReducer.user,
 });
 
-const mapDispatchToProps = dispatch => ({
-  setUser: user => dispatch(setUser(user)),
-  createUserFromAccessToken: (accessToken, expiresIn) =>
-    dispatch(createUserFromAccessToken(accessToken, expiresIn)),
-});
+const mapDispatchToProps = {
+  setUser,
+  createUserFromAccessToken,
+};
 
 export default withStyles(styles)(
   connect(

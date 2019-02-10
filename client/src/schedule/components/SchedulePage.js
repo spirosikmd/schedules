@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import ArrowBack from '@material-ui/icons/ArrowBack';
 import Grid from '@material-ui/core/Grid';
@@ -318,5 +319,11 @@ class SchedulePage extends PureComponent {
     );
   }
 }
+
+SchedulePage.propTypes = {
+  classes: PropTypes.object.isRequired,
+  navigate: PropTypes.func.isRequired,
+  scheduleId: PropTypes.string.isRequired,
+};
 
 export default withAuth(withStyles(styles)(SchedulePage));

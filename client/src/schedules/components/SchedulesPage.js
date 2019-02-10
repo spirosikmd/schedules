@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
@@ -278,5 +279,9 @@ class SchedulesPage extends Component {
     );
   }
 }
+
+SchedulesPage.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
 
 export default withAuth(withStyles(styles)(SchedulesPage));

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { navigate } from '@reach/router';
 import DeleteUserDialog from './DeleteUserDialog';
@@ -14,9 +15,13 @@ const SettingsPage = React.memo(({ deleteUser: deleteUserAndLogout }) => {
   return <DeleteUserDialog onDeleteClick={handleDeleteClick} />;
 });
 
-const mapDispatchToProps = dispatch => ({
-  deleteUserAndLogout: () => dispatch(deleteUserAndLogout()),
-});
+SettingsPage.propTypes = {
+  deleteUserAndLogout: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = {
+  deleteUserAndLogout,
+};
 
 export default connect(
   null,

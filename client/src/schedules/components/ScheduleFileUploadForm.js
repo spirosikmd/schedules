@@ -1,4 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -114,5 +115,9 @@ class ScheduleFileUploadForm extends PureComponent {
     );
   }
 }
+
+ScheduleFileUploadForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
 
 export default withMobileDialog()(ScheduleFileUploadForm);

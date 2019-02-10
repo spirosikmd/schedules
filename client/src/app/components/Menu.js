@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
 import InboxIcon from '@material-ui/icons/Inbox';
 import ShowChartIcon from '@material-ui/icons/ShowChart';
@@ -44,5 +45,12 @@ const Menu = React.memo(
     );
   }
 );
+
+Menu.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onMenuClose: PropTypes.func.isRequired,
+  onMenuContentClick: PropTypes.func.isRequired,
+  onMenuContentKeyDown: PropTypes.func.isRequired,
+};
 
 export default Menu;
