@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { Link } from '@reach/router';
 import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
@@ -23,6 +24,7 @@ import {
   fetchHolyTotal,
   createSchedule,
 } from '../api';
+import { setSchedules } from '../actions';
 
 const styles = theme => ({
   item: {
@@ -44,16 +46,9 @@ const styles = theme => ({
 
 class SchedulesPage extends Component {
   state = {
-    schedule: [],
-    totalHours: 0,
-    totalWeeklyWage: 0,
-    selectedScheduleId: '',
-    schedules: [],
-    isCreatingEvents: false,
     editingScheduleId: '',
     newScheduleName: '',
     holyTotal: 0,
-    isDrawerOpen: false,
     isLoadingSchedules: false,
     isSnackbarOpen: false,
     snackbarMessage: '',
@@ -65,7 +60,8 @@ class SchedulesPage extends Component {
 
     fetchSchedules()
       .then(schedules => {
-        this.setState({ schedules, isLoadingSchedules: false });
+        this.props.setSchedules(schedules);
+        this.setState({ isLoadingSchedules: false });
       })
       .catch(err => console.log(err));
 
@@ -78,7 +74,7 @@ class SchedulesPage extends Component {
     generateScheduleWithFileAndPerson(file, hourlyWage, person)
       .then(() => {
         fetchSchedules().then(schedules => {
-          this.setState({ schedules });
+          this.props.setSchedules(schedules);
         });
 
         fetchHolyTotal().then(response =>
@@ -98,7 +94,7 @@ class SchedulesPage extends Component {
     deleteSchedule(scheduleId)
       .then(() => {
         fetchSchedules().then(schedules => {
-          this.setState({ schedules });
+          this.props.setSchedules(schedules);
         });
 
         fetchHolyTotal().then(response =>
@@ -138,7 +134,7 @@ class SchedulesPage extends Component {
       this.setState({ editingScheduleId: '' });
 
       fetchSchedules().then(schedules => {
-        this.setState({ schedules });
+        this.props.setSchedules(schedules);
       });
     });
   };
@@ -151,7 +147,7 @@ class SchedulesPage extends Component {
   handleCreateSchedule = data => {
     createSchedule(data).then(() => {
       fetchSchedules().then(schedules => {
-        this.setState({ schedules });
+        this.props.setSchedules(schedules);
       });
     });
   };
@@ -165,10 +161,9 @@ class SchedulesPage extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, schedules } = this.props;
     const {
       holyTotal,
-      schedules,
       isLoadingSchedules,
       isSnackbarOpen,
       snackbarMessage,
@@ -284,4 +279,19 @@ SchedulesPage.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withAuth(withStyles(styles)(SchedulesPage));
+const mapStateToProps = ({ schedulesReducer }) => ({
+  schedules: schedulesReducer.schedules,
+});
+
+const mapDispatchToProps = {
+  setSchedules,
+};
+
+export default withAuth(
+  withStyles(styles)(
+    connect(
+      mapStateToProps,
+      mapDispatchToProps
+    )(SchedulesPage)
+  )
+);

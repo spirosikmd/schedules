@@ -88,7 +88,7 @@ class SchedulePage extends PureComponent {
 
   getSchedule() {
     return fetchSchedule(this.props.scheduleId)
-      .then(schedule => this.setState({ schedule, isLoading: false }))
+      .then(schedule => this.setState({ schedule }))
       .catch(err => console.log(err));
   }
 
