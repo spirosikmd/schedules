@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,67 +7,63 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
+import useToggle from '../../shared/components/useToggle';
 
-class CreateEventsDialog extends PureComponent {
-  state = {
-    open: false,
-  };
+function CreateEventsDialog({
+  fullScreen,
+  eventsCreatedOnce,
+  isCreatingEvents,
+  onCreateEventsClick,
+}) {
+  const [open, toggleOpen] = useToggle();
 
-  handleClickOpen = () => {
-    if (this.props.eventsCreatedOnce) {
-      this.setState({ open: true });
+  const handleClickOpen = () => {
+    if (eventsCreatedOnce) {
+      toggleOpen(true);
       return;
     }
-    this.props.onCreateEventsClick();
+    onCreateEventsClick();
   };
 
-  handleCreateClick = () => {
-    this.closeDialog();
-    this.props.onCreateEventsClick();
+  const handleCreateClick = () => {
+    toggleOpen(false);
+    onCreateEventsClick();
   };
 
-  closeDialog = () => {
-    this.setState({ open: false });
-  };
-
-  render() {
-    const { fullScreen, isCreatingEvents } = this.props;
-
-    return (
-      <div>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={this.handleClickOpen}
-          disabled={isCreatingEvents}
-        >
-          {isCreatingEvents ? 'creating events...' : 'create events'}
-        </Button>
-        <Dialog
-          fullScreen={fullScreen}
-          open={this.state.open}
-          onClose={this.closeDialog}
-          aria-labelledby="responsive-dialog-title"
-        >
-          <DialogTitle id="responsive-dialog-title">Create events</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              You have created events for this schedule once. Do you want to
-              create them again?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.closeDialog} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleCreateClick} color="primary" autoFocus>
-              Create
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <Button
+        variant="outlined"
+        color="primary"
+        onClick={handleClickOpen}
+        disabled={isCreatingEvents}
+      >
+        {isCreatingEvents ? 'creating events...' : 'create events'}
+      </Button>
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={toggleOpen}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">Create events</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            You have created events for this schedule once. Do you want to
+            create them again?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={toggleOpen} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleCreateClick} color="primary" autoFocus>
+            Create
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
 
 CreateEventsDialog.propTypes = {
@@ -81,4 +77,4 @@ CreateEventsDialog.defaultProps = {
   eventsCreatedOnce: false,
 };
 
-export default withMobileDialog()(CreateEventsDialog);
+export default withMobileDialog()(memo(CreateEventsDialog));

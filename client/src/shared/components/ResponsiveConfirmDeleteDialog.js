@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
@@ -9,60 +9,53 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import withMobileDialog from '@material-ui/core/withMobileDialog';
+import useToggle from './useToggle';
 
-class ResponsiveConfirmDeleteDialog extends PureComponent {
-  state = {
-    open: false,
+function ResponsiveConfirmDeleteDialog({
+  fullScreen,
+  title,
+  content,
+  onDeleteClick,
+  onCancelClick,
+}) {
+  const [open, toggleOpen] = useToggle();
+
+  const handleCancelClick = () => {
+    toggleOpen(false);
+    onCancelClick();
   };
 
-  handleClickOpen = () => {
-    this.setState({ open: true });
+  const handleDeleteClick = () => {
+    toggleOpen(false);
+    onDeleteClick();
   };
 
-  handleCancelClick = () => {
-    this.closeDialog();
-    this.props.onCancelClick();
-  };
-
-  handleDeleteClick = () => {
-    this.closeDialog();
-    this.props.onDeleteClick();
-  };
-
-  closeDialog = () => {
-    this.setState({ open: false });
-  };
-
-  render() {
-    const { fullScreen, title, content } = this.props;
-
-    return (
-      <div>
-        <IconButton aria-label="Delete schedule" onClick={this.handleClickOpen}>
-          <DeleteIcon />
-        </IconButton>
-        <Dialog
-          fullScreen={fullScreen}
-          open={this.state.open}
-          onClose={this.closeDialog}
-          aria-labelledby="responsive-dialog-title"
-        >
-          <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>{content}</DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleCancelClick} color="secondary">
-              Cancel
-            </Button>
-            <Button onClick={this.handleDeleteClick} color="primary" autoFocus>
-              Delete
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
-    );
-  }
+  return (
+    <div>
+      <IconButton aria-label="Delete schedule" onClick={toggleOpen}>
+        <DeleteIcon />
+      </IconButton>
+      <Dialog
+        fullScreen={fullScreen}
+        open={open}
+        onClose={toggleOpen}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">{title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{content}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelClick} color="secondary">
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteClick} color="primary" autoFocus>
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
 
 ResponsiveConfirmDeleteDialog.propTypes = {
@@ -78,4 +71,4 @@ ResponsiveConfirmDeleteDialog.defaultProps = {
   onDeleteClick: () => {},
 };
 
-export default withMobileDialog()(ResponsiveConfirmDeleteDialog);
+export default withMobileDialog()(memo(ResponsiveConfirmDeleteDialog));

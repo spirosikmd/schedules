@@ -1,18 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from '@reach/router';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import EditIcon from '@material-ui/icons/Edit';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
 import { withStyles } from '@material-ui/core/styles';
 import withAuth from '../../shared/components/withAuth';
 import Loader from '../../shared/components/Loader';
-import ResponsiveConfirmDeleteDialog from '../../shared/components/ResponsiveConfirmDeleteDialog';
 import MessageSnackbar from '../../shared/components/MessageSnackbar';
 import { updateSchedule } from '../../shared/api';
 import ScheduleFileUploadForm from './ScheduleFileUploadForm';
@@ -25,6 +18,7 @@ import {
   createSchedule,
 } from '../api';
 import { setSchedules } from '../actions';
+import ScheduleListItem from './ScheduleListItem';
 
 const styles = theme => ({
   item: {
@@ -187,75 +181,21 @@ class SchedulesPage extends Component {
             <Loader loading={true} />
           ) : (
             schedules.map(schedule => (
-              <Grid item xs={12} key={schedule.id}>
-                <Paper className={classes.item}>
-                  <Grid container alignItems="center">
-                    <Grid item xs={8}>
-                      {this.state.editingScheduleId !== schedule.id ? (
-                        <Typography className={classes.scheduleLink}>
-                          <Link to={`/schedules/${schedule.id}`}>
-                            {schedule.name}
-                          </Link>
-                        </Typography>
-                      ) : (
-                        <Grid
-                          container
-                          className={classes.editContainer}
-                          spacing={8}
-                        >
-                          <Grid item>
-                            <TextField
-                              id="newScheduleName"
-                              value={this.state.newScheduleName}
-                              onChange={this.handleNewScheduleNameChange}
-                              autoFocus
-                            />
-                          </Grid>
-                          <Grid item>
-                            <Button
-                              color="secondary"
-                              onClick={this.handleCancelEditClick}
-                            >
-                              cancel
-                            </Button>
-                            <Button
-                              color="primary"
-                              onClick={() =>
-                                this.handleUpdateScheduleName(
-                                  schedule.id,
-                                  schedule.name
-                                )
-                              }
-                            >
-                              update
-                            </Button>
-                          </Grid>
-                        </Grid>
-                      )}
-                    </Grid>
-                    <Grid item xs={4}>
-                      <Grid container justify="flex-end">
-                        <IconButton
-                          aria-label="Edit schedule name"
-                          onClick={() =>
-                            this.handleScheduleEdit(schedule.id, schedule.name)
-                          }
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <ResponsiveConfirmDeleteDialog
-                          title="Delete schedule?"
-                          content="All the schedule data will be removed permanently and you won't be
-                      able to retrieve them again."
-                          onDeleteClick={() =>
-                            this.handleScheduleDelete(schedule.id)
-                          }
-                        />
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Paper>
-              </Grid>
+              <ScheduleListItem
+                key={schedule.id}
+                schedule={schedule}
+                newScheduleName={this.state.newScheduleName}
+                editingScheduleId={this.state.editingScheduleId}
+                onNewScheduleNameChange={this.handleNewScheduleNameChange}
+                onCancelEditClick={this.handleCancelEditClick}
+                onUpdateScheduleName={() =>
+                  this.handleUpdateScheduleName(schedule.id, schedule.name)
+                }
+                onScheduleEdit={() =>
+                  this.handleScheduleEdit(schedule.id, schedule.name)
+                }
+                onScheduleDelete={() => this.handleScheduleDelete(schedule.id)}
+              />
             ))
           )}
         </Grid>
