@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -23,80 +23,74 @@ const styles = {
   },
 };
 
-class TopBar extends PureComponent {
-  state = {
-    anchorEl: null,
+function TopBar({
+  user,
+  onMenuIconClick,
+  onGoogleLogoutSuccess,
+  classes,
+  profileImageUrl,
+}) {
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
   };
 
-  handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget });
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
-  handleClose = () => {
-    this.setState({ anchorEl: null });
-  };
+  const name = `${user.firstName} ${user.lastName}`;
 
-  render() {
-    const {
-      user,
-      onMenuIconClick,
-      onGoogleLogoutSuccess,
-      classes,
-      profileImageUrl,
-    } = this.props;
-    const { anchorEl } = this.state;
-    const name = `${user.firstName} ${user.lastName}`;
-
-    return (
-      <div className={classes.grow}>
-        <AppBar position="static">
-          <Toolbar>
-            <IconButton
-              className={classes.menuButton}
-              color="inherit"
-              aria-label="Menu"
-              onClick={onMenuIconClick}
-            >
-              <MenuIcon />
-            </IconButton>
-            <div className={classes.grow} />
-            <Avatar
-              className={classes.avatar}
-              alt={name}
-              src={profileImageUrl}
-              aria-owns={anchorEl ? 'account-menu' : undefined}
-              aria-haspopup="true"
-              onClick={this.handleClick}
+  return (
+    <div className={classes.grow}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="Menu"
+            onClick={onMenuIconClick}
+          >
+            <MenuIcon />
+          </IconButton>
+          <div className={classes.grow} />
+          <Avatar
+            className={classes.avatar}
+            alt={name}
+            src={profileImageUrl}
+            aria-owns={anchorEl ? 'account-menu' : undefined}
+            aria-haspopup="true"
+            onClick={handleClick}
+          />
+          <Menu
+            id="account-menu"
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+            getContentAnchorEl={null}
+            anchorOrigin={{
+              vertical: 'bottom',
+              horizontal: 'right',
+            }}
+            transformOrigin={{
+              vertical: 'top',
+              horizontal: 'right',
+            }}
+          >
+            <MenuItem disabled={true}>{name}</MenuItem>
+            <GoogleLogout
+              icon={false}
+              onLogoutSuccess={onGoogleLogoutSuccess}
+              render={props => (
+                <MenuItem onClick={props.onClick}>Logout</MenuItem>
+              )}
             />
-            <Menu
-              id="account-menu"
-              anchorEl={anchorEl}
-              open={Boolean(anchorEl)}
-              onClose={this.handleClose}
-              getContentAnchorEl={null}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-            >
-              <MenuItem disabled={true}>{name}</MenuItem>
-              <GoogleLogout
-                icon={false}
-                onLogoutSuccess={onGoogleLogoutSuccess}
-                render={props => (
-                  <MenuItem onClick={props.onClick}>Logout</MenuItem>
-                )}
-              />
-            </Menu>
-          </Toolbar>
-        </AppBar>
-      </div>
-    );
-  }
+          </Menu>
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
 }
 
 TopBar.propTypes = {
