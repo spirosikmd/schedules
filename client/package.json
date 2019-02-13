@@ -15,7 +15,7 @@
     "react-google-login": "^5.0.2",
     "react-redux": "^6.0.0",
     "react-scripts": "^2.1.5",
-    "recharts": "^1.4.2",
+    "recharts": "^1.4.3",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   },
