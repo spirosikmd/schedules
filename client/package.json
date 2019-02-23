@@ -34,7 +34,7 @@
   ],
   "devDependencies": {
     "@types/reach__router": "^1.2.3",
-    "@types/recharts": "^1.1.11",
+    "@types/recharts": "^1.1.13",
     "merge": "^1.2.1"
   }
 }
