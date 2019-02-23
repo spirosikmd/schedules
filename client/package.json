@@ -9,7 +9,6 @@
     "@material-ui/icons": "^3.0.1",
     "@reach/router": "^1.1.1",
     "classnames": "^2.2.6",
-    "merge": "^1.2.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
@@ -35,6 +34,7 @@
   ],
   "devDependencies": {
     "@types/reach__router": "^1.2.3",
-    "@types/recharts": "^1.1.11"
+    "@types/recharts": "^1.1.11",
+    "merge": "^1.2.1"
   }
 }
