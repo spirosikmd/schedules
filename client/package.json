@@ -19,6 +19,13 @@
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0"
   },
+  "devDependencies": {
+    "@types/reach__router": "^1.2.3",
+    "@types/recharts": "^1.1.11"
+  },
+  "resolutions": {
+    "merge": "^1.2.1"
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -31,10 +38,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "@types/reach__router": "^1.2.3",
-    "@types/recharts": "^1.1.11",
-    "merge": "^1.2.1"
-  }
+  ]
 }
