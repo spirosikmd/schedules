@@ -3205,10 +3205,10 @@ mongoose-timestamp@^0.6.0:
   dependencies:
     defaults "^1.0.3"
 
-mongoose@^5.4.18:
-  version "5.4.18"
-  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.4.18.tgz#ed74e152600f7c911f8b9d61b51560f9635b2dfe"
-  integrity sha512-yiSd/1OYYfK9EuH6NFO/NnTD4AZPIpRY1i58xUssgCGsYDX3qEYcdgFeknB5OArMB1Ny3wwMW8xiip2I5pgszw==
+mongoose@^5.4.19:
+  version "5.4.19"
+  resolved "https://registry.yarnpkg.com/mongoose/-/mongoose-5.4.19.tgz#fdca94ee7f71da2cf0e941d02255aa02007c55c0"
+  integrity sha512-paRU3nbCrPIUVw1GAlxo11uIIqrYORctUx1kcLj7i2NhkxPQuy5OK2/FYj8+tglsaixycmONSyop2HQp1IUQSA==
   dependencies:
     async "2.6.1"
     bson "~1.1.0"
