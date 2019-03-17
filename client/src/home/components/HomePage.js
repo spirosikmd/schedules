@@ -65,7 +65,14 @@ class HomePage extends Component {
 
     return (
       <Fragment>
-        <Grid container spacing={8} className={classes.actions}>
+        <Grid
+          container
+          spacing={8}
+          className={classes.actions}
+          direction="row"
+          justify="center"
+          alignItems="center"
+        >
           <Grid item>
             <ScheduleFileUploadForm
               onSubmit={this.handleScheduleFileUploadFormSubmit}
