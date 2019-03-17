@@ -12,6 +12,7 @@ import {
   fetchHolyTotal,
 } from '../api';
 import { setSchedules } from '../../shared/actions';
+import MessageSnackbar from '../../shared/components/MessageSnackbar';
 
 const styles = theme => ({
   actions: {
@@ -25,6 +26,9 @@ const styles = theme => ({
 class HomePage extends Component {
   state = {
     holyTotal: 0,
+    isSnackbarOpen: false,
+    snackbarMessage: '',
+    snackbarVariant: 'success',
   };
 
   componentDidMount() {
@@ -38,6 +42,14 @@ class HomePage extends Component {
         });
       });
   }
+
+  handleSnackbarClose = (_, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ isSnackbarOpen: false });
+  };
 
   handleScheduleFileUploadFormSubmit = (file, hourlyWage, person) => {
     generateScheduleWithFileAndPerson(file, hourlyWage, person)
@@ -61,7 +73,12 @@ class HomePage extends Component {
 
   render() {
     const { classes } = this.props;
-    const { holyTotal } = this.state;
+    const {
+      holyTotal,
+      isSnackbarOpen,
+      snackbarMessage,
+      snackbarVariant,
+    } = this.state;
 
     return (
       <Fragment>
@@ -87,6 +104,12 @@ class HomePage extends Component {
             <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
           </Typography>
         )}
+        <MessageSnackbar
+          isOpen={isSnackbarOpen}
+          onClose={this.handleSnackbarClose}
+          message={snackbarMessage}
+          variant={snackbarVariant}
+        />
       </Fragment>
     );
   }
