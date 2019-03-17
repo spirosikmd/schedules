@@ -4,3 +4,10 @@ export const setUser = user => dispatch => {
     user,
   });
 };
+
+export const setSchedules = schedules => dispatch => {
+  dispatch({
+    type: 'SET_SCHEDULES',
+    schedules,
+  });
+};

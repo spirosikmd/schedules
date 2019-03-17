@@ -30,3 +30,16 @@ export async function checkToken() {
   }
   throw new ApiError('Token not valid', response.error);
 }
+
+export async function fetchSchedules() {
+  return fetch(`${BASE}/schedules`, { headers: getDefaultHeaders() }).then(
+    response => response.json()
+  );
+}
+
+export async function fetchHolyTotal() {
+  const response = await fetch(`${BASE}/aggregations/holy-total`, {
+    headers: getDefaultHeaders(),
+  });
+  return response.json();
+}

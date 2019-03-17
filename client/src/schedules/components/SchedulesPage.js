@@ -8,16 +8,9 @@ import withAuth from '../../shared/components/withAuth';
 import Loader from '../../shared/components/Loader';
 import MessageSnackbar from '../../shared/components/MessageSnackbar';
 import { updateSchedule } from '../../shared/api';
-import ScheduleFileUploadForm from './ScheduleFileUploadForm';
-import NewSchedule from './NewSchedule';
-import {
-  generateScheduleWithFileAndPerson,
-  fetchSchedules,
-  deleteSchedule,
-  fetchHolyTotal,
-  createSchedule,
-} from '../api';
-import { setSchedules } from '../actions';
+import { deleteSchedule } from '../api';
+import { fetchSchedules, fetchHolyTotal } from '../../shared/api';
+import { setSchedules } from '../../shared/actions';
 import ScheduleListItem from './ScheduleListItem';
 
 const styles = theme => ({
@@ -63,26 +56,6 @@ class SchedulesPage extends Component {
       .then(response => this.setState({ holyTotal: response.data.holyTotal }))
       .catch(err => console.log(err));
   }
-
-  handleScheduleFileUploadFormSubmit = (file, hourlyWage, person) => {
-    generateScheduleWithFileAndPerson(file, hourlyWage, person)
-      .then(() => {
-        fetchSchedules().then(schedules => {
-          this.props.setSchedules(schedules);
-        });
-
-        fetchHolyTotal().then(response =>
-          this.setState({ holyTotal: response.data.holyTotal })
-        );
-      })
-      .catch(error => {
-        this.setState({
-          isSnackbarOpen: true,
-          snackbarMessage: error.message,
-          snackbarVariant: 'error',
-        });
-      });
-  };
 
   handleScheduleDelete = scheduleId => {
     deleteSchedule(scheduleId)
@@ -138,14 +111,6 @@ class SchedulesPage extends Component {
     this.setState({ newScheduleName: value });
   };
 
-  handleCreateSchedule = data => {
-    createSchedule(data).then(() => {
-      fetchSchedules().then(schedules => {
-        this.props.setSchedules(schedules);
-      });
-    });
-  };
-
   handleSnackbarClose = (_, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -166,16 +131,6 @@ class SchedulesPage extends Component {
 
     return (
       <Fragment>
-        <Grid container spacing={8} className={classes.actions}>
-          <Grid item>
-            <ScheduleFileUploadForm
-              onSubmit={this.handleScheduleFileUploadFormSubmit}
-            />
-          </Grid>
-          <Grid item>
-            <NewSchedule onCreate={this.handleCreateSchedule} />
-          </Grid>
-        </Grid>
         <Grid container spacing={16}>
           {isLoadingSchedules ? (
             <Loader loading={true} />
