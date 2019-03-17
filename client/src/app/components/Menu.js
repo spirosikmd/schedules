@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from '@reach/router';
-import InboxIcon from '@material-ui/icons/Inbox';
-import ShowChartIcon from '@material-ui/icons/ShowChart';
-import SettingsIcon from '@material-ui/icons/Settings';
+import InboxIcon from '@material-ui/icons/InboxRounded';
+import HomeIcon from '@material-ui/icons/HomeRounded';
+import ShowChartIcon from '@material-ui/icons/ShowChartRounded';
+import SettingsIcon from '@material-ui/icons/SettingsRounded';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -23,9 +24,15 @@ const Menu = React.memo(
           <List component="nav">
             <ListItem button component={Link} to="/">
               <ListItemIcon>
-                <InboxIcon />
+                <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
+            </ListItem>
+            <ListItem button component={Link} to="/schedules">
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary="Schedules" />
             </ListItem>
             <ListItem button component={Link} to="/statistics">
               <ListItemIcon>

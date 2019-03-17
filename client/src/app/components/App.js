@@ -24,6 +24,7 @@ const StatisticsPage = lazy(() =>
 const SettingsPage = lazy(() =>
   import('../../settings/components/SettingsPage')
 );
+const HomePage = lazy(() => import('../../home/components/HomePage'));
 
 const styles = theme => ({
   page: {
@@ -102,7 +103,8 @@ class App extends PureComponent {
           <Suspense fallback={<Loader loading={true} />}>
             <Router>
               <NotFound default />
-              <SchedulesPage path="/" />
+              <HomePage path="/" />
+              <SchedulesPage path="/schedules" />
               <SchedulePage path="/schedules/:scheduleId" />
               <StatisticsPage path="/statistics" />
               <SettingsPage path="/settings" />

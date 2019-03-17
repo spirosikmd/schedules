@@ -57,7 +57,7 @@ class SchedulePage extends PureComponent {
 
   handleBackButtonClick = event => {
     event.preventDefault();
-    this.props.navigate('/');
+    this.props.navigate('/schedules');
   };
 
   handleCreateEventsClick = () => {
