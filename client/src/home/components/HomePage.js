@@ -1,21 +1,39 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ScheduleFileUploadForm from './ScheduleFileUploadForm';
 import NewSchedule from './NewSchedule';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import { generateScheduleWithFileAndPerson, createSchedule } from '../api';
-import { fetchHolyTotal, fetchSchedules } from '../../shared/api';
+import Typography from '@material-ui/core/Typography';
+import {
+  generateScheduleWithFileAndPerson,
+  createSchedule,
+  fetchHolyTotal,
+} from '../api';
+import { fetchSchedules } from '../../shared/api';
 import { setSchedules } from '../../shared/actions';
 
 const styles = theme => ({
   actions: {
     marginBottom: theme.spacing.unit,
   },
+  info: {
+    marginTop: theme.spacing.unit * 2,
+  },
 });
 
 class HomePage extends Component {
+  state = {
+    holyTotal: 0,
+  };
+
+  componentDidMount() {
+    fetchHolyTotal()
+      .then(response => this.setState({ holyTotal: response.data.holyTotal }))
+      .catch(err => console.log(err));
+  }
+
   handleScheduleFileUploadFormSubmit = (file, hourlyWage, person) => {
     generateScheduleWithFileAndPerson(file, hourlyWage, person)
       .then(() => {
@@ -46,18 +64,26 @@ class HomePage extends Component {
 
   render() {
     const { classes } = this.props;
+    const { holyTotal } = this.state;
 
     return (
-      <Grid container spacing={8} className={classes.actions}>
-        <Grid item>
-          <ScheduleFileUploadForm
-            onSubmit={this.handleScheduleFileUploadFormSubmit}
-          />
+      <Fragment>
+        <Grid container spacing={8} className={classes.actions}>
+          <Grid item>
+            <ScheduleFileUploadForm
+              onSubmit={this.handleScheduleFileUploadFormSubmit}
+            />
+          </Grid>
+          <Grid item>
+            <NewSchedule onCreate={this.handleCreateSchedule} />
+          </Grid>
         </Grid>
-        <Grid item>
-          <NewSchedule onCreate={this.handleCreateSchedule} />
-        </Grid>
-      </Grid>
+        {holyTotal > 0 && (
+          <Typography className={classes.info}>
+            <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
+          </Typography>
+        )}
+      </Fragment>
     );
   }
 }

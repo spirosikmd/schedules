@@ -2,40 +2,19 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import { withStyles } from '@material-ui/core/styles';
 import withAuth from '../../shared/components/withAuth';
 import Loader from '../../shared/components/Loader';
 import MessageSnackbar from '../../shared/components/MessageSnackbar';
 import { updateSchedule } from '../../shared/api';
 import { deleteSchedule } from '../api';
-import { fetchSchedules, fetchHolyTotal } from '../../shared/api';
+import { fetchSchedules } from '../../shared/api';
 import { setSchedules } from '../../shared/actions';
 import ScheduleListItem from './ScheduleListItem';
-
-const styles = theme => ({
-  item: {
-    padding: theme.spacing.unit,
-  },
-  actions: {
-    marginBottom: theme.spacing.unit,
-  },
-  editContainer: {
-    paddingLeft: theme.spacing.unit * 2,
-  },
-  scheduleLink: {
-    paddingLeft: theme.spacing.unit,
-  },
-  info: {
-    marginTop: theme.spacing.unit * 2,
-  },
-});
 
 class SchedulesPage extends Component {
   state = {
     editingScheduleId: '',
     newScheduleName: '',
-    holyTotal: 0,
     isLoadingSchedules: false,
     isSnackbarOpen: false,
     snackbarMessage: '',
@@ -51,10 +30,6 @@ class SchedulesPage extends Component {
         this.setState({ isLoadingSchedules: false });
       })
       .catch(err => console.log(err));
-
-    fetchHolyTotal()
-      .then(response => this.setState({ holyTotal: response.data.holyTotal }))
-      .catch(err => console.log(err));
   }
 
   handleScheduleDelete = scheduleId => {
@@ -63,10 +38,6 @@ class SchedulesPage extends Component {
         fetchSchedules().then(schedules => {
           this.props.setSchedules(schedules);
         });
-
-        fetchHolyTotal().then(response =>
-          this.setState({ holyTotal: response.data.holyTotal })
-        );
 
         this.setState({
           isSnackbarOpen: true,
@@ -120,9 +91,8 @@ class SchedulesPage extends Component {
   };
 
   render() {
-    const { classes, schedules } = this.props;
+    const { schedules } = this.props;
     const {
-      holyTotal,
       isLoadingSchedules,
       isSnackbarOpen,
       snackbarMessage,
@@ -154,11 +124,6 @@ class SchedulesPage extends Component {
             ))
           )}
         </Grid>
-        {holyTotal > 0 && (
-          <Typography className={classes.info}>
-            <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
-          </Typography>
-        )}
         <MessageSnackbar
           isOpen={isSnackbarOpen}
           onClose={this.handleSnackbarClose}
@@ -171,7 +136,8 @@ class SchedulesPage extends Component {
 }
 
 SchedulesPage.propTypes = {
-  classes: PropTypes.object.isRequired,
+  schedules: PropTypes.array.isRequired,
+  setSchedules: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ schedulesReducer }) => ({
@@ -183,10 +149,8 @@ const mapDispatchToProps = {
 };
 
 export default withAuth(
-  withStyles(styles)(
-    connect(
-      mapStateToProps,
-      mapDispatchToProps
-    )(SchedulesPage)
-  )
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(SchedulesPage)
 );
