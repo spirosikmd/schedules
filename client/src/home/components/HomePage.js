@@ -11,7 +11,6 @@ import {
   createSchedule,
   fetchHolyTotal,
 } from '../api';
-import { fetchSchedules } from '../../shared/api';
 import { setSchedules } from '../../shared/actions';
 
 const styles = theme => ({
@@ -31,19 +30,19 @@ class HomePage extends Component {
   componentDidMount() {
     fetchHolyTotal()
       .then(response => this.setState({ holyTotal: response.data.holyTotal }))
-      .catch(err => console.log(err));
+      .catch(error => {
+        this.setState({
+          isSnackbarOpen: true,
+          snackbarMessage: error.message,
+          snackbarVariant: 'error',
+        });
+      });
   }
 
   handleScheduleFileUploadFormSubmit = (file, hourlyWage, person) => {
     generateScheduleWithFileAndPerson(file, hourlyWage, person)
-      .then(() => {
-        fetchSchedules().then(schedules => {
-          this.props.setSchedules(schedules);
-        });
-
-        fetchHolyTotal().then(response =>
-          this.setState({ holyTotal: response.data.holyTotal })
-        );
+      .then(schedule => {
+        this.props.navigate(`/schedules/${schedule._id}`);
       })
       .catch(error => {
         this.setState({
@@ -55,10 +54,8 @@ class HomePage extends Component {
   };
 
   handleCreateSchedule = data => {
-    createSchedule(data).then(() => {
-      fetchSchedules().then(schedules => {
-        this.props.setSchedules(schedules);
-      });
+    createSchedule(data).then(schedule => {
+      this.props.navigate(`/schedules/${schedule._id}`);
     });
   };
 
@@ -92,6 +89,7 @@ HomePage.propTypes = {
   classes: PropTypes.object.isRequired,
   schedules: PropTypes.array.isRequired,
   setSchedules: PropTypes.func.isRequired,
+  navigate: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = ({ schedulesReducer }) => ({
