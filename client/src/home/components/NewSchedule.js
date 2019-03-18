@@ -43,7 +43,13 @@ class NewSchedule extends PureComponent {
 
     return (
       <Fragment>
-        <Button onClick={this.handleClickOpen}>create new</Button>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={this.handleClickOpen}
+        >
+          create new
+        </Button>
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}

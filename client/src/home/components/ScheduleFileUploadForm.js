@@ -62,7 +62,13 @@ class ScheduleFileUploadForm extends PureComponent {
 
     return (
       <Fragment>
-        <Button onClick={this.handleClickOpen}>Upload</Button>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={this.handleClickOpen}
+        >
+          Upload
+        </Button>
         <Dialog
           fullScreen={fullScreen}
           open={this.state.open}
