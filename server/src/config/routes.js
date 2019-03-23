@@ -160,6 +160,21 @@ module.exports = function(app) {
   );
 
   app.get(
+    `${BASE}/aggregations/next-working-date`,
+    aggregationsController.getNextWorkingDate
+  );
+
+  app.get(
+    `${BASE}/aggregations/highest-location`,
+    aggregationsController.getHighestLocation
+  );
+
+  app.get(
+    `${BASE}/aggregations/best-schedule`,
+    aggregationsController.getBestSchedule
+  );
+
+  app.get(
     `${BASE}/auth/google`,
     passport.authenticate('google-token', { session: false }),
     [

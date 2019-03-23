@@ -40,3 +40,24 @@ export async function fetchHolyTotal() {
   });
   return response.json();
 }
+
+export async function fetchNextWorkingDate() {
+  const response = await fetch(`${BASE}/aggregations/next-working-date`, {
+    headers: getDefaultHeaders(),
+  });
+  return response.json();
+}
+
+export async function fetchHighestLocation() {
+  const response = await fetch(`${BASE}/aggregations/highest-location`, {
+    headers: getDefaultHeaders(),
+  });
+  return response.json();
+}
+
+export async function fetchBestSchedule() {
+  const response = await fetch(`${BASE}/aggregations/best-schedule`, {
+    headers: getDefaultHeaders(),
+  });
+  return response.json();
+}

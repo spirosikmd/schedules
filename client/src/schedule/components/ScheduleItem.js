@@ -5,13 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import Grid from '@material-ui/core/Grid';
 import Checkbox from '@material-ui/core/Checkbox';
 import EditEntryForm from './EditEntryForm';
-
-function renderTime(time) {
-  if (!time) return '-';
-  const date = new Date(time);
-  const minutes = date.getMinutes();
-  return `${date.getHours()}:${minutes < 10 ? '0' : ''}${minutes}`;
-}
+import { formatTime } from '../../shared/helpers/dateTime';
 
 function formatDate(dateString) {
   const dateToFormat = new Date(dateString);
@@ -29,8 +23,8 @@ const ScheduleItem = React.memo(
         </TableCell>
         <TableCell>{new Date(daySchedule.date).toDateString()}</TableCell>
         <TableCell>{daySchedule.location || '-'}</TableCell>
-        <TableCell>{renderTime(daySchedule.startTime)}</TableCell>
-        <TableCell>{renderTime(daySchedule.endTime)}</TableCell>
+        <TableCell>{formatTime(daySchedule.startTime)}</TableCell>
+        <TableCell>{formatTime(daySchedule.endTime)}</TableCell>
         <TableCell align="right">{daySchedule.hours}</TableCell>
         <TableCell align="right">{daySchedule.dayWage.toFixed(2)}</TableCell>
         <TableCell>

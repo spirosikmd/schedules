@@ -158,9 +158,131 @@ function calculateHoursPerLocation(userId) {
   });
 }
 
+function calculateNextWorkingDate(userId) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject('Cannot get next working date');
+      }
+
+      ScheduleEntry.find({ date: { $gt: new Date() } })
+        .sort('date')
+        .exec((err, scheduleEntries) => {
+          if (err) {
+            return reject(err);
+          }
+
+          const { date, startTime, endTime } = scheduleEntries[0];
+
+          resolve(
+            createAggregationResponse({
+              nextWorkingDate: { date, startTime, endTime },
+            })
+          );
+        });
+    });
+  });
+}
+
+function calculateHighestLocation(userId) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject('Cannot get highest location');
+      }
+
+      ScheduleEntry.aggregate()
+        .match({ user: mongoose.Types.ObjectId(user._id) })
+        .group({
+          _id: '$location',
+          hours: { $sum: '$hours' },
+          numberOfTimes: { $sum: 1 },
+        })
+        .sort('-hours')
+        .project({
+          _id: 0,
+          name: '$_id',
+          hours: 1,
+          numberOfTimes: 1,
+        })
+        .exec((err, locationHourData) => {
+          if (err) {
+            return reject(err);
+          }
+
+          resolve(
+            createAggregationResponse({ highestLocation: locationHourData[0] })
+          );
+        });
+    });
+  });
+}
+
+function calculateBestSchedule(userId) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject('Cannot get best schedule');
+      }
+
+      ScheduleEntry.aggregate()
+        .match({ user: mongoose.Types.ObjectId(user._id) })
+        .lookup({
+          from: 'schedules',
+          localField: 'schedule',
+          foreignField: '_id',
+          as: 'schedule',
+        })
+        .group({
+          _id: '$schedule',
+          weeklyWage: {
+            $sum: {
+              $multiply: [
+                '$hours',
+                { $arrayElemAt: ['$schedule.settings.hourlyWage', 0] },
+              ],
+            },
+          },
+          hours: { $sum: '$hours' },
+        })
+        .project({
+          _id: 0,
+          weeklyWage: 1,
+          name: { $arrayElemAt: ['$_id.name', 0] },
+          hours: 1,
+        })
+        .sort('-weeklyWage')
+        .exec((err, weeklyWageData) => {
+          if (err) {
+            return reject(err);
+          }
+
+          resolve(
+            createAggregationResponse({ bestSchedule: weeklyWageData[0] })
+          );
+        });
+    });
+  });
+}
+
 module.exports = {
   calculateHolyTotal,
   calculateWeeklyWageData,
   calculateWeeklyHourData,
   calculateHoursPerLocation,
+  calculateNextWorkingDate,
+  calculateHighestLocation,
+  calculateBestSchedule,
 };

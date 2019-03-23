@@ -5,21 +5,21 @@ import ScheduleFileUploadForm from './ScheduleFileUploadForm';
 import NewSchedule from './NewSchedule';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import { setSchedules } from '../../shared/actions';
+import MessageSnackbar from '../../shared/components/MessageSnackbar';
 import {
   generateScheduleWithFileAndPerson,
   createSchedule,
   fetchHolyTotal,
+  fetchBestSchedule,
+  fetchHighestLocation,
+  fetchNextWorkingDate,
 } from '../api';
-import { setSchedules } from '../../shared/actions';
-import MessageSnackbar from '../../shared/components/MessageSnackbar';
+import Info from './Info';
 
 const styles = theme => ({
   actions: {
-    marginBottom: theme.spacing.unit,
-  },
-  info: {
-    marginTop: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2,
   },
 });
 
@@ -29,11 +29,50 @@ class HomePage extends Component {
     isSnackbarOpen: false,
     snackbarMessage: '',
     snackbarVariant: 'success',
+    nextWorkingDate: null,
+    highestLocation: null,
+    bestSchedule: null,
   };
 
   componentDidMount() {
     fetchHolyTotal()
       .then(response => this.setState({ holyTotal: response.data.holyTotal }))
+      .catch(error => {
+        this.setState({
+          isSnackbarOpen: true,
+          snackbarMessage: error.message,
+          snackbarVariant: 'error',
+        });
+      });
+
+    fetchNextWorkingDate()
+      .then(response =>
+        this.setState({ nextWorkingDate: response.data.nextWorkingDate })
+      )
+      .catch(error => {
+        this.setState({
+          isSnackbarOpen: true,
+          snackbarMessage: error.message,
+          snackbarVariant: 'error',
+        });
+      });
+
+    fetchBestSchedule()
+      .then(response =>
+        this.setState({ bestSchedule: response.data.bestSchedule })
+      )
+      .catch(error => {
+        this.setState({
+          isSnackbarOpen: true,
+          snackbarMessage: error.message,
+          snackbarVariant: 'error',
+        });
+      });
+
+    fetchHighestLocation()
+      .then(response =>
+        this.setState({ highestLocation: response.data.highestLocation })
+      )
       .catch(error => {
         this.setState({
           isSnackbarOpen: true,
@@ -75,6 +114,9 @@ class HomePage extends Component {
     const { classes } = this.props;
     const {
       holyTotal,
+      nextWorkingDate,
+      bestSchedule,
+      highestLocation,
       isSnackbarOpen,
       snackbarMessage,
       snackbarVariant,
@@ -99,11 +141,12 @@ class HomePage extends Component {
             <NewSchedule onCreate={this.handleCreateSchedule} />
           </Grid>
         </Grid>
-        {holyTotal > 0 && (
-          <Typography className={classes.info}>
-            <strong>Holy total:</strong> {holyTotal.toFixed(2)} EUR
-          </Typography>
-        )}
+        <Info
+          holyTotal={holyTotal}
+          nextWorkingDate={nextWorkingDate}
+          bestSchedule={bestSchedule}
+          highestLocation={highestLocation}
+        />
         <MessageSnackbar
           isOpen={isSnackbarOpen}
           onClose={this.handleSnackbarClose}
