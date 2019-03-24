@@ -36,18 +36,22 @@ const Info = ({
             {formatTime(nextWorkingDate.endTime)}
           </Typography>
         </div>
-        <div className={classes.separator} />
       </>
     )}
+    {nextWorkingDate && (holyTotal || bestSchedule || highestLocation) ? (
+      <div className={classes.separator} />
+    ) : null}
     {holyTotal > 0 && (
       <>
         <div>
           <Typography>Holy total</Typography>
           <Typography variant="h5">€{holyTotal.toFixed(2)}</Typography>
         </div>
-        <div className={classes.separator} />
       </>
     )}
+    {holyTotal && (bestSchedule || highestLocation) ? (
+      <div className={classes.separator} />
+    ) : null}
     {bestSchedule && (
       <>
         <div>
@@ -59,9 +63,11 @@ const Info = ({
             {bestSchedule.name} with {bestSchedule.hours} hours
           </Typography>
         </div>
-        <div className={classes.separator} />
       </>
     )}
+    {bestSchedule && highestLocation ? (
+      <div className={classes.separator} />
+    ) : null}
     {highestLocation && (
       <div>
         <Typography>You work mostly on</Typography>
