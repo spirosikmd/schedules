@@ -169,11 +169,19 @@ function calculateNextWorkingDate(userId) {
         return reject('Cannot get next working date');
       }
 
-      ScheduleEntry.find({ date: { $gt: new Date() } })
+      ScheduleEntry.find({ user: user._id, date: { $gt: new Date() } })
         .sort('date')
         .exec((err, scheduleEntries) => {
           if (err) {
             return reject(err);
+          }
+
+          if (scheduleEntries.length === 0) {
+            return resolve(
+              createAggregationResponse({
+                nextWorkingDate: undefined,
+              })
+            );
           }
 
           const { date, startTime, endTime } = scheduleEntries[0];

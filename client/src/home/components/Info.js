@@ -25,29 +25,31 @@ const Info = ({
 }) => (
   <Paper className={classes.info}>
     {nextWorkingDate && (
-      <div>
-        <Typography>You work again on</Typography>
-        <Typography variant="h5">
-          {new Date(nextWorkingDate.date).toDateString()}
-        </Typography>
-        <Typography variant="subtitle1">
-          {formatTime(nextWorkingDate.startTime)} to{' '}
-          {formatTime(nextWorkingDate.endTime)}
-        </Typography>
-      </div>
+      <>
+        <div>
+          <Typography>You work again on</Typography>
+          <Typography variant="h5">
+            {new Date(nextWorkingDate.date).toDateString()}
+          </Typography>
+          <Typography variant="subtitle1">
+            {formatTime(nextWorkingDate.startTime)} to{' '}
+            {formatTime(nextWorkingDate.endTime)}
+          </Typography>
+        </div>
+        <div className={classes.separator} />
+      </>
     )}
     {holyTotal > 0 && (
       <>
-        <div className={classes.separator} />
         <div>
           <Typography>Holy total</Typography>
           <Typography variant="h5">€{holyTotal.toFixed(2)}</Typography>
         </div>
+        <div className={classes.separator} />
       </>
     )}
     {bestSchedule && (
       <>
-        <div className={classes.separator} />
         <div>
           <Typography>Your best schedule</Typography>
           <Typography variant="h5">
@@ -57,20 +59,18 @@ const Info = ({
             {bestSchedule.name} with {bestSchedule.hours} hours
           </Typography>
         </div>
+        <div className={classes.separator} />
       </>
     )}
     {highestLocation && (
-      <>
-        <div className={classes.separator} />
-        <div>
-          <Typography>You work mostly on</Typography>
-          <Typography variant="h5">{highestLocation.name}</Typography>
-          <Typography variant="subtitle1">
-            {highestLocation.numberOfTimes} times and total{' '}
-            {highestLocation.hours} hours
-          </Typography>
-        </div>
-      </>
+      <div>
+        <Typography>You work mostly on</Typography>
+        <Typography variant="h5">{highestLocation.name}</Typography>
+        <Typography variant="subtitle1">
+          {highestLocation.numberOfTimes} times and total{' '}
+          {highestLocation.hours} hours
+        </Typography>
+      </div>
     )}
   </Paper>
 );

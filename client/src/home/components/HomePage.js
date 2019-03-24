@@ -29,9 +29,9 @@ class HomePage extends Component {
     isSnackbarOpen: false,
     snackbarMessage: '',
     snackbarVariant: 'success',
-    nextWorkingDate: null,
-    highestLocation: null,
-    bestSchedule: null,
+    nextWorkingDate: undefined,
+    highestLocation: undefined,
+    bestSchedule: undefined,
   };
 
   componentDidMount() {
