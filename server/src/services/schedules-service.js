@@ -292,7 +292,7 @@ function updateEntryForSchedule(
   userId,
   scheduleId,
   entryId,
-  { hours, date, startTime, endTime, location, workWith }
+  { hours, date, startTime, endTime, location, workWith, isWorkingAlone }
 ) {
   return new Promise((resolve, reject) => {
     const doc = {
@@ -302,6 +302,7 @@ function updateEntryForSchedule(
       ...(endTime !== undefined && { endTime }),
       ...(location !== undefined && { location }),
       ...(workWith !== undefined && { workWith }),
+      ...(isWorkingAlone !== undefined && { isWorkingAlone }),
     };
 
     ScheduleEntry.findOneAndUpdate(

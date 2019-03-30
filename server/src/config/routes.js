@@ -112,21 +112,22 @@ module.exports = function(app) {
           checkNull: true,
         })
         .toFloat(),
-      check('entries.*.startTime')
+      check('startTime')
         .isRFC3339()
         .exists({
           checkFalsy: true,
           checkNull: true,
         }),
-      check('entries.*.endTime')
+      check('endTime')
         .isRFC3339()
         .exists({
           checkFalsy: true,
           checkNull: true,
         }),
-      check('entries.*.location').isString(),
-      check('entries.*.workWith').isArray(),
-      check('entries.*.workWith.*').isString(),
+      check('location').isString(),
+      check('isWorkingAlone').isBoolean(),
+      check('workWith').isArray(),
+      check('workWith.*').isString(),
     ],
     validationErrors(),
     schedulesController.updateEntryForSchedule
