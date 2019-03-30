@@ -66,6 +66,7 @@ const Login = React.memo(
               isSignedIn
               onSuccess={onGoogleLoginSuccess}
               onFailure={onGoogleLoginFailure}
+              scope="https://www.googleapis.com/auth/calendar.events"
               render={props => (
                 <div className={classes.submit}>
                   <Button
