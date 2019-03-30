@@ -101,17 +101,20 @@ class DefaultParser {
         location.employees.forEach(employee => {
           if (employee.name.toLowerCase() !== person.toLowerCase()) return;
 
+          const workWith = location.employees
+            .filter(
+              employee => employee.name.toLowerCase() !== person.toLowerCase()
+            )
+            .map(employee => employee.name);
+
           scheduleEntries.push({
             date: new Date(date),
             location: locationName,
             hours: employee.hours,
             startTime: new Date(employee.startTime),
             endTime: new Date(employee.endTime),
-            workWith: location.employees
-              .filter(
-                employee => employee.name.toLowerCase() !== person.toLowerCase()
-              )
-              .map(employee => employee.name),
+            workWith,
+            isWorkingAlone: workWith.length === 0,
           });
         });
       });

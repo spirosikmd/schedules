@@ -116,6 +116,7 @@ function getSchedule(userId, scheduleId) {
                 dayWage: scheduleEntry.hours * hourlyWage,
                 workWith: scheduleEntry.workWith,
                 hours: scheduleEntry.hours,
+                isWorkingAlone: scheduleEntry.isWorkingAlone,
               }));
 
               const totalHours = schedule.reduce(

@@ -11,6 +11,7 @@ const scheduleEntrySchema = mongoose.Schema(
     startTime: Date,
     endTime: Date,
     workWith: [String],
+    isWorkingAlone: Boolean,
     user: { type: Schema.Types.ObjectId, ref: 'User' },
     schedule: { type: Schema.Types.ObjectId, ref: 'Schedule' },
   },

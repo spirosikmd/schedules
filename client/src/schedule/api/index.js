@@ -51,8 +51,9 @@ function createEventObject(scheduleItem) {
     ...(scheduleItem.location !== undefined && {
       location: scheduleItem.location,
     }),
-    description:
-      "We don't know who you work with, but you definitely are not working alone :)",
+    description: scheduleItem.isWorkingAlone
+      ? 'You work alone :D'
+      : "We don't know who you work with, but you definitely are not working alone :)",
     start: {
       dateTime: new Date(scheduleItem.startTime),
     },
