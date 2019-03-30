@@ -26,9 +26,9 @@ const styles = {
 function TopBar({
   user,
   onMenuIconClick,
+  onLogoutClick,
   onGoogleLogoutSuccess,
   classes,
-  profileImageUrl,
 }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -40,7 +40,10 @@ function TopBar({
     setAnchorEl(null);
   };
 
-  const name = `${user.firstName} ${user.lastName}`;
+  let name;
+  if (user.firstName && user.lastName) {
+    name = `${user.firstName} ${user.lastName}`;
+  }
 
   return (
     <div className={classes.grow}>
@@ -58,7 +61,7 @@ function TopBar({
           <Avatar
             className={classes.avatar}
             alt={name}
-            src={profileImageUrl}
+            src={user.profileImageUrl}
             aria-owns={anchorEl ? 'account-menu' : undefined}
             aria-haspopup="true"
             onClick={handleClick}
@@ -78,14 +81,18 @@ function TopBar({
               horizontal: 'right',
             }}
           >
-            <MenuItem disabled={true}>{name}</MenuItem>
-            <GoogleLogout
-              icon={false}
-              onLogoutSuccess={onGoogleLogoutSuccess}
-              render={props => (
-                <MenuItem onClick={props.onClick}>Logout</MenuItem>
-              )}
-            />
+            {name && <MenuItem disabled={true}>{name}</MenuItem>}
+            {name ? (
+              <GoogleLogout
+                icon={false}
+                onLogoutSuccess={onGoogleLogoutSuccess}
+                render={props => (
+                  <MenuItem onClick={props.onClick}>Logout</MenuItem>
+                )}
+              />
+            ) : (
+              <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
+            )}
           </Menu>
         </Toolbar>
       </AppBar>
@@ -96,8 +103,8 @@ function TopBar({
 TopBar.propTypes = {
   user: PropTypes.object.isRequired,
   onMenuIconClick: PropTypes.func.isRequired,
+  onLogoutClick: PropTypes.func.isRequired,
   onGoogleLogoutSuccess: PropTypes.func.isRequired,
-  profileImageUrl: PropTypes.string.isRequired,
   classes: PropTypes.object.isRequired,
 };
 

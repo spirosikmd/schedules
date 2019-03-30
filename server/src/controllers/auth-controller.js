@@ -1,14 +1,15 @@
 const jwt = require('jsonwebtoken');
+const authService = require('../services/auth-service');
 
-function createToken(auth) {
+function createToken(options) {
   return jwt.sign(
     {
-      id: auth.id,
+      id: options.id,
     },
     process.env.JWT_SECRET,
     {
       // This is set from Google login response and it is 1 hour by default.
-      expiresIn: auth.expiresIn,
+      expiresIn: options.expiresIn,
     }
   );
 }
@@ -26,25 +27,46 @@ function getCookieOptions(expiresIn) {
 }
 
 function authenticate(req, res) {
-  if (!req.user) {
+  const user = req.user;
+
+  if (!user) {
     return res.status(401).json({ message: 'User not authenticated' });
   }
 
-  const expiresIn = req.query.expires_in;
+  const expiresIn = req.query.expires_in || 3600;
 
-  const auth = {
-    id: req.user.id,
+  const tokenOptions = {
+    id: user.id,
     expiresIn,
   };
 
-  const token = createToken(auth);
+  const token = createToken(tokenOptions);
+
+  const userResponse = {
+    email: user.email,
+    ...(user.firstName && { firstName: user.firstName }),
+    ...(user.lastName && { lastName: user.lastName }),
+  };
 
   return res
     .status(200)
     .cookie('token', token, getCookieOptions(expiresIn))
     .json({
-      user: req.user,
+      user: userResponse,
     });
 }
 
-module.exports = { authenticate };
+function register(req, res) {
+  const { email, password, confirmPassword } = req.body;
+
+  authService
+    .register(email, password, confirmPassword)
+    .then(data => res.json(data))
+    .catch(error => {
+      res.status(400).json({
+        message: error,
+      });
+    });
+}
+
+module.exports = { authenticate, register };

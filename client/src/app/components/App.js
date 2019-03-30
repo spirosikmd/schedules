@@ -6,8 +6,6 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import { withStyles } from '@material-ui/core/styles';
 import Loader from '../../shared/components/Loader';
 import { setUser } from '../../shared/actions';
-import { createUserFromAccessToken } from '../actions';
-import Login from './Login';
 import TopBar from './TopBar';
 import Menu from './Menu';
 
@@ -25,6 +23,8 @@ const SettingsPage = lazy(() =>
   import('../../settings/components/SettingsPage')
 );
 const HomePage = lazy(() => import('../../home/components/HomePage'));
+const RegisterPage = lazy(() => import('../../auth/components/RegisterPage'));
+const LoginPage = lazy(() => import('../../auth/components/LoginPage'));
 
 const styles = theme => ({
   page: {
@@ -34,34 +34,12 @@ const styles = theme => ({
 
 class App extends PureComponent {
   state = {
-    error: {
-      errorCode: '',
-      details: '',
-    },
     isDrawerOpen: false,
-    profileImageUrl: '',
-    isLoggingIn: false,
-  };
-
-  handleGoogleLoginSuccess = async response => {
-    this.setState({ isLoggingIn: true });
-    await this.props.createUserFromAccessToken(
-      response.accessToken,
-      response.tokenObj.expires_in
-    );
-    this.setState({
-      profileImageUrl: response.profileObj.imageUrl,
-      isLoggingIn: false,
-    });
-  };
-
-  handleGoogleLoginFailure = ({ error, details }) => {
-    this.setState({ error: { errorCode: error, details } });
   };
 
   handleGoogleLogoutSuccess = () => {
     this.props.setUser(null);
-    navigate('/');
+    navigate('/login');
   };
 
   toggleDrawer(isDrawerOpen) {
@@ -75,11 +53,12 @@ class App extends PureComponent {
       return (
         <Fragment>
           <CssBaseline />
-          <Login
-            isLoggingIn={this.state.isLoggingIn}
-            onGoogleLoginSuccess={this.handleGoogleLoginSuccess}
-            onGoogleLoginFailure={this.handleGoogleLoginFailure}
-          />
+          <Suspense fallback={<Loader loading={true} />}>
+            <Router>
+              <LoginPage default path="/login" />
+              <RegisterPage path="/register" />
+            </Router>
+          </Suspense>
         </Fragment>
       );
     }
@@ -89,8 +68,8 @@ class App extends PureComponent {
         <CssBaseline />
         <TopBar
           user={user}
-          profileImageUrl={this.state.profileImageUrl}
           onMenuIconClick={() => this.toggleDrawer(true)}
+          onLogoutClick={this.handleGoogleLogoutSuccess}
           onGoogleLogoutSuccess={this.handleGoogleLogoutSuccess}
         />
         <Menu
@@ -121,7 +100,6 @@ App.propTypes = {
   classes: PropTypes.object.isRequired,
   user: PropTypes.object,
   setUser: PropTypes.func.isRequired,
-  createUserFromAccessToken: PropTypes.func.isRequired,
   numberOfSchedules: PropTypes.number.isRequired,
 };
 
@@ -132,7 +110,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   setUser,
-  createUserFromAccessToken,
 };
 
 export default withStyles(styles)(

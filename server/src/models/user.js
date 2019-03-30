@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const timestamps = require('mongoose-timestamp');
 const Schedule = require('./schedule');
 const ScheduleEntry = require('./schedule-entry');
+const bcrypt = require('bcrypt');
+
+const ROUNDS = 10;
 
 const userSchema = mongoose.Schema({
   email: {
@@ -11,6 +14,7 @@ const userSchema = mongoose.Schema({
     unique: true,
     match: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
   },
+  password: { type: String },
   firstName: { type: String, trim: true },
   lastName: { type: String, trim: true },
   googleProvider: {
@@ -55,6 +59,32 @@ userSchema.statics.upsertGoogleUser = function(
       });
     }
   );
+};
+
+userSchema.statics.createUser = function(newUser, callback) {
+  bcrypt.genSalt(ROUNDS, function(error, salt) {
+    bcrypt.hash(newUser.password, salt, function(error, hash) {
+      newUser.password = hash;
+      newUser.save(callback);
+    });
+  });
+};
+
+userSchema.statics.getUserByEmail = function(email, callback) {
+  const User = this;
+
+  return User.findOne({ email }, callback);
+};
+
+userSchema.statics.comparePassword = function(
+  candidatePassword,
+  hash,
+  callback
+) {
+  bcrypt.compare(candidatePassword, hash, function(error, isMatch) {
+    if (error) throw error;
+    callback(null, isMatch);
+  });
 };
 
 userSchema.post('remove', doc => {

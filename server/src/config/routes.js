@@ -191,7 +191,6 @@ module.exports = function(app) {
 
   app.get(
     `${BASE}/auth/google`,
-    passport.authenticate('google-token', { session: false }),
     [
       check('access_token')
         .isString()
@@ -207,6 +206,26 @@ module.exports = function(app) {
         }),
     ],
     validationErrors(),
+    passport.authenticate('google-token', { session: false }),
+    authController.authenticate
+  );
+
+  app.post(
+    `${BASE}/auth/register`,
+    [
+      check('email').isEmail(),
+      check('password').isLength({ min: 6 }),
+      check('confirmPassword').isLength({ min: 6 }),
+    ],
+    validationErrors(),
+    authController.register
+  );
+
+  app.post(
+    `${BASE}/auth/login`,
+    [check('email').isEmail(), check('password').isLength({ min: 6 })],
+    validationErrors(),
+    passport.authenticate('local', { session: false }),
     authController.authenticate
   );
 
