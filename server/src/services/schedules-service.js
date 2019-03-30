@@ -252,7 +252,15 @@ function createEntriesForSchedule(userId, scheduleId, entries) {
         }
 
         const executions = entries.map(
-          ({ date, hours, startTime, endTime, location, workWith }) => {
+          ({
+            date,
+            hours,
+            startTime,
+            endTime,
+            location,
+            workWith,
+            isWorkingAlone,
+          }) => {
             const doc = {
               date,
               hours,
@@ -260,6 +268,7 @@ function createEntriesForSchedule(userId, scheduleId, entries) {
               endTime,
               location,
               workWith,
+              isWorkingAlone,
               user: user._id,
               schedule: schedule._id,
             };

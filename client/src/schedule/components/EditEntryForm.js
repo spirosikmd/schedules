@@ -11,6 +11,8 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import IconButton from '@material-ui/core/IconButton';
 import EditIcon from '@material-ui/icons/Edit';
 import Chip from '@material-ui/core/Chip';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const style = theme => ({
   workWith: {
@@ -47,11 +49,18 @@ class EditEntryForm extends PureComponent {
     location: this.props.location || '',
     workWith: this.props.workWith || [],
     workWithPerson: '',
+    isWorkingAlone: this.props.isWorkingAlone,
   };
 
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
+  };
+
+  handleCheckChange = event => {
+    const { name, checked } = event.target;
+    const workWith = checked ? [] : this.props.workWith;
+    this.setState({ [name]: checked, workWith });
   };
 
   handleClickOpen = () => {
@@ -75,7 +84,15 @@ class EditEntryForm extends PureComponent {
   handleSubmit = event => {
     event.preventDefault();
 
-    const { hours, date, startTime, endTime, location, workWith } = this.state;
+    const {
+      hours,
+      date,
+      startTime,
+      endTime,
+      location,
+      workWith,
+      isWorkingAlone,
+    } = this.state;
 
     this.props.onSubmit({
       hours,
@@ -84,6 +101,7 @@ class EditEntryForm extends PureComponent {
       endTime: getTimeDate(date, endTime),
       location,
       workWith,
+      isWorkingAlone,
     });
 
     this.setState({ open: false });
@@ -187,6 +205,7 @@ class EditEntryForm extends PureComponent {
               onKeyUp={this.handleWorkWithKeyUp}
               name="workWithPerson"
               fullWidth
+              disabled={this.state.isWorkingAlone}
             />
             {this.state.workWith.map((workWith, index) => (
               <Chip
@@ -196,6 +215,19 @@ class EditEntryForm extends PureComponent {
                 onDelete={() => this.handleWorkWithDelete(workWith)}
               />
             ))}
+            <div>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={this.state.isWorkingAlone}
+                    onChange={this.handleCheckChange}
+                    name="isWorkingAlone"
+                    color="primary"
+                  />
+                }
+                label="Do you work alone?"
+              />
+            </div>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="secondary">

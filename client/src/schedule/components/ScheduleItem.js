@@ -39,6 +39,7 @@ const ScheduleItem = React.memo(
               endTime={daySchedule.endTime}
               location={daySchedule.location}
               workWith={daySchedule.workWith}
+              isWorkingAlone={daySchedule.isWorkingAlone}
               onSubmit={onEditClick}
             />
           </Grid>

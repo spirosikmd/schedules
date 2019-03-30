@@ -12,6 +12,8 @@ import withMobileDialog from '@material-ui/core/withMobileDialog';
 import Add from '@material-ui/icons/Add';
 import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 const style = theme => ({
   workWith: {
@@ -34,11 +36,18 @@ class CreateEntryForm extends PureComponent {
     location: '',
     workWith: [],
     workWithPerson: '',
+    isWorkingAlone: false,
   };
 
   handleInputChange = event => {
     const { name, value } = event.target;
     this.setState({ [name]: value });
+  };
+
+  handleCheckChange = event => {
+    const { name, checked } = event.target;
+    const workWith = checked ? [] : this.state.workWith;
+    this.setState({ [name]: checked, workWith });
   };
 
   handleClickOpen = () => {
@@ -52,7 +61,15 @@ class CreateEntryForm extends PureComponent {
   handleSubmit = event => {
     event.preventDefault();
 
-    const { hours, date, startTime, endTime, location, workWith } = this.state;
+    const {
+      hours,
+      date,
+      startTime,
+      endTime,
+      location,
+      workWith,
+      isWorkingAlone,
+    } = this.state;
 
     this.props.onSubmit({
       hours,
@@ -61,6 +78,7 @@ class CreateEntryForm extends PureComponent {
       endTime: getTimeDate(date, endTime),
       location,
       workWith,
+      isWorkingAlone,
     });
     this.handleClose();
 
@@ -72,6 +90,7 @@ class CreateEntryForm extends PureComponent {
       location: '',
       workWith: [],
       workWithPerson: '',
+      isWorkingAlone: false,
     });
   };
 
@@ -175,6 +194,7 @@ class CreateEntryForm extends PureComponent {
               onKeyUp={this.handleWorkWithKeyUp}
               name="workWithPerson"
               fullWidth
+              disabled={this.state.isWorkingAlone}
             />
             {this.state.workWith.map((workWith, index) => (
               <Chip
@@ -184,6 +204,19 @@ class CreateEntryForm extends PureComponent {
                 onDelete={() => this.handleWorkWithDelete(workWith)}
               />
             ))}
+            <div>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={this.state.isWorkingAlone}
+                    onChange={this.handleCheckChange}
+                    name="isWorkingAlone"
+                    color="primary"
+                  />
+                }
+                label="Do you work alone?"
+              />
+            </div>
           </DialogContent>
           <DialogActions>
             <Button onClick={this.handleClose} color="secondary">

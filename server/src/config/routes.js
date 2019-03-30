@@ -90,6 +90,7 @@ module.exports = function(app) {
         })
         .toFloat(),
       check('entries.*.location').isString(),
+      check('entries.*.isWorkingAlone').isBoolean(),
       check('entries.*.workWith').isArray(),
       check('entries.*.workWith.*').isString(),
     ],
