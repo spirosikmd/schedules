@@ -17,23 +17,21 @@ const styles = theme => ({
   },
 });
 
-const SettingsPage = React.memo(
-  ({ deleteUser: deleteUserAndLogout, classes }) => {
-    const handleDeleteClick = async () => {
-      await deleteUserAndLogout();
-      navigate('/');
-    };
+const SettingsPage = React.memo(({ deleteUserAndLogout, classes }) => {
+  const handleDeleteClick = async () => {
+    await deleteUserAndLogout();
+    navigate('/');
+  };
 
-    return (
-      <Paper className={classes.dangerZone}>
-        <Typography variant="h5" gutterBottom>
-          Danger zone
-        </Typography>
-        <DeleteUserDialog onDeleteClick={handleDeleteClick} />
-      </Paper>
-    );
-  }
-);
+  return (
+    <Paper className={classes.dangerZone}>
+      <Typography variant="h5" gutterBottom>
+        Danger zone
+      </Typography>
+      <DeleteUserDialog onDeleteClick={handleDeleteClick} />
+    </Paper>
+  );
+});
 
 SettingsPage.propTypes = {
   deleteUserAndLogout: PropTypes.func.isRequired,
