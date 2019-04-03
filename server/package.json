@@ -22,7 +22,7 @@
     "passport-google-token": "^0.1.2"
   },
   "devDependencies": {
-    "jest": "^24.5.0",
+    "jest": "^24.6.0",
     "nodemon": "^1.18.10"
   },
   "resolutions": {
