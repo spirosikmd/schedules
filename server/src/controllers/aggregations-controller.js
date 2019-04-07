@@ -91,6 +91,19 @@ function getBestSchedule(req, res) {
     });
 }
 
+function getUniqueLocations(req, res) {
+  const userId = req.user.id;
+
+  aggregationsService
+    .getUniqueLocations(userId)
+    .then(data => res.json(data))
+    .catch(error => {
+      res.status(404).json({
+        message: error,
+      });
+    });
+}
+
 module.exports = {
   getWeeklyWageData,
   getHolyTotal,
@@ -99,4 +112,5 @@ module.exports = {
   getNextWorkingDate,
   getBestSchedule,
   getHighestLocation,
+  getUniqueLocations,
 };

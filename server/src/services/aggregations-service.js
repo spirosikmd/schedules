@@ -285,6 +285,30 @@ function calculateBestSchedule(userId) {
   });
 }
 
+function getUniqueLocations(userId) {
+  return new Promise((resolve, reject) => {
+    User.findById(userId, (err, user) => {
+      if (err) {
+        return reject(err);
+      }
+
+      if (user === null) {
+        return reject('Cannot get best schedule');
+      }
+
+      ScheduleEntry.distinct(
+        'location',
+        { location: { $nin: [''] } },
+        (error, result) => {
+          if (error) reject(error);
+
+          resolve(createAggregationResponse({ locations: result }));
+        }
+      );
+    });
+  });
+}
+
 module.exports = {
   calculateHolyTotal,
   calculateWeeklyWageData,
@@ -293,4 +317,5 @@ module.exports = {
   calculateNextWorkingDate,
   calculateHighestLocation,
   calculateBestSchedule,
+  getUniqueLocations,
 };

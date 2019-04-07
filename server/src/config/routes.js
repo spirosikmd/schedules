@@ -177,6 +177,11 @@ module.exports = function(app) {
   );
 
   app.get(
+    `${BASE}/aggregations/locations`,
+    aggregationsController.getUniqueLocations
+  );
+
+  app.get(
     `${BASE}/auth/google`,
     passport.authenticate('google-token', { session: false }),
     [
