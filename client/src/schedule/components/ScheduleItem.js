@@ -15,7 +15,7 @@ function formatDate(dateString) {
 }
 
 const ScheduleItem = React.memo(
-  ({ daySchedule, onEditClick, isSelected, onSelect }) => {
+  ({ daySchedule, onEditClick, isSelected, onSelect, locations }) => {
     return (
       <TableRow>
         <TableCell padding="checkbox">
@@ -41,6 +41,7 @@ const ScheduleItem = React.memo(
               workWith={daySchedule.workWith}
               isWorkingAlone={daySchedule.isWorkingAlone}
               onSubmit={onEditClick}
+              locations={locations}
             />
           </Grid>
         </TableCell>
@@ -54,6 +55,7 @@ ScheduleItem.propTypes = {
   onEditClick: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
   onSelect: PropTypes.func.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default ScheduleItem;

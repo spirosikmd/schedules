@@ -35,6 +35,7 @@ const ScheduleToolbar = ({
   name,
   numSelected,
   hourlyWage,
+  locations,
   onDeleteEntries,
   onCreateEntry,
   onSettingsSave,
@@ -77,7 +78,10 @@ const ScheduleToolbar = ({
             ) : (
               <>
                 <Grid item>
-                  <CreateEntryForm onSubmit={onCreateEntry} />
+                  <CreateEntryForm
+                    onSubmit={onCreateEntry}
+                    locations={locations}
+                  />
                 </Grid>
                 {hourlyWage !== undefined && hourlyWage !== null && (
                   <Grid item>
@@ -101,6 +105,7 @@ ScheduleToolbar.propTypes = {
   classes: PropTypes.object.isRequired,
   numSelected: PropTypes.number.isRequired,
   hourlyWage: PropTypes.number,
+  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
   onDeleteEntries: PropTypes.func.isRequired,
   onCreateEntry: PropTypes.func.isRequired,
   onSettingsSave: PropTypes.func.isRequired,

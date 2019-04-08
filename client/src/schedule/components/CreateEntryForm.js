@@ -14,6 +14,9 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Chip from '@material-ui/core/Chip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 const style = theme => ({
   workWith: {
@@ -112,7 +115,7 @@ class CreateEntryForm extends PureComponent {
   };
 
   render() {
-    const { fullScreen, classes } = this.props;
+    const { fullScreen, classes, locations } = this.props;
 
     return (
       <Fragment>
@@ -142,15 +145,25 @@ class CreateEntryForm extends PureComponent {
               type="date"
               fullWidth
             />
-            <TextField
-              label="Location"
-              margin="normal"
-              id="location"
-              value={this.state.location}
-              onChange={this.handleInputChange}
-              name="location"
-              fullWidth
-            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel htmlFor="location">Location</InputLabel>
+              <Select
+                native
+                value={this.state.location}
+                onChange={this.handleInputChange}
+                inputProps={{
+                  name: 'location',
+                  id: 'location',
+                }}
+              >
+                <option value="" />
+                {locations.map(location => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               label="Start time"
               margin="normal"
@@ -236,6 +249,7 @@ CreateEntryForm.propTypes = {
   fullScreen: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default withStyles(style)(withMobileDialog()(CreateEntryForm));

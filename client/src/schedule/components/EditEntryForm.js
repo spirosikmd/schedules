@@ -13,6 +13,9 @@ import EditIcon from '@material-ui/icons/Edit';
 import Chip from '@material-ui/core/Chip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 
 const style = theme => ({
   workWith: {
@@ -125,7 +128,7 @@ class EditEntryForm extends PureComponent {
   };
 
   render() {
-    const { fullScreen, classes } = this.props;
+    const { fullScreen, classes, locations } = this.props;
 
     return (
       <Fragment>
@@ -153,15 +156,25 @@ class EditEntryForm extends PureComponent {
               type="date"
               fullWidth
             />
-            <TextField
-              label="Location"
-              margin="normal"
-              id="location"
-              value={this.state.location}
-              onChange={this.handleInputChange}
-              name="location"
-              fullWidth
-            />
+            <FormControl fullWidth margin="normal">
+              <InputLabel htmlFor="location">Location</InputLabel>
+              <Select
+                native
+                value={this.state.location}
+                onChange={this.handleInputChange}
+                inputProps={{
+                  name: 'location',
+                  id: 'location',
+                }}
+              >
+                <option value="" />
+                {locations.map(location => (
+                  <option key={location} value={location}>
+                    {location}
+                  </option>
+                ))}
+              </Select>
+            </FormControl>
             <TextField
               label="Start time"
               margin="normal"
@@ -249,6 +262,7 @@ EditEntryForm.propTypes = {
   date: PropTypes.string.isRequired,
   onSubmit: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
+  locations: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default withStyles(style)(withMobileDialog()(EditEntryForm));

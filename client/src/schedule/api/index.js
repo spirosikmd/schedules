@@ -112,3 +112,15 @@ export async function createEvents(schedule) {
 
   return Promise.all(createEventRequests);
 }
+
+export async function getUniqueLocations() {
+  const response = await fetch(`${BASE}/aggregations/locations`, {
+    method: 'GET',
+    headers: getDefaultHeaders(),
+  });
+  const json = await response.json();
+  if (response.status < 400) {
+    return json;
+  }
+  throw new ApiError('Cannot get locations', json.errors);
+}

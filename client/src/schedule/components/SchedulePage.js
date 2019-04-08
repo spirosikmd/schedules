@@ -21,6 +21,7 @@ import {
   createScheduleEntries,
   deleteScheduleEntry,
   updateScheduleEntry,
+  getUniqueLocations,
 } from '../api';
 
 const styles = theme => ({
@@ -47,12 +48,19 @@ class SchedulePage extends PureComponent {
     snackbarMessage: '',
     snackbarVariant: 'success',
     selected: [],
+    locations: [],
   };
 
   componentDidMount() {
     this.setState({ isLoading: true });
 
-    this.getSchedule().then(() => this.setState({ isLoading: false }));
+    this.getSchedule().then(() => {
+      this.setState({ isLoading: false });
+
+      getUniqueLocations().then(({ data }) =>
+        this.setState({ locations: data.locations })
+      );
+    });
   }
 
   handleBackButtonClick = event => {
@@ -238,6 +246,7 @@ class SchedulePage extends PureComponent {
       snackbarVariant,
       selected,
       isCreatingEvents,
+      locations,
     } = this.state;
 
     const numSelected = selected.length;
@@ -266,6 +275,7 @@ class SchedulePage extends PureComponent {
               name={name}
               numSelected={numSelected}
               hourlyWage={settings && settings.hourlyWage}
+              locations={locations}
               onDeleteEntries={this.handleDeleteEntries}
               onCreateEntry={this.handleCreateEntry}
               onSettingsSave={this.handleSettingsSave}
@@ -290,6 +300,7 @@ class SchedulePage extends PureComponent {
                       onSelect={() =>
                         this.handleScheduleItemSelect(daySchedule.id)
                       }
+                      locations={locations}
                     />
                   ))}
                 </TableBody>
