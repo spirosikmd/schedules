@@ -54,32 +54,41 @@ class DefaultParser {
         daySchedule[1] !== ' ' &&
         daySchedule[1] !== undefined
       ) {
-        const foundLocation = locations.find(
-          location => location.name === daySchedule[1]
-        );
-        const startTime = this.parseTime(daySchedule[3], date, timezone);
-        const endTime = this.parseTime(daySchedule[4], date, timezone);
-        if (foundLocation) {
-          foundLocation.employees.push({
-            name: daySchedule[2],
-            startTime,
-            endTime,
-            hours: parseFloat(daySchedule[5]),
-          });
-        } else {
-          const employees = [
-            {
+        // The start or end time can be undefined for some days
+        if (
+          daySchedule[3].trim().length > 0 &&
+          daySchedule[4].trim().length > 0
+        ) {
+          const foundLocation = locations.find(
+            location => location.name === daySchedule[1]
+          );
+
+          const startTime = this.parseTime(daySchedule[3], date, timezone);
+          const endTime = this.parseTime(daySchedule[4], date, timezone);
+
+          if (foundLocation) {
+            foundLocation.employees.push({
               name: daySchedule[2],
               startTime,
               endTime,
               hours: parseFloat(daySchedule[5]),
-            },
-          ];
-          locations.push({
-            name: daySchedule[1],
-            employees,
-          });
+            });
+          } else {
+            const employees = [
+              {
+                name: daySchedule[2],
+                startTime,
+                endTime,
+                hours: parseFloat(daySchedule[5]),
+              },
+            ];
+            locations.push({
+              name: daySchedule[1],
+              employees,
+            });
+          }
         }
+
         j++;
         daySchedule = schedule[0].data[j];
       }
