@@ -3348,10 +3348,10 @@ node-pre-gyp@^0.10.0:
     semver "^5.3.0"
     tar "^4"
 
-node-xlsx@^0.14.1:
-  version "0.14.1"
-  resolved "https://registry.yarnpkg.com/node-xlsx/-/node-xlsx-0.14.1.tgz#982a9b3f2215d24b51795148eb07917b0572784d"
-  integrity sha512-eNtlGQdjsN2jGveaVPyVJ3MFx+V3YOu/xCAdnHndiMKWOiaA4XsSCLm8mzym0z4AF5+CBjkv/V4ssl4QJFlZFQ==
+node-xlsx@^0.15.0:
+  version "0.15.0"
+  resolved "https://registry.yarnpkg.com/node-xlsx/-/node-xlsx-0.15.0.tgz#1f1b0d7adce5c706e86bfd96a5aa0005bf8a9dc3"
+  integrity sha512-rQyhWDJ/k60wQemov7a8MlToastWTidrAVFRwTWV+s53LN/SRwU4lnmc5xuFXx/ay+uaLAsAQBp6BkVob5OjOA==
   dependencies:
     buffer-from "^1.1.0"
     xlsx "^0.14.1"
