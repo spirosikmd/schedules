@@ -9,7 +9,7 @@
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.4",
     "dotenv-safe": "^6.1.0",
-    "express": "^4.16.4",
+    "express": "^4.17.0",
     "express-validator": "^5.3.1",
     "jsonwebtoken": "^8.5.1",
     "moment-timezone": "^0.5.25",
