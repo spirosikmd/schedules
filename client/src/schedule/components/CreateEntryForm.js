@@ -20,7 +20,7 @@ import FormControl from '@material-ui/core/FormControl';
 
 const style = theme => ({
   workWith: {
-    margin: theme.spacing.unit / 2,
+    margin: theme.spacing(0.5),
   },
 });
 

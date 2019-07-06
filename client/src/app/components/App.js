@@ -28,7 +28,7 @@ const HomePage = lazy(() => import('../../home/components/HomePage'));
 
 const styles = theme => ({
   page: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
   },
 });
 

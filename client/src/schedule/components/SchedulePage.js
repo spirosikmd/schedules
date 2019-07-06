@@ -27,15 +27,15 @@ import {
 const styles = theme => ({
   table: {
     width: '100%',
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(),
     overflowX: 'auto',
   },
   info: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   eventsMessage: {
-    marginTop: theme.spacing.unit,
-    marginBottom: theme.spacing.unit,
+    marginTop: theme.spacing(),
+    marginBottom: theme.spacing(),
   },
 });
 
