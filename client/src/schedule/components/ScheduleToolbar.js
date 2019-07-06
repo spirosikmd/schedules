@@ -15,7 +15,7 @@ import IconButton from '@material-ui/core/IconButton';
 const styles = theme => ({
   toolbar: {
     [theme.breakpoints.down('sm')]: {
-      paddingRight: theme.spacing.unit,
+      paddingRight: theme.spacing(),
     },
   },
   highlight:

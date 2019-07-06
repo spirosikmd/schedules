@@ -19,7 +19,7 @@ import Info from './Info';
 
 const styles = theme => ({
   actions: {
-    marginBottom: theme.spacing.unit * 2,
+    marginBottom: theme.spacing(2),
   },
 });
 
@@ -126,7 +126,7 @@ class HomePage extends Component {
       <Fragment>
         <Grid
           container
-          spacing={8}
+          spacing={1}
           className={classes.actions}
           direction="row"
           justify="center"

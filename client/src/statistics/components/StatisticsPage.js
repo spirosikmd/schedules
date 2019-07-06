@@ -26,8 +26,8 @@ import {
 const styles = theme => ({
   chartRoot: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 6,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(6),
   },
   section: {
     height: 400,
@@ -88,7 +88,7 @@ class StatisticsPage extends PureComponent {
     } = this.state;
 
     return (
-      <Grid container spacing={16}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Paper className={classes.chartRoot}>
             {isWeeklyWageDataLoading ? (

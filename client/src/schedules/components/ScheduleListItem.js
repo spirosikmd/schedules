@@ -13,13 +13,13 @@ import ResponsiveConfirmDeleteDialog from '../../shared/components/ResponsiveCon
 
 const styles = theme => ({
   item: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(),
   },
   editContainer: {
-    paddingLeft: theme.spacing.unit * 2,
+    paddingLeft: theme.spacing(2),
   },
   scheduleLink: {
-    paddingLeft: theme.spacing.unit,
+    paddingLeft: theme.spacing(),
   },
 });
 
@@ -44,7 +44,7 @@ function ScheduleListItem({
                 <Link to={`/schedules/${schedule.id}`}>{schedule.name}</Link>
               </Typography>
             ) : (
-              <Grid container className={classes.editContainer} spacing={8}>
+              <Grid container className={classes.editContainer} spacing={1}>
                 <Grid item>
                   <TextField
                     id="newScheduleName"

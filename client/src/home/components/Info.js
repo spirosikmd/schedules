@@ -7,12 +7,12 @@ import { formatTime } from '../../shared/helpers/dateTime';
 
 const styles = theme => ({
   info: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
   separator: {
     borderBottom: `1px solid ${theme.palette.grey[400]}`,
-    marginTop: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
 });
 

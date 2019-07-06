@@ -10,7 +10,7 @@ const styles = theme => ({
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column',
-    paddingTop: theme.spacing.unit * 8,
+    paddingTop: theme.spacing(8),
   },
   image: {
     width: '400px',
@@ -25,7 +25,7 @@ const styles = theme => ({
     },
   },
   text: {
-    marginTop: theme.spacing.unit * 4,
+    marginTop: theme.spacing(4),
   },
 });
 
