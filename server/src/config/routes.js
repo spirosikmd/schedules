@@ -1,6 +1,6 @@
 const multer = require('multer');
 const passport = require('passport');
-const { check } = require('express-validator/check');
+const { check } = require('express-validator');
 const authController = require('../controllers/auth-controller');
 const aggregationsController = require('../controllers/aggregations-controller');
 const schedulesController = require('../controllers/schedules-controller');
