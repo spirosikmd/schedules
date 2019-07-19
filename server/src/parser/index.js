@@ -56,8 +56,9 @@ class DefaultParser {
       ) {
         // The start or end time can be undefined for some days
         if (
+          daySchedule[3] &&
           daySchedule[3].trim().length > 0 &&
-          daySchedule[4].trim().length > 0
+          (daySchedule[4] && daySchedule[4].trim().length > 0)
         ) {
           const foundLocation = locations.find(
             location => location.name === daySchedule[1]
