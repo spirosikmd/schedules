@@ -52,7 +52,15 @@ module.exports = function(app) {
     schedulesController.generateSchedule
   );
 
-  app.put(`${BASE}/schedules/:scheduleId`, schedulesController.updateSchedule);
+  app.put(
+    `${BASE}/schedules/:scheduleId`,
+    [
+      check('name').isString(),
+      check('eventsCreatedOnce').isBoolean(),
+      check('settings.hourlyWage').isFloat(),
+    ],
+    schedulesController.updateSchedule
+  );
 
   app.delete(
     `${BASE}/schedules/:scheduleId`,
