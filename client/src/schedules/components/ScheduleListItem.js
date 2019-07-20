@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from '@reach/router';
+import { Link as RouterLink } from '@reach/router';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Edit';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
 import ResponsiveConfirmDeleteDialog from '../../shared/components/ResponsiveConfirmDeleteDialog';
 
 const styles = theme => ({
@@ -41,7 +42,9 @@ function ScheduleListItem({
           <Grid item xs={8}>
             {editingScheduleId !== schedule.id ? (
               <Typography className={classes.scheduleLink}>
-                <Link to={`/schedules/${schedule.id}`}>{schedule.name}</Link>
+                <Link to={`/schedules/${schedule.id}`} component={RouterLink}>
+                  {schedule.name}
+                </Link>
               </Typography>
             ) : (
               <Grid container className={classes.editContainer} spacing={1}>
@@ -88,6 +91,13 @@ function ScheduleListItem({
 
 ScheduleListItem.propTypes = {
   schedule: PropTypes.object.isRequired,
+  newScheduleName: PropTypes.string.isRequired,
+  editingScheduleId: PropTypes.string.isRequired,
+  onNewScheduleNameChange: PropTypes.func.isRequired,
+  onCancelEditClick: PropTypes.func.isRequired,
+  onUpdateScheduleName: PropTypes.func.isRequired,
+  onScheduleEdit: PropTypes.func.isRequired,
+  onScheduleDelete: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(ScheduleListItem);
