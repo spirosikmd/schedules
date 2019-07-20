@@ -10,9 +10,16 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Badge from '@material-ui/core/Badge';
 
 const Menu = React.memo(
-  ({ open, onMenuClose, onMenuContentClick, onMenuContentKeyDown }) => {
+  ({
+    open,
+    numberOfSchedules,
+    onMenuClose,
+    onMenuContentClick,
+    onMenuContentKeyDown,
+  }) => {
     return (
       <Drawer open={open} onClose={onMenuClose}>
         <nav
@@ -30,7 +37,9 @@ const Menu = React.memo(
             </ListItem>
             <ListItem button component={Link} to="/schedules">
               <ListItemIcon>
-                <InboxIcon />
+                <Badge color="primary" badgeContent={numberOfSchedules}>
+                  <InboxIcon />
+                </Badge>
               </ListItemIcon>
               <ListItemText primary="Schedules" />
             </ListItem>
@@ -55,6 +64,7 @@ const Menu = React.memo(
 
 Menu.propTypes = {
   open: PropTypes.bool.isRequired,
+  numberOfSchedules: PropTypes.number.isRequired,
   onMenuClose: PropTypes.func.isRequired,
   onMenuContentClick: PropTypes.func.isRequired,
   onMenuContentKeyDown: PropTypes.func.isRequired,

@@ -95,6 +95,7 @@ class App extends PureComponent {
         />
         <Menu
           open={this.state.isDrawerOpen}
+          numberOfSchedules={this.props.numberOfSchedules}
           onMenuClose={() => this.toggleDrawer(false)}
           onMenuContentClick={() => this.toggleDrawer(false)}
           onMenuContentKeyDown={() => this.toggleDrawer(false)}
@@ -121,10 +122,12 @@ App.propTypes = {
   user: PropTypes.object,
   setUser: PropTypes.func.isRequired,
   createUserFromAccessToken: PropTypes.func.isRequired,
+  numberOfSchedules: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
   user: state.authReducer.user,
+  numberOfSchedules: state.schedulesReducer.schedules.length,
 });
 
 const mapDispatchToProps = {
