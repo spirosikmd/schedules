@@ -1,0 +1,54 @@
+on: push
+name: Deploy
+jobs:
+  buildClient:
+    name: Build Client
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Build Client
+      uses: borales/actions-yarn@master
+      env:
+        CI: "true"
+      with:
+        args: install:client
+    - name: Build Server
+      uses: borales/actions-yarn@master
+      env:
+        CI: "true"
+      with:
+        args: install:server
+    - name: Test Client
+      uses: borales/actions-yarn@master
+      env:
+        CI: "true"
+      with:
+        args: test:client
+    - name: Test Server
+      uses: borales/actions-yarn@master
+      env:
+        CI: "true"
+      with:
+        args: test:server
+    - name: Master Branch Filter
+      uses: actions/bin/filter@master
+      with:
+        args: branch master
+    - name: Login
+      uses: actions/heroku@master
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      with:
+        args: container:login
+    - name: Push
+      uses: actions/heroku@master
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      with:
+        args: container:push -a schedule-5j7wpm7zpq web
+    - name: Release
+      uses: actions/heroku@master
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      with:
+        args: container:release -a schedule-5j7wpm7zpq web
