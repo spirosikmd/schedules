@@ -20,7 +20,7 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "@types/reach__router": "^1.2.4",
+    "@types/reach__router": "^1.2.5",
     "@types/recharts": "^1.1.21"
   },
   "resolutions": {
