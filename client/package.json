@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@types/reach__router": "^1.2.6",
-    "@types/recharts": "^1.7.0"
+    "@types/recharts": "^1.7.1"
   },
   "resolutions": {
     "merge": "^1.2.1",
