@@ -19,6 +19,6 @@
     "test": "yarn test:client && yarn test:server"
   },
   "devDependencies": {
-    "concurrently": "^5.0.0"
+    "concurrently": "^5.2.0"
   }
 }
