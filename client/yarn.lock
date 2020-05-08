@@ -9412,10 +9412,10 @@ react-error-overlay@^6.0.3:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.3.tgz#c378c4b0a21e88b2e159a3e62b2f531fd63bf60d"
   integrity sha512-bOUvMWFQVk5oz8Ded9Xb7WVdEi3QGLC8tH7HmYP0Fdp4Bn3qw0tRFmr5TW6mvahzvmrK4a6bqWGfCevBflP+Xw==
 
-react-google-login@^5.0.6:
-  version "5.0.6"
-  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-5.0.6.tgz#43234009f119311a882e7f9ddd4cebfaad737b43"
-  integrity sha512-2gZ5xlRg6DMMaK54Mu+r1LaT5Mfd9okA18me3lfPv2taqn55Q0i/YLsETiaMajRytlmyZMMxbzKoAQwMdjnd8w==
+react-google-login@^5.1.14:
+  version "5.1.14"
+  resolved "https://registry.yarnpkg.com/react-google-login/-/react-google-login-5.1.14.tgz#7b35a8f3fc989132ed48f7db31d54fe4c5190b2a"
+  integrity sha512-locx4M80FGYLW7ej44GgMJV0Rj/n66/QHPpUzcu6kNbMmu1ziK7/f7smQ24YpOk1N2x8go7AvzaNN6qILyTA2Q==
   dependencies:
     "@types/react" "*"
     prop-types "^15.6.0"
