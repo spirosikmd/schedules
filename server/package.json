@@ -23,7 +23,7 @@
   },
   "devDependencies": {
     "jest": "^24.9.0",
-    "nodemon": "^1.19.4"
+    "nodemon": "^2.0.4"
   },
   "resolutions": {
     "lodash": "^4.7.14"
